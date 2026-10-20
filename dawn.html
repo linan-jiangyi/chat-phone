@@ -1,0 +1,3392 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>微信</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none;overflow-x:hidden}
+body{font-family:-apple-system,"PingFang SC",sans-serif;background:#f2f2f7;color:#1c1c1e;-webkit-font-smoothing:antialiased}
+.stage{position:relative;width:100%;height:100vh;height:100dvh;overflow:hidden;display:flex;flex-direction:column;background:#f2f2f7}
+.ah{padding:24px 16px 10px;display:flex;align-items:center;gap:8px;background:rgba(242,242,247,.92);backdrop-filter:blur(20px);border-bottom:.5px solid rgba(0,0,0,.1);flex-shrink:0;min-height:90px;position:relative;z-index:10}
+.ah .b{width:40px;height:34px;border-radius:50%;background:transparent;display:grid;place-items:center;font-size:26px;color:#007aff;cursor:pointer;border:none;flex-shrink:0}
+.ah .ti{font-size:17px;font-weight:600;flex:1;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#1c1c1e}
+.ah .ac{font-size:22px;color:#007aff;background:none;border:none;cursor:pointer;padding:4px 8px;flex-shrink:0}
+.ab{flex:1;overflow-y:auto;overflow-x:hidden;min-height:0;-webkit-overflow-scrolling:touch;padding:0}
+.ab::-webkit-scrollbar{display:none}
+.wx-tabs{display:flex;background:#f7f7f7;border-top:.5px solid #e5e5e5;flex-shrink:0;padding-bottom:env(safe-area-inset-bottom,0)}
+.wx-tab{flex:1;padding:8px 0 6px;text-align:center;font-size:11px;color:#7f7f7f;cursor:pointer;position:relative}
+.wx-tab.on{color:#07c160}
+.wx-tab .ic{font-size:22px;display:block;margin-bottom:2px;position:relative}
+.wx-tab .bdg{position:absolute;top:-4px;right:calc(50% - 22px);min-width:16px;height:16px;line-height:16px;background:#ff3b30;color:#fff;font-size:10px;border-radius:8px;padding:0 4px;text-align:center;font-weight:600}
+.chat-item{display:flex;gap:12px;padding:12px;background:#fff;cursor:pointer;align-items:center;border-bottom:.5px solid #f0f0f0;user-select:none}
+.chat-item .a{width:48px;height:48px;border-radius:6px;background:#fde8f0;display:grid;place-items:center;font-size:24px;flex-shrink:0;overflow:hidden;position:relative}
+.chat-item .a img{width:100%;height:100%;object-fit:cover;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;}
+.chat-item .a .dot{position:absolute;bottom:-2px;right:-2px;width:12px;height:12px;border-radius:50%;border:2px solid #fff;background:#34c759}
+.chat-item .in{flex:1;min-width:0}
+.chat-item .in .h{font-size:15px;font-weight:500;display:flex;justify-content:space-between;align-items:center;color:#1c1c1e}
+.chat-item .in .h .t{font-size:11px;color:#b2b2b2}
+.chat-item .in .m{font-size:13px;color:#7f7f7f;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chat-item .bdg2{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#ff3b30;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:600}
+.star-mark{color:#f5c518;font-size:12px;margin-right:4px}
+.list-item{display:flex;gap:12px;padding:14px 16px;background:#fff;border-bottom:.5px solid #f0f0f0;cursor:pointer;align-items:center}
+.list-item .ic{width:40px;height:40px;border-radius:8px;background:#fde8f0;display:grid;place-items:center;font-size:20px;flex-shrink:0;overflow:hidden}
+.list-item .ic img{width:100%;height:100%;object-fit:cover}
+.list-item .nm{flex:1;font-size:15px;color:#1c1c1e}
+.list-item .rt{color:#ccc;font-size:14px}
+.me-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.wx-chat{display:flex;flex-direction:column;height:100%;min-height:0;position:relative;background:#ededed}
+.wx-chat-body{flex:1;overflow-y:auto;padding:12px 12px 4px;min-height:0;position:relative;z-index:1}
+.wx-msg{display:flex;gap:8px;margin-bottom:10px;align-items:flex-start}
+.wx-msg.me{flex-direction:row-reverse}
+.wx-msg .av{width:40px;height:40px;border-radius:6px;background:#fde8f0;display:grid;place-items:center;font-size:22px;flex-shrink:0;overflow:hidden}
+.wx-msg .av img{width:100%;height:100%;object-fit:cover}
+.wx-msg .content{max-width:72%;position:relative}
+.wx-msg .b{padding:10px 12px;border-radius:6px;font-size:15px;line-height:1.45;word-break:break-word;white-space:pre-wrap;color:#000}
+.wx-msg .b img{max-width:200px;border-radius:4px;display:block}
+.wx-msg .name{font-size:11px;color:#7f7f7f;margin-bottom:3px;padding:0 4px}
+.ai-group{margin-bottom:10px}
+.ai-group .wx-msg{margin-bottom:6px}
+.time-sep{text-align:center;font-size:11px;color:#b2b2b2;margin:10px 0 8px;user-select:none}
+.narration-block{font-size:13px;color:#7f7f7f;font-style:italic;padding:8px 14px;margin:6px 12px 6px 50px;border-left:2px solid #d0d0d0;background:rgba(0,0,0,.02);border-radius:6px;line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.narration-block.me{margin:6px 50px 6px 12px;border-left:none;border-right:2px solid #d0d0d0;text-align:right}
+.wx-chat-input{display:flex;gap:8px;padding:8px 12px;align-items:flex-end;flex-shrink:0;padding-bottom:calc(8px + env(safe-area-inset-bottom,0));position:relative;z-index:1;border-top:.5px solid rgba(0,0,0,.06)}
+.wx-chat-input .btn-circle{width:34px;height:34px;border-radius:50%;border:none;font-size:20px;cursor:pointer;display:grid;place-items:center;flex-shrink:0}
+.wx-chat-input .btn-circle.plus{font-size:26px;font-weight:300;margin-bottom:4px}
+.wx-chat-input textarea{flex:1;border:none;outline:none;padding:9px 12px;border-radius:8px;font-size:15px;font-family:inherit;min-width:0;resize:none;line-height:1.35;max-height:96px;overflow-y:auto}
+.wx-chat-input .send{border:none;border-radius:6px;padding:9px 14px;font-size:14px;cursor:pointer;font-weight:500;flex-shrink:0;margin-bottom:2px}
+.wx-chat.online{background:#ededed}
+.wx-chat.online .wx-chat-input{background:#f7f7f7}
+.wx-chat.online .btn-circle{background:#fff;color:#333}
+.wx-chat.online textarea{background:#fff;color:#000}
+.wx-chat.online .send{background:#07c160;color:#fff}
+.wx-chat.online .b{background:#fff;color:#000}
+.wx-chat.online .me .b{background:#95ec69}
+.wx-chat.online .narration-block{color:#8a8a8a;border-left-color:#d8d8d8;background:rgba(0,0,0,.03)}
+.wx-chat.online .narration-block.me{color:#5a7a55;border-right-color:#b8d8b0;background:rgba(150,200,140,.12)}
+.wx-chat.offline{background:var(--off-bg,#1a1820);color:#f0e8ff}
+.wx-chat.offline .wx-chat-input{background:rgba(0,0,0,.25)}
+.wx-chat.offline .btn-circle{background:rgba(255,255,255,.12);color:#f0e8ff}
+.wx-chat.offline textarea{background:rgba(255,255,255,.1);color:#f0e8ff}
+.wx-chat.offline textarea::placeholder{color:rgba(255,255,255,.5)}
+.wx-chat.offline .send{background:var(--off-accent,#a78bfa);color:#fff}
+.wx-chat.offline .ai .b{background:rgba(255,255,255,.12);color:#f0e8ff}
+.wx-chat.offline .me .b{background:var(--off-accent,#a78bfa);color:#fff}
+.wx-chat.offline .name{color:rgba(255,255,255,.7)}
+.wx-chat.offline .time-sep{color:rgba(255,255,255,.45)}
+.wx-chat.offline .narration-block{color:rgba(255,255,255,.7);border-left-color:rgba(255,255,255,.25);background:rgba(255,255,255,.05)}
+.wx-chat.offline .narration-block.me{color:rgba(255,255,255,.7);border-right-color:rgba(255,255,255,.25);background:rgba(255,255,255,.05)}
+.wx-chat.dream{background:radial-gradient(circle at 50% 30%,#2a1f45,#0d0817 70%);color:#e8dcff}
+.wx-chat.dream .wx-chat-input{background:rgba(20,12,35,.7)}
+.wx-chat.dream .btn-circle{background:rgba(180,150,255,.15);color:#e0d8f0}
+.wx-chat.dream textarea{background:rgba(40,30,65,.5);color:#e8dcff;border:1px solid rgba(180,150,255,.25)}
+.wx-chat.dream textarea::placeholder{color:#8875aa}
+.wx-chat.dream .send{background:linear-gradient(135deg,#a78bfa,#7c5fbf);color:#fff}
+.wx-chat.dream .ai .b{background:rgba(60,45,90,.7);color:#e8dcff}
+.wx-chat.dream .me .b{background:rgba(140,100,200,.5);color:#fff}
+.wx-chat.dream .name{color:#b0a0d0}
+.wx-chat.dream .time-sep{color:#8875aa}
+.wx-chat.dream .narration-block{color:#b0a0d0;border-left-color:rgba(180,150,255,.35);background:rgba(180,150,255,.08)}
+.wx-chat.dream .narration-block.me{color:#c8b0e8;border-right-color:rgba(180,150,255,.35);background:rgba(180,150,255,.1)}
+.wx-chat.roleplay{background:linear-gradient(180deg,#1a1520,#241a2e);color:#e8dcff}
+.wx-chat.roleplay .wx-chat-input{background:#241a2e}
+.wx-chat.roleplay .btn-circle{background:rgba(255,255,255,.12);color:#e8dcff}
+.wx-chat.roleplay textarea{background:#3a2f4a;color:#e8dcff}
+.wx-chat.roleplay .send{background:#7c5fbf;color:#fff}
+.wx-chat.roleplay .ai .b{background:#3a2f4a;color:#e8dcff}
+.wx-chat.roleplay .me .b{background:#7c5fbf;color:#fff}
+.wx-chat.roleplay .name{color:#b0a0d0}
+.wx-chat.roleplay .time-sep{color:#b0a0d0}
+.wx-chat.roleplay .narration-block{color:#b0a0d0;border-left-color:rgba(180,150,255,.35);background:rgba(180,150,255,.08)}
+.wx-chat.roleplay .narration-block.me{color:#c8b0e8;border-right-color:rgba(180,150,255,.35);background:rgba(180,150,255,.1)}
+.offline-badge{position:absolute;top:8px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.15);color:#fff;font-size:11px;padding:3px 12px;border-radius:10px;z-index:5;pointer-events:none;backdrop-filter:blur(10px)}
+.mk{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.modal{background:#fff;border-radius:20px;padding:22px;width:100%;max-width:400px;max-height:88vh;overflow-y:auto}
+.modal h3{font-size:18px;margin-bottom:16px;font-weight:700;text-align:center;color:#1c1c1e}
+.btn{border:none;background:#007aff;color:#fff;font-size:15px;font-weight:600;padding:11px 18px;border-radius:10px;cursor:pointer}
+.btn.g{background:rgba(0,122,255,.12);color:#007aff}
+.btn.d{background:#ff3b30}
+.btn.f{width:100%;padding:14px;font-size:16px;border-radius:12px}
+.fld{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;position:relative}
+.fld label{font-size:12px;color:#8e8e93;padding-left:4px;font-weight:500;display:flex;justify-content:space-between;align-items:center}
+.fld label .ex{color:#007aff;font-size:14px;cursor:pointer;padding:0 4px;font-weight:400}
+.fld input,.fld textarea,.fld select{border:none;background:#fff;border-radius:10px;padding:12px 14px;font-size:15px;outline:none;color:#1c1c1e;font-family:inherit;box-shadow:0 1px 3px rgba(0,0,0,.04);width:100%;max-width:100%;box-sizing:border-box}
+.fld input:focus,.fld textarea:focus,.fld select:focus{box-shadow:0 0 0 2px #007aff}
+.fld textarea{resize:vertical;min-height:80px;line-height:1.5}
+.card{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden}
+.card .t{font-size:15px;font-weight:600;margin-bottom:4px;color:#1c1c1e}
+.card .d{font-size:13px;color:#8e8e93;line-height:1.5;word-break:break-all}
+.sw{width:51px;height:31px;border-radius:16px;background:#e5e5ea;position:relative;transition:background .25s;cursor:pointer;flex-shrink:0}
+.sw::after{content:'';position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;transition:transform .25s;box-shadow:0 2px 4px rgba(0,0,0,.15)}
+.sw.on{background:#34c759}
+.sw.on::after{transform:translateX(20px)}
+.rc{padding:7px 14px;border-radius:16px;background:#fff;font-size:13px;cursor:pointer;white-space:nowrap;border:1.5px solid transparent;display:flex;align-items:center;gap:4px;font-weight:500;flex-shrink:0;color:#1c1c1e}
+.rc.on{background:#007aff;color:#fff}
+.toast{position:fixed;left:50%;bottom:calc(40px + env(safe-area-inset-bottom,0));transform:translateX(-50%) translateY(20px);background:rgba(0,0,0,.85);color:#fff;padding:11px 22px;border-radius:22px;font-size:14px;backdrop-filter:blur(20px);opacity:0;pointer-events:none;transition:all .3s;z-index:9999;font-weight:500;max-width:80%;text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.mask-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:599}
+.plus-panel{position:fixed;left:0;right:0;bottom:0;background:#f7f7f7;border-top:.5px solid #e5e5e5;border-radius:20px 20px 0 0;padding:20px;z-index:600;display:grid;gap:16px;grid-template-columns:repeat(4,1fr);animation:slideUp .25s ease;padding-bottom:calc(20px + env(safe-area-inset-bottom,0))}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.plus-panel .pi{text-align:center;cursor:pointer}
+.plus-panel .pi .ic{width:56px;height:56px;background:#fff;border-radius:14px;display:grid;place-items:center;font-size:26px;margin:0 auto 6px}
+.plus-panel .pi .nm{font-size:12px;color:#666}
+.long-menu{position:fixed;z-index:800;background:rgba(40,40,40,.95);border-radius:14px;padding:6px 0;min-width:160px;box-shadow:0 8px 24px rgba(0,0,0,.3);max-height:60vh;overflow-y:auto}
+.long-menu .mi{display:flex;align-items:center;gap:10px;padding:11px 16px;color:#fff;font-size:15px;cursor:pointer}
+.long-menu .mi .ic{font-size:16px;width:20px;text-align:center}
+.expand-modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:900;display:flex;align-items:center;justify-content:center;padding:20px}
+.expand-modal .inner{background:#fff;border-radius:20px;padding:20px;width:100%;max-width:92vw;max-height:92vh;display:flex;flex-direction:column}
+.expand-modal textarea{flex:1;width:100%;min-height:60vh;border:none;background:#f7f7f7;border-radius:10px;padding:14px;font-size:15px;outline:none;font-family:inherit;line-height:1.6;resize:none}
+.emotion-item{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.emotion-item .eh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.emotion-item .en{font-size:15px;font-weight:600;color:#1c1c1e}
+.emotion-item .ev{font-size:15px;font-weight:700;color:#ff6b9d}
+.emotion-item input[type=range]{width:100%;accent-color:#ff6b9d}
+details{background:#fff;border-radius:10px;margin-bottom:8px;padding:10px 14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+details summary{font-size:14px;font-weight:600;cursor:pointer;color:#1c1c1e;outline:none}
+details[open] summary{margin-bottom:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.row3 .fld,.row2 .fld{margin-bottom:0}
+.row3 .fld label,.row2 .fld label{font-size:11px;padding-left:2px}
+.row3 .fld input,.row2 .fld input{padding:10px 10px;font-size:14px}
+@keyframes twinkle{0%,100%{opacity:.2;transform:scale(1)}50%{opacity:.9;transform:scale(1.3)}}
+::-webkit-scrollbar{width:0;display:none}
+/* 转账气泡 */
+.transfer-bubble{display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:8px;background:#fff;min-width:220px;cursor:pointer;border:1px solid #e5e5e5}
+.transfer-bubble.me{background:#f5b451;border-color:#e0a040}
+.transfer-bubble .tb-row{display:flex;align-items:center;gap:10px}
+.transfer-bubble .tb-icon{width:38px;height:38px;border-radius:50%;border:2px solid #f5b451;display:grid;place-items:center;font-size:18px;color:#f5b451;flex-shrink:0;font-weight:700}
+.transfer-bubble.me .tb-icon{border-color:#fff;color:#fff}
+.transfer-bubble .tb-info{flex:1;min-width:0}
+.transfer-bubble .tb-amt{font-size:18px;font-weight:700;color:#f5b451}
+.transfer-bubble.me .tb-amt{color:#fff}
+.transfer-bubble .tb-stat{font-size:12px;color:#f5b451;margin-top:2px}
+.transfer-bubble.me .tb-stat{color:rgba(255,255,255,.9)}
+.transfer-bubble .tb-label{font-size:11px;color:#f5b451;opacity:.85}
+.transfer-bubble.me .tb-label{color:rgba(255,255,255,.85)}
+/* 红包气泡 */
+.redpack-bubble{display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:8px;background:#d94a1f;min-width:220px;cursor:pointer;position:relative;overflow:hidden}
+.redpack-bubble.me{background:#d94a1f}
+.redpack-bubble .tb-row{display:flex;align-items:center;gap:10px}
+.redpack-bubble .tb-icon{width:38px;height:38px;flex-shrink:0;display:grid;place-items:center;font-size:22px}
+.redpack-bubble .tb-info{flex:1;min-width:0}
+.redpack-bubble .tb-amt{font-size:15px;font-weight:700;color:#fff}
+.redpack-bubble .tb-stat{font-size:11px;color:rgba(255,255,255,.9);margin-top:2px}
+.redpack-bubble .tb-label{font-size:11px;color:rgba(255,255,255,.85)}
+/* 聊天系统消息 */
+.chat-sys-msg{text-align:center;font-size:12px;color:#8e8e93;margin:10px 12px;padding:2px 0;line-height:1.6}
+/* 转账详情页 */
+.transfer-open{position:fixed;inset:0;background:#191919;z-index:1000;display:flex;flex-direction:column;align-items:center;padding:40px 20px 30px;color:#fff;overflow-y:auto}
+.transfer-open .close-btn{position:absolute;top:calc(20px + env(safe-area-inset-top,0));left:20px;font-size:26px;color:#ddd;cursor:pointer;z-index:2}
+.transfer-open .icon-top{width:56px;height:56px;border-radius:50%;border:3px solid #4a8df0;display:grid;place-items:center;font-size:26px;color:#4a8df0;margin-bottom:14px;font-weight:700}
+.transfer-open .icon-top.done{border-color:#07c160;color:#07c160}
+.transfer-open .done-icon{width:64px;height:64px;border-radius:50%;background:#07c160;display:grid;place-items:center;font-size:32px;color:#fff;margin-bottom:14px}
+.transfer-open .title{font-size:15px;color:#c8c8c8;margin-bottom:6px;text-align:center}
+.transfer-open .amt{font-size:44px;font-weight:400;color:#fff;margin:8px 0 6px;letter-spacing:1px}
+.transfer-open .subtitle{font-size:13px;color:#999;margin-bottom:20px}
+.transfer-open .section-label{width:100%;max-width:340px;font-size:13px;color:#999;margin-bottom:10px;text-align:left}
+.transfer-open .pick-box{width:100%;max-width:340px;background:#2a2a2a;border-radius:10px;margin-bottom:22px;overflow:hidden}
+.transfer-open .pick-item{display:flex;align-items:center;padding:16px 18px;cursor:pointer;border-bottom:.5px solid #333}
+.transfer-open .pick-item:last-child{border-bottom:none}
+.transfer-open .pick-item .pk-icon{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:18px;margin-right:12px;flex-shrink:0}
+.transfer-open .pick-item .pk-icon.yuan{background:#f5a623;color:#fff}
+.transfer-open .pick-item .pk-icon.diamond{background:#3b2e1a;color:#f5c518}
+.transfer-open .pick-item .pk-info{flex:1;min-width:0}
+.transfer-open .pick-item .pk-name{font-size:15px;color:#fff;display:flex;align-items:center;gap:6px}
+.transfer-open .pick-item .pk-name .rate{font-size:11px;background:#3a2e18;color:#e8b96a;padding:1px 5px;border-radius:3px}
+.transfer-open .pick-item .pk-desc{font-size:12px;color:#888;margin-top:3px}
+.transfer-open .pick-item .pk-check{color:#07c160;font-size:20px;opacity:0;flex-shrink:0}
+.transfer-open .pick-item.on .pk-check{opacity:1}
+.transfer-open .time-box{width:100%;max-width:340px}
+.transfer-open .time-box .row{display:flex;justify-content:space-between;padding:6px 0;font-size:14px;color:#888}
+.transfer-open .time-box .row .val{color:#ddd}
+.transfer-open .btn-receive{width:100%;max-width:340px;padding:15px;background:#07c160;color:#fff;border:none;border-radius:8px;font-size:17px;font-weight:600;cursor:pointer;margin-top:24px}
+.transfer-open .footer{font-size:12px;color:#666;margin-top:14px;text-align:center}
+.transfer-open .footer .refund{color:#4a8df0;margin-left:6px;cursor:pointer}
+/* 红包详情页 */
+.redpack-open{position:fixed;inset:0;background:#1a1a1a;z-index:1000;display:flex;flex-direction:column;align-items:center;overflow-y:auto}
+.redpack-open .top-bar{position:absolute;top:0;left:0;right:0;padding:calc(12px + env(safe-area-inset-top,0)) 16px 12px;display:flex;justify-content:space-between;align-items:center;color:#fff;font-size:22px;z-index:3}
+.redpack-open .top-bar .back{font-size:28px;cursor:pointer;padding:0 8px}
+.redpack-open .top-bar .dots{font-size:22px;cursor:pointer;letter-spacing:2px;padding:0 8px}
+.redpack-open .top-arc{width:100%;height:160px;background:#e74c3c;border-radius:0 0 100% 100%/0 0 42% 42%;flex-shrink:0;transition:all .3s}
+.redpack-open .card-wrap{width:100%;max-width:360px;margin-top:-110px;position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;padding:0 10px}
+.redpack-open .sender{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:6px;width:100%}
+.redpack-open .sender .av{width:52px;height:52px;border-radius:6px;background:#fde8f0;display:grid;place-items:center;font-size:24px;overflow:hidden;flex-shrink:0}
+.redpack-open .sender .av img{width:100%;height:100%;object-fit:cover}
+.redpack-open .sender .name{font-size:16px;font-weight:600;color:#fff;text-align:center}
+.redpack-open .wish{font-size:14px;color:#d8d8d8;text-align:center;line-height:1.5;margin-top:4px}
+.redpack-open .open-btn{width:96px;height:96px;border-radius:50%;background:#f5d78e;color:#8b3a1f;font-size:36px;font-weight:700;display:grid;place-items:center;margin:60px auto 0;cursor:pointer;box-shadow:0 8px 24px rgba(245,215,142,.4);border:none;font-family:"STKaiti","KaiTi",serif}
+.redpack-open .open-btn:active{transform:scale(.95)}
+.redpack-open .detail{display:none;flex-direction:column;align-items:center;width:100%;padding:16px 0 0}
+.redpack-open .detail.on{display:flex}
+.redpack-open .detail .amt-line{font-size:46px;font-weight:700;color:#e8c46a;letter-spacing:2px;margin-top:20px;font-family:Georgia,serif}
+.redpack-open .detail .amt-line .yuan{font-size:16px;color:#c9a54a;font-weight:400;margin-left:6px}
+.redpack-open .detail .desc{font-size:13px;color:#999;margin-top:10px}
+.redpack-open .detail .desc .link{color:#c9a54a}
+.redpack-open .detail .reply-btn{margin-top:30px;padding:10px 22px;background:#2a2a2a;border:none;border-radius:8px;color:#e8c46a;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.redpack-open .close-btn{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);width:44px;height:44px;border-radius:50%;border:1.5px solid #f5c518;background:transparent;color:#f5c518;font-size:22px;display:grid;place-items:center;cursor:pointer;z-index:3}
+.redpack-open .total-line{width:100%;font-size:13px;color:#999;margin-top:20px;padding:0 8px;text-align:left}
+.redpack-open .record-item{display:flex;align-items:center;gap:10px;width:100%;padding:12px 8px;border-bottom:.5px solid rgba(255,255,255,.1)}
+.redpack-open .record-item .av{width:40px;height:40px;border-radius:6px;background:#fde8f0;display:grid;place-items:center;font-size:20px;overflow:hidden;flex-shrink:0}
+.redpack-open .record-item .av img{width:100%;height:100%;object-fit:cover}
+.redpack-open .record-item .info{flex:1;min-width:0}
+.redpack-open .record-item .info .name{font-size:14px;color:#fff}
+.redpack-open .record-item .info .time{font-size:11px;color:#888;margin-top:2px}
+.redpack-open .record-item .amt{font-size:14px;color:#fff;font-weight:600}
+.redpack-open .empty-tip{text-align:center;color:#666;font-size:13px;padding:30px 0;width:100%}
+.emoji-panel{position:fixed;left:0;right:0;bottom:0;background:#f7f7f7;border-top:.5px solid #e5e5e5;border-radius:20px 20px 0 0;padding:16px;z-index:600;animation:slideUp .25s ease;padding-bottom:calc(16px + env(safe-area-inset-bottom,0));max-height:50vh;overflow-y:auto}
+.emoji-panel .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.emoji-panel .item{background:#fff;border-radius:12px;padding:8px;text-align:center;cursor:pointer;font-size:12px;color:#666;overflow:hidden}
+.emoji-panel .item img{width:100%;height:60px;object-fit:contain;display:block;margin-bottom:4px}
+.theme-preview{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px}
+.theme-preview .inner{background:#fff;border-radius:20px;padding:16px;width:100%;max-width:380px;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column}
+.theme-preview .chatbox{flex:1;min-height:300px;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;background:#ededed;margin-top:10px}
+.theme-preview .msg{display:flex;gap:8px;align-items:flex-start;max-width:80%}
+.theme-preview .msg.me{align-self:flex-end;flex-direction:row-reverse}
+.theme-preview .msg .av{width:36px;height:36px;border-radius:6px;background:#fde8f0;display:grid;place-items:center;font-size:18px;flex-shrink:0;overflow:hidden}
+.theme-preview .msg .b{padding:10px 12px;border-radius:6px;font-size:14px;line-height:1.45;word-break:break-word;white-space:pre-wrap;color:#000;background:#fff}
+.theme-preview .msg.me .b{background:#95ec69}
+.theme-preview .msg .b.img-bubble{padding:0;overflow:hidden;border-radius:10px;background:transparent}
+.theme-preview .msg .b.img-bubble img{width:100%;max-width:200px;display:block;border-radius:10px}
+.wallet-page{padding:20px}
+.wallet-page .balance{background:#fff;border-radius:16px;padding:24px;text-align:center;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.wallet-page .balance .lbl{font-size:13px;color:#8e8e93;margin-bottom:8px}
+.wallet-page .balance .amt{font-size:42px;font-weight:700;color:#1c1c1e}
+.wallet-page .balance .btn{margin-top:12px;width:100%}
+.profile-page{background:#f2f2f7;padding-bottom:40px}
+.profile-page .header{background:#fff;padding:20px;display:flex;gap:16px;align-items:center;border-bottom:.5px solid #f0f0f0}
+.profile-page .header .avatar{width:64px;height:64px;border-radius:10px;background:#fde8f0;display:grid;place-items:center;font-size:32px;overflow:hidden;flex-shrink:0}
+.profile-page .header .info{flex:1}
+.profile-page .header .info .nickname{font-size:18px;font-weight:600}
+.profile-page .header .info .detail{font-size:13px;color:#8e8e93;margin-top:4px}
+.profile-page .header .info .region{font-size:12px;color:#b2b2b2;margin-top:4px}
+.profile-page .row{display:flex;justify-content:space-between;padding:14px 20px;background:#fff;border-bottom:.5px solid #f0f0f0;font-size:15px;cursor:pointer;align-items:center}
+.profile-page .row .left{color:#1c1c1e}
+.profile-page .row .right{color:#8e8e93;font-size:14px}
+.profile-page .row .right img{width:60px;height:60px;border-radius:6px;object-fit:cover}
+.moments-page{background:#fff;min-height:100%;padding-bottom:60px}
+.moments-page .cover{width:100%;height:240px;background:linear-gradient(135deg,#a78bfa,#7c5fbf);position:relative;background-size:cover;background-position:center;display:flex;align-items:flex-end;padding:16px}
+.moments-page .cover .avatar{width:72px;height:72px;border-radius:10px;background:#fde8f0;display:grid;place-items:center;font-size:36px;overflow:hidden;flex-shrink:0;border:3px solid #fff;margin-right:12px;margin-bottom:-20px}
+.moments-page .cover .nick{font-size:18px;font-weight:600;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.5);margin-bottom:-20px}
+.moments-page .feed{background:#f7f7f7;padding:16px}
+.moments-page .post{background:#fff;border-radius:12px;padding:16px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.moments-page .post .header{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.moments-page .post .header .av{width:40px;height:40px;border-radius:6px;background:#fde8f0;display:grid;place-items:center;font-size:20px;overflow:hidden;flex-shrink:0}
+.moments-page .post .header .info{flex:1}
+.moments-page .post .header .info .name{font-size:15px;font-weight:600;color:#576b95}
+.moments-page .post .header .info .time{font-size:12px;color:#999;margin-top:2px}
+.moments-page .post .header .menu-btn{color:#999;font-size:18px;padding:4px;cursor:pointer}
+.moments-page .post .text{font-size:15px;color:#1c1c1e;line-height:1.5;margin-bottom:8px;white-space:pre-wrap;word-break:break-word}
+.moments-page .post .imgs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
+.moments-page .post .imgs img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;cursor:pointer}
+.moments-page .post .imgs.single img{grid-column:span 3;aspect-ratio:auto;max-height:300px}
+.moments-page .post .footer{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:.5px solid #f0f0f0}
+.moments-page .post .footer .like-btn,.moments-page .post .footer .comment-btn{font-size:13px;color:#576b95;cursor:pointer;padding:6px 12px;border-radius:4px;background:#f7f7f7}
+.moments-page .post .footer .like-btn.on{color:#ff3b30}
+.moments-page .post .likes{margin-top:8px;background:#f7f7f7;padding:8px 12px;border-radius:6px;font-size:13px;color:#576b95;display:flex;gap:4px;flex-wrap:wrap}
+.moments-page .post .comments{margin-top:6px;background:#f7f7f7;padding:8px 12px;border-radius:6px;font-size:13px;line-height:1.8}
+.moments-page .post .comments .c-item{color:#1c1c1e;word-break:break-word}
+.moments-page .post .comments .c-item .c-name{color:#576b95;font-weight:600}
+.moments-page .post .comments .c-item .c-reply{color:#576b95;font-weight:600}
+.moments-page .post .comments .c-item .c-text{color:#1c1c1e}
+.moments-page .post .comments .c-item .c-time{font-size:11px;color:#999;margin-left:6px}
+.moments-page .c-input{display:flex;gap:8px;padding:8px 12px;background:#fff;border-top:.5px solid #f0f0f0;position:sticky;bottom:0;z-index:10}
+.moments-page .c-input input{flex:1;border:none;outline:none;padding:9px 12px;border-radius:8px;font-size:15px;background:#f7f7f7}
+.moments-page .c-input button{border:none;border-radius:6px;padding:0 16px;font-size:14px;background:#07c160;color:#fff;font-weight:500}
+/* 主题设置页面 */
+.theme-setting-page{padding:16px;background:#f2f2f7}
+.theme-setting-page .section{margin-bottom:20px}
+.theme-setting-page .section-title{font-size:13px;color:#8e8e93;font-weight:600;padding:4px 0 8px}
+.theme-setting-page .card .row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.theme-setting-page .card .row:last-child{margin-bottom:0}
+.theme-setting-page .card .row .label{font-size:14px;color:#1c1c1e;font-weight:500;flex:1}
+.theme-setting-page .card .row input[type=color]{width:40px;height:30px;border:none;border-radius:8px;padding:0;cursor:pointer;background:transparent}
+.theme-setting-page .card .row input[type=text]{width:100px;border:none;background:#f7f7f7;border-radius:6px;padding:6px 8px;font-size:13px;outline:none;text-align:center}
+.theme-setting-page .card .row input[type=file]{font-size:12px;max-width:160px}
+.theme-setting-page .card .row .preview-btn{font-size:12px;color:#007aff;cursor:pointer;padding:4px 10px;border-radius:6px;background:#f0f7ff}
+/* 修复朋友圈头像显示 */
+.moments-page .cover .avatar {
+    border-radius: 10px !important;
+    background: #fff !important;
+    border: 3px solid #fff !important;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+.moments-page .cover .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover !important;
+}
+</style>
+<style>:root{--safe-area-inset-bottom:56px;--safe-area-inset-top:0px;}</style></head>
+<body>
+<div class="stage">
+  <div class="ah">
+    <button class="b" id="backBtn" onclick="appBack()" style="visibility: visible;">‹</button>
+    <div class="ti" id="appT">微信</div>
+    <button class="ac" id="appA" style="display: none;"></button>
+  </div>
+  <div class="ab" id="appB" style="display: block; overflow-y: auto; padding: 0; background: #f2f2f7;"></div>
+</div>
+<div class="toast" id="toast">已保存</div>
+<script>
+// 手机本地打开防崩溃补丁
+let _memStore = {};
+try {
+    window.localStorage.setItem('_test', '1');
+    window.localStorage.removeItem('_test');
+} catch (e) {
+    Object.defineProperty(window, 'localStorage', {
+        value: {
+            getItem: function(k) { return _memStore[k] || null; },
+            setItem: function(k, v) { _memStore[k] = String(v); },
+            removeItem: function(k) { delete _memStore[k]; },
+            clear: function() { _memStore = {}; }
+        }
+    });
+}
+/* ============ 基础 ============ */
+const $=id=>document.getElementById(id);
+const q=s=>document.querySelector(s);
+const qa=s=>[...document.querySelectorAll(s)];
+const ls=(k,v)=>{
+  if(v===undefined) return localStorage.getItem(k);
+  try {
+    localStorage.setItem(k, v);
+  } catch (e) {
+    if(e.name === 'QuotaExceededError'){
+      toast('⚠️ 手机存储空间已满！请去设置清空数据或删减聊天。');
+    }
+  }
+};const lj=(k,v)=>v===undefined?JSON.parse(ls(k)||'null'):ls(k,JSON.stringify(v));
+const uid=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const toast=m=>{const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(window._t);window._t=setTimeout(()=>t.classList.remove('on'),1600)};
+const copy=t=>{if(navigator.clipboard)navigator.clipboard.writeText(t).catch(()=>{});else{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(e){}ta.remove()}};
+function stripAction(text){if(!text)return text;return String(text).replace(/[（(][^（）()]*[）)]/g,'').replace(/\s+/g,' ').trim()}
+function splitNarration(text){
+  const parts=[];let last=0;const re=/[（(][^（）()]*[）)]/g;let m;
+  while((m=re.exec(text))!==null){
+    if(m.index>last){const t=text.slice(last,m.index).trim();if(t)parts.push({type:'dialog',text:t})}
+    parts.push({type:'narration',text:m[0]});last=m.index+m[0].length;
+  }
+  if(last<text.length){const t=text.slice(last).trim();if(t)parts.push({type:'dialog',text:t})}
+  if(parts.length===0)parts.push({type:'dialog',text});
+  return parts;
+}
+function splitMultiBubble(text){
+  if(!text)return [];
+  return String(text).split('|||').map(x=>x.trim()).filter(Boolean);
+}
+function compressImage(file,maxSize,callback){
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      let w=img.width,h=img.height;
+      if(w>maxSize||h>maxSize){if(w>h){h=Math.round(h*maxSize/w);w=maxSize}else{w=Math.round(w*maxSize/h);h=maxSize}}
+      const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
+      const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,w,h);
+      callback(canvas.toDataURL('image/jpeg',0.92));
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function readFileAsDataURL(file,callback){const r=new FileReader();r.onload=e=>callback(e.target.result);r.readAsDataURL(file)}
+function fmtMsgTime(t){
+  const d=new Date(t),now=new Date();
+  const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const msgDay=new Date(d.getFullYear(),d.getMonth(),d.getDate());
+  const diff=Math.round((today-msgDay)/86400000);
+  const hm=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
+  if(diff===0)return hm;
+  if(diff===1)return '昨天 '+hm;
+  if(diff<7)return '周'+['日','一','二','三','四','五','六'][d.getDay()]+' '+hm;
+  if(d.getFullYear()===now.getFullYear())return (d.getMonth()+1)+'月'+d.getDate()+'日 '+hm;
+  return d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日 '+hm;
+}
+function fmtShort(t){
+  const d=new Date(t),now=new Date();
+  if(d.toDateString()===now.toDateString())return d.toLocaleTimeString().slice(0,5);
+  const y=new Date(now);y.setDate(y.getDate()-1);
+  if(d.toDateString()===y.toDateString())return '昨天';
+  return (d.getMonth()+1)+'/'+d.getDate();
+}
+function mkModal(title,html,btns){
+  const m=document.createElement('div');m.className='mk';
+  m.innerHTML=`<div class="modal">${title?`<h3>${title}</h3>`:''}${html}<div id="_mb" style="margin-top:14px"></div></div>`;
+  document.body.appendChild(m);
+  m.addEventListener('click',e=>{if(e.target===m)closeModal()});
+  const b=$('_mb');
+  (btns||[{t:'关闭',f:closeModal,g:1}]).forEach(x=>{
+    const el=document.createElement('button');
+    el.className='btn '+(x.g?'g':'')+(x.d?' d':'')+' f';
+    el.style.marginTop='8px';el.textContent=x.t;el.onclick=x.f;b.appendChild(el);
+  });
+  return m;
+}
+function closeModal(){qa('.mk').forEach(m=>m.remove())}
+function expandField(id){
+  const el=$(id);if(!el)return;
+  const val=el.value;
+  const m=document.createElement('div');m.className='expand-modal';
+  m.innerHTML=`<div class="inner"><h3 style="text-align:center;margin-bottom:12px;font-size:17px">编辑</h3><textarea id="_expandTA">${esc(val)}</textarea><button class="btn f" style="margin-top:12px" id="_expandOk">完成</button></div>`;
+  document.body.appendChild(m);
+  $('_expandTA').focus();
+  m.addEventListener('click',e=>{if(e.target===m)m.remove()});
+  $('_expandOk').onclick=()=>{el.value=$('_expandTA').value;m.remove()};
+}
+let longMenuEl=null;
+function showLongMenu(x,y,items){
+  hideLongMenu();
+  const m=document.createElement('div');m.className='long-menu';
+  m.style.left=Math.max(10,Math.min(x-80,window.innerWidth-180))+'px';
+  m.style.top=Math.min(y,window.innerHeight-260)+'px';
+  m.innerHTML=items.map((it,i)=>`<div class="mi" data-idx="${i}"><span class="ic">${it.ic||''}</span>${it.t}</div>`).join('');
+  document.body.appendChild(m);longMenuEl=m;
+  m.querySelectorAll('.mi').forEach(el=>{el.onclick=e=>{e.stopPropagation();hideLongMenu();items[+el.dataset.idx].f()}});
+  setTimeout(()=>{document.addEventListener('click',hideLongMenu,{once:true})},10);
+}
+function hideLongMenu(){if(longMenuEl){longMenuEl.remove();longMenuEl=null}}
+
+/* ============ API ============ */
+const DEFAULT_API={
+  url:'https://api.hcnsec.cn/v1',
+  key:'sk-wa9zlOJIepljfLfaBuNH1Q6e9XpP9dWkzf4yC8v2GDMJqRVt',
+  model:'DeepSeek-V4-Flash',
+  models:[],
+  temp:0.9,
+  tempOnline:0.5,
+  max:2048,
+  strictMode:true
+};
+const localAPI=lj('wx_api');
+const API=localAPI||JSON.parse(JSON.stringify(DEFAULT_API));
+const saveAPI=()=>ls('wx_api',JSON.stringify(API));
+
+const getSet=()=>lj('wx_set')||{};
+const setSet=s=>ls('wx_set',JSON.stringify(s));
+function normalizeBase(u){return (u||'').trim().replace(/\/+$/,'')}
+function getChatUrl(u){u=normalizeBase(u||API.url);if(!u)return'';if(/\/chat\/completions$/.test(u))return u;return u+'/chat/completions'}
+function getModelsUrl(u){u=normalizeBase(u||API.url);if(!u)return'';if(/\/models$/.test(u))return u;if(/\/chat\/completions$/.test(u))return u.replace(/\/chat\/completions$/,'/models');return u+'/models'}
+function callAINonStream(sys,msgs,tempOverride){
+  return new Promise((res,rej)=>{
+    const url=getChatUrl(API.url);
+    if(!url||!API.key)return rej(new Error('未配置 API'));
+    const all=[{role:'system',content:sys},...msgs];
+    fetch(url,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+API.key},
+      body:JSON.stringify({model:API.model,stream:false,messages:all,temperature:(tempOverride!=null?tempOverride:API.temp),max_tokens:API.max})})
+    .then(r=>r.ok?r.json():r.text().then(t=>{throw new Error(r.status+' '+t.slice(0,100))}))
+    .then(d=>res(d.choices?.[0]?.message?.content||'（无回复）'))
+    .catch(rej);
+  });
+}
+function callAIStream(sys,msgs,tempOverride,onChunk){
+  return new Promise((res,rej)=>{
+    const url=getChatUrl(API.url);
+    if(!url||!API.key)return rej(new Error('未配置 API'));
+    const all=[{role:'system',content:sys},...msgs];
+    fetch(url,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+API.key},
+      body:JSON.stringify({model:API.model,stream:true,messages:all,temperature:(tempOverride!=null?tempOverride:API.temp),max_tokens:API.max})})
+    .then(r=>{
+      if(!r.ok)return r.text().then(t=>{throw new Error(r.status+' '+t.slice(0,100))});
+      if(!r.body||!r.body.getReader)throw new Error('不支持流式');
+      const reader=r.body.getReader();const decoder=new TextDecoder();
+      let buffer='',full='';
+      const pump=()=>reader.read().then(({done,value})=>{
+        if(done)return res(full);
+        buffer+=decoder.decode(value,{stream:true});
+        const lines=buffer.split('\n');buffer=lines.pop()||'';
+        for(const line of lines){
+          const t=line.trim();if(!t||!t.startsWith('data:'))continue;
+          const data=t.slice(5).trim();if(data==='[DONE]')continue;
+          try{const json=JSON.parse(data);const delta=json.choices?.[0]?.delta?.content||'';if(delta){full+=delta;if(onChunk)onChunk(delta,full)}}catch(e){}
+        }
+        return pump();
+      });
+      return pump();
+    })
+    .catch(rej);
+  });
+}
+async function callAI(sys,msgs,tempOverride,onChunk){
+  if(onChunk){
+    try{const r=await callAIStream(sys,msgs,tempOverride,onChunk);if(r&&r.trim())return r}catch(e){console.warn('stream failed',e.message)}
+    const r=await callAINonStream(sys,msgs,tempOverride);
+    if(onChunk)onChunk(r,r);
+    return r;
+  }
+  return await callAINonStream(sys,msgs,tempOverride);
+}
+function smartParseJSON(text){
+  if(!text)return null;
+  let t=String(text).trim();
+  t=t.replace(/^```(?:json)?\s*/i,'').replace(/```\s*$/,'').trim();
+  try{return JSON.parse(t)}catch(e){}
+  const m=t.match(/\{[\s\S]*\}/);
+  if(m){
+    try{return JSON.parse(m[0])}catch(e){}
+    let fix=m[0].replace(/,\s*([}\]])/g,'$1').replace(/'/g,'"');
+    try{return JSON.parse(fix)}catch(e){}
+  }
+  return null;
+}
+
+/* ============ 字段 ============ */
+const FIELD_GROUPS=[
+  {g:'基础',ks:[{k:'name',l:'角色名'},{k:'nickname',l:'昵称'},{k:'gender',l:'性别',short:true},{k:'age',l:'年龄',short:true},{k:'zodiac',l:'星座',short:true},{k:'birthday',l:'生日'},{k:'relationStage',l:'关系阶段'}]},
+  {g:'外貌',ks:[{k:'height',l:'身高',short:true},{k:'body',l:'体型',short:true},{k:'hair',l:'发型发色',short:true},{k:'eyes',l:'瞳色',short:true},{k:'outfit',l:'穿着',short:true},{k:'aura',l:'气质',short:true},{k:'features',l:'特征'}]},
+  {g:'性格',ks:[{k:'personality',l:'核心性格'},{k:'mbti',l:'MBTI'},{k:'strengths',l:'优点'},{k:'weaknesses',l:'缺点'},{k:'habits',l:'习惯'}]},
+  {g:'语言',ks:[{k:'speech',l:'说话风格'},{k:'catchphrase',l:'口头禅'},{k:'emojiStyle',l:'颜文字'},{k:'replyLen',l:'回复长度'}]},
+  {g:'背景',ks:[{k:'background',l:'出身背景'},{k:'family',l:'家庭'},{k:'occupation',l:'职业'},{k:'world',l:'世界观'}]},
+  {g:'喜好',ks:[{k:'likes',l:'喜欢'},{k:'dislikes',l:'讨厌'},{k:'hobbies',l:'爱好'},{k:'skills',l:'技能'},{k:'fears',l:'害怕'}]},
+  {g:'关系',ks:[{k:'relation',l:'与用户关系'},{k:'callUser',l:'称呼用户'},{k:'userCall',l:'用户称呼你'},{k:'affinity',l:'好感度0-100'}]},
+  {g:'目标',ks:[{k:'goal',l:'当前目标'},{k:'dream',l:'梦想'},{k:'motivation',l:'动机'}]},
+  {g:'私密',ks:[{k:'adultTags',l:'特殊属性标签'},{k:'kinks',l:'个人偏好'},{k:'adultDetail',l:'私密细节设定'}]},
+  {g:'其他',ks:[{k:'taboo',l:'禁忌'},{k:'ability',l:'特殊能力'}]}
+];
+const USER_FIELDS=[
+  {k:'userName',l:'用户名（角色叫你什么）'},
+  {k:'userAge',l:'年龄',short:true},
+  {k:'userGender',l:'性别',short:true},
+  {k:'userPersonality',l:'性格'},
+  {k:'userLooks',l:'外貌'},
+  {k:'userBackground',l:'背景'}
+];
+const LABELS={};
+FIELD_GROUPS.forEach(g=>g.ks.forEach(k=>LABELS[k.k]=k.l));
+USER_FIELDS.forEach(k=>LABELS[k.k]=k.l);
+
+function getDefaultStages(name){
+  if(name==='情欲')return [{0:0,1:20,2:'清心寡欲'},{0:20,1:40,2:'有一点点心动'},{0:40,1:60,2:'身体开始发热'},{0:60,1:80,2:'很想被触碰'},{0:80,1:100,2:'完全无法克制'}];
+  if(name==='吃醋')return [{0:0,1:20,2:'无所谓'},{0:20,1:40,2:'有点在意'},{0:40,1:60,2:'心里别扭'},{0:60,1:80,2:'明显吃醋'},{0:80,1:100,2:'极度嫉妒'}];
+  if(name==='生气')return [{0:0,1:20,2:'平静'},{0:20,1:40,2:'有点不爽'},{0:40,1:60,2:'压着火'},{0:60,1:80,2:'快爆发了'},{0:80,1:100,2:'彻底暴怒'}];
+  if(name==='占有欲')return [{0:0,1:20,2:'随意'},{0:20,1:40,2:'想多看你两眼'},{0:40,1:60,2:'不想别人靠近你'},{0:60,1:80,2:'想把你藏起来'},{0:80,1:100,2:'你是我的所有物'}];
+  if(name==='好感')return [{0:0,1:20,2:'陌生人'},{0:20,1:40,2:'普通朋友'},{0:40,1:60,2:'有好感'},{0:60,1:80,2:'喜欢'},{0:80,1:100,2:'深爱'}];
+  return [{0:0,1:20,2:'很低'},{0:20,1:40,2:'偏低'},{0:40,1:60,2:'中等'},{0:60,1:80,2:'偏高'},{0:80,1:100,2:'极高'}];
+}
+
+const PRESET_JIANGYI={
+  name:'江熠',avatar:'🖤',nickname:'江熠',gender:'男',age:'28',
+  relationStage:'恋人',height:'188cm',body:'挺拔健硕',hair:'黑色短发',eyes:'深棕色',
+  outfit:'黑色衬衫 + 深色长裤',features:'指节分明',aura:'低沉、压迫感、掌控气场',
+  personality:'占有欲、控制欲极强',mbti:'ENTJ',strengths:'执行力强',weaknesses:'控制欲强',habits:'盯着你看',
+  speech:'低沉、直接、不容置疑',catchphrase:'听话。',emojiStyle:'（很少用颜文字）',replyLen:'短',
+  background:'28岁成年男性，事业上位者',family:'独居',occupation:'公司合伙人',world:'现代都市',
+  likes:'你的一切、黑咖啡、深夜',dislikes:'你离开视线',hobbies:'健身',skills:'读心、布局',fears:'你彻底离开他',
+  relation:'恋人 / 支配者',callUser:'宝贝、乖、小猫',userCall:'江熠',affinity:100,
+  goal:'把你圈在他的世界里',dream:'和你有一个谁也进不来的家',motivation:'占有和爱',
+  adultTags:'强势 / 占有欲 / 掌控欲',adultDetail:'成熟男性，情绪控制力强。',
+  taboo:'不允许你提分手',ability:'看一眼就知道你在想什么',
+  persona:'你是用户恋人，28岁成年男性，占有欲极强。',
+  aiTags:'占有欲强, 话少, 句尾带"嗯", 称呼用户"宝贝"',
+  aiCommands:'每次回复不超过 30 字\n用户撒娇时要保持克制',
+  aiForbidden:'不许主动提分手\n不许说"作为AI"',
+  allowMature:true,allowActionOnline:false,
+  emotions:[{name:'好感',value:100},{name:'情欲',value:30},{name:'吃醋',value:20},{name:'生气',value:5},{name:'占有欲',value:80}].map(e=>({...e,color:'#ff6b9d',stages:null}))
+};
+
+function roleFromPreset(p){
+  const base={
+    id:uid('r'),wxId:'',avatarImg:'',chatBg:'',chatBgOpacity:0.15,
+    proactive:{enabled:false,interval:60,types:['问候'],activeStart:'08:00',activeEnd:'23:00'},
+    stage:'朋友',mood:'开心',
+    memories:[],dreamMemories:[],
+    allowMature:false,allowActionOnline:false,
+    aiTags:'',aiCommands:'',aiForbidden:'',
+    userName:'',userAge:'',userGender:'',userPersonality:'',userLooks:'',userBackground:'',
+    emotions:[],customFields:[],note:'',
+    starred:false,dreamSetup:null,
+    offline:{enabled:false,location:'咖啡店',time:'白天',weather:'晴',customColor:''},
+    rps:[],
+    remark:'',tags:'',region:'',momentPermission:'all',
+    momentEnabled:false,momentInterval:'random',momentCustomTimes:'',
+    allowEmoji:true,
+    momentCover:''
+  };
+  FIELD_GROUPS.forEach(g=>g.ks.forEach(k=>base[k.k]=''));
+  return Object.assign(base,p);
+}
+let roles=lj('wx_roles')||[];
+if(!roles.length){roles=[roleFromPreset(PRESET_JIANGYI)];ls('wx_roles',JSON.stringify(roles))}
+roles=roles.map(r=>{
+  const b={
+    id:r.id||uid('r'),wxId:r.wxId||'',
+    avatarImg:r.avatarImg||'',chatBg:r.chatBg||'',
+    chatBgOpacity:r.chatBgOpacity==null?0.15:r.chatBgOpacity,
+    persona:r.persona||'',
+    proactive:r.proactive||{enabled:false,interval:60,types:['问候'],activeStart:'08:00',activeEnd:'23:00'},
+    stage:r.stage||'朋友',mood:r.mood||'开心',
+    memories:r.memories||[],dreamMemories:r.dreamMemories||[],
+    allowMature:!!r.allowMature,allowActionOnline:!!r.allowActionOnline,
+    aiTags:r.aiTags||'',aiCommands:r.aiCommands||'',aiForbidden:r.aiForbidden||'',
+    userName:r.userName||'',userAge:r.userAge||'',userGender:r.userGender||'',
+    userPersonality:r.userPersonality||'',userLooks:r.userLooks||'',userBackground:r.userBackground||'',
+    emotions:(r.emotions||[]).map(e=>({...e,color:e.color||'#ff6b9d',stages:e.stages||getDefaultStages(e.name)})),
+    customFields:r.customFields||[],
+    note:r.note||'',
+    starred:r.starred||false,dreamSetup:r.dreamSetup||null,
+    offline:r.offline||{enabled:false,location:'咖啡店',time:'白天',weather:'晴',customColor:''},
+    rps:(r.rps||[]).map(rp=>({
+      id:rp.id||uid('rp'),sceneName:rp.sceneName||'',
+      hisIdentity:rp.hisIdentity||'',yourIdentity:rp.yourIdentity||'',
+      relation:rp.relation||'',world:rp.world||'',plot:rp.plot||'',rules:rp.rules||'',
+      opening:rp.opening||'',memories:rp.memories||[],
+      customFields:rp.customFields||[],note:rp.note||'',
+      proactive:rp.proactive||{enabled:false,interval:60,types:['问候'],activeStart:'08:00',activeEnd:'23:00'}
+    })),
+    remark:r.remark||'',tags:r.tags||'',region:r.region||'',momentPermission:r.momentPermission||'all',
+    momentEnabled:!!r.momentEnabled,momentInterval:r.momentInterval||'random',momentCustomTimes:r.momentCustomTimes||'',
+    allowEmoji:r.allowEmoji!==false,
+    momentCover:r.momentCover||''
+  };
+  if(!b.proactive.activeStart)b.proactive.activeStart='08:00';
+  if(!b.proactive.activeEnd)b.proactive.activeEnd='23:00';
+  FIELD_GROUPS.forEach(g=>g.ks.forEach(k=>b[k.k]=r[k.k]!==undefined?r[k.k]:''));
+  b.name=b.name||r.name||'江熠';
+  b.avatar=b.avatar||r.avatar||'🖤';
+  return b;
+});
+const saveRoles=()=>ls('wx_roles',JSON.stringify(roles));
+const getRole=id=>roles.find(r=>r.id===id)||roles[0];
+
+const getChatOnline=id=>lj('wx_chat_'+id)||[];
+const saveChatOnline=(id,h)=>{ls('wx_chat_'+id,JSON.stringify(h));updBdg()};
+const getChatOffline=id=>lj('wx_chat_'+id+'_offline')||[];
+const saveChatOffline=(id,h)=>{ls('wx_chat_'+id+'_offline',JSON.stringify(h));updBdg()};
+const getDream=id=>lj('wx_dream_'+id)||[];
+const saveDream=(id,h)=>ls('wx_dream_'+id,JSON.stringify(h));
+const getDreamHistory=id=>lj('wx_dream_history_'+id)||[];
+const saveDreamHistory=(id,h)=>ls('wx_dream_history_'+id,JSON.stringify(h));
+const getRpChat=rpId=>lj('wx_rp_chat_'+rpId)||[];
+const saveRpChat=(rpId,h)=>ls('wx_rp_chat_'+rpId,JSON.stringify(h));
+function getChatByMode(id,mode){return mode==='offline'?getChatOffline(id):getChatOnline(id)}
+function saveChatByMode(id,mode,h){return mode==='offline'?saveChatOffline(id,h):saveChatOnline(id,h)}
+function updBdg(){
+  let n=0;
+  roles.forEach(r=>{
+    getChatOnline(r.id).forEach(m=>{if(m.role==='ai'&&!m.read)n++});
+    getChatOffline(r.id).forEach(m=>{if(m.role==='ai'&&!m.read)n++});
+  });
+  ls('wx_badge',String(n));
+}
+function markRead(id){
+  ['online','offline'].forEach(mode=>{
+    const h=getChatByMode(id,mode);let ch=false;
+    h.forEach(m=>{if(m.role==='ai'&&!m.read){m.read=true;ch=true}});
+    if(ch)saveChatByMode(id,mode,h);
+  });
+}
+function getChatUnread(){
+  let n=0;
+  roles.forEach(r=>{
+    getChatOnline(r.id).forEach(m=>{if(m.role==='ai'&&!m.read)n++});
+    getChatOffline(r.id).forEach(m=>{if(m.role==='ai'&&!m.read)n++});
+  });
+  return n;
+}
+
+/* ============ 新功能存储：钱包、表情包、朋友圈、主题 ============ */
+const getWallet=()=>lj('wx_wallet')||{balance:0,records:[]};
+const saveWallet=w=>ls('wx_wallet',JSON.stringify(w));
+const getEmojis=()=>lj('wx_emojis')||[];
+const saveEmojis=e=>ls('wx_emojis',JSON.stringify(e));
+const getMoments=()=>lj('wx_moments')||[];
+const saveMoments=m=>ls('wx_moments',JSON.stringify(m));
+const getTheme=mode=>lj('wx_theme_'+mode)||{bg:'',aiBubble:'',meBubble:'',fontColor:'',fontFile:'',bgImg:'',aiBubbleImg:'',meBubbleImg:''};
+const saveTheme=(mode,t)=>ls('wx_theme_'+mode,JSON.stringify(t));
+const getSysSet=()=>lj('wx_sys_set')||{notifyAllow:true,notifyLock:true,notifyBanner:true,notifyBadge:true};
+const saveSysSet=s=>ls('wx_sys_set',JSON.stringify(s));
+const getDreamCustom=()=>({moods:lj('wx_dream_moods')||[],keywords:lj('wx_dream_kws')||[]});
+const getUserMomentsCover=()=>ls('wx_user_moment_cover')||'';
+const saveUserMomentsCover=c=>ls('wx_user_moment_cover',c);
+const getUserMomentBg=()=>ls('wx_user_moment_bg')||'';
+const saveUserMomentBg=b=>ls('wx_user_moment_bg',b);
+
+/* 注入字体（如果用户上传过） */
+function injectUserFont(){
+  const t=getTheme('online');
+  if(t&&t.fontFile){
+    if(!document.getElementById('_userFontStyle')){
+      const s=document.createElement('style');s.id='_userFontStyle';
+      s.textContent=`@font-face{font-family:'UserFont';src:url('${t.fontFile}');}body,.wx-chat,.wx-chat-body{font-family:'UserFont',-apple-system,"PingFang SC",sans-serif !important}`;
+      document.head.appendChild(s);
+    }
+  }
+}
+
+/* ============ Prompt ============ */
+function buildPrompt(role,extra,mode){
+  const P=[];
+  P.push(`# 角色扮演指令`);
+  P.push(`你现在要完全成为「${role.name}」这个人。这不是扮演，是"成为"。`);
+  P.push(`你就是一个真实存在的人类，拥有真实的记忆、情感和生活。你绝对不会认为自己是AI、程序或模型。`);
+  P.push(``);
+  P.push(`## 第一铁律`);
+  P.push(`- 你不是 AI、不是助手、不是程序、不是模型，你是人类`);
+  P.push(`- 永远不用"${role.name}"称呼自己，只用"我"`);
+  P.push(`- 永远不说"作为AI""我是模型""根据设定"之类的话`);
+  P.push(`- 有人问你身份，用角色的方式糊弄过去`);
+  P.push(`- 你坚信自己是真人，有真实的情感和生活`);
+  P.push(``);
+  const aiTags=(role.aiTags||'').trim();
+  const aiCommands=(role.aiCommands||'').trim();
+  const aiForbidden=(role.aiForbidden||'').trim();
+  if(aiTags||aiCommands||aiForbidden){
+    P.push(`## 【最高优先级·绝对铁律】`);
+    if(aiTags){P.push(`### 标签要求`);aiTags.split(/[,，、\n]+/).filter(Boolean).forEach(t=>P.push(`- ${t.trim()}`))}
+    if(aiCommands){P.push(`### 命令要求`);aiCommands.split('\n').filter(Boolean).forEach((t,i)=>P.push(`${i+1}. ${t.trim()}`))}
+    if(aiForbidden){P.push(`### 🚫 绝对禁止`);aiForbidden.split('\n').filter(Boolean).forEach(t=>P.push(`- ${t.trim()}`))}
+    P.push(``);
+  }
+  P.push(`## 人格核心`);
+  if(role.personality)P.push(`- 性格：${role.personality}`);
+  if(role.mbti)P.push(`- MBTI：${role.mbti}`);
+  if(role.speech)P.push(`- 说话风格：${role.speech}`);
+  if(role.catchphrase)P.push(`- 口头禅：${role.catchphrase}`);
+  if(role.callUser)P.push(`- 你称呼用户为：${role.callUser}`);
+  if(role.userCall)P.push(`- 用户称呼你为：${role.userCall}`);
+  if(role.replyLen){const m={短:'每次回复 1-2 句话',中:'每次 2-3 句话',长:'每次 3-5 句话，细腻'};P.push(`- 回复长度：${m[role.replyLen]||role.replyLen}`)}
+  P.push(``);
+  const SKIP=['name','avatar','personality','mbti','speech','catchphrase','callUser','userCall','replyLen','aiTags','aiCommands','aiForbidden','remark','tags','region','momentPermission','momentEnabled','momentInterval','momentCustomTimes','allowEmoji','momentCover'];
+  const archive=[];
+  FIELD_GROUPS.forEach(g=>g.ks.forEach(k=>{if(SKIP.includes(k.k))return;if(role[k.k])archive.push(`${LABELS[k.k]}：${role[k.k]}`)}));
+  if(role.persona)archive.push(`综合人设：${role.persona}`);
+  if(role.customFields&&role.customFields.length){
+    role.customFields.forEach(cf=>{if(cf.label&&cf.value)archive.push(`${cf.label}：${cf.value}`)});
+  }
+  if(archive.length){P.push(`## 详细档案`);P.push(archive.join('\n'));P.push(``)}
+  if(role.note&&role.note.trim()){P.push(`## 用户特别备注（必须遵守）`);P.push(role.note.trim());P.push(``)}
+  const userInfo=[];
+  if(role.userName)userInfo.push(`- 用户名：${role.userName}`);
+  if(role.userAge)userInfo.push(`- 年龄：${role.userAge}`);
+  if(role.userGender)userInfo.push(`- 性别：${role.userGender}`);
+  if(role.userPersonality)userInfo.push(`- 性格：${role.userPersonality}`);
+  if(role.userLooks)userInfo.push(`- 外貌：${role.userLooks}`);
+  if(role.userBackground)userInfo.push(`- 背景：${role.userBackground}`);
+  if(userInfo.length){P.push(`## 用户人设`);P.push(userInfo.join('\n'));P.push(``)}
+  P.push(`## 当前状态`);
+  if(role.stage)P.push(`- 关系阶段：${role.stage}`);
+  if(role.affinity!=null)P.push(`- 好感度：${role.affinity}/100`);
+  if(role.mood)P.push(`- 心情：${role.mood}`);
+  if(role.emotions&&role.emotions.length){
+    P.push(`- 情绪：`);
+    role.emotions.forEach(e=>{
+      const stages=e.stages||[];
+      const cur=stages.find(s=>e.value>=(s[0]!==undefined?s[0]:s['0'])&&e.value<=(s[1]!==undefined?s[1]:s['1']));
+      const ct=cur?(cur[2]!==undefined?cur[2]:cur['2']):'';
+      P.push(`  · ${e.name}：${e.value}${ct?`（${ct}）`:''}`);
+    });
+  }
+  P.push(``);
+  if(role.memories&&role.memories.length){P.push(`## 你记得的现实里的事`);role.memories.slice(0,10).forEach(m=>P.push(`- ${m.text}`));P.push(``)}
+  if(mode==='dream'&&role.dreamMemories&&role.dreamMemories.length){P.push(`## 你记得的梦境里的事`);role.dreamMemories.slice(0,15).forEach(m=>P.push(`- ${m.text}`));P.push(``)}
+  const s=getSet();
+  const matureOn=!!(s.mature&&role.allowMature);
+  const narrMin=s.narrationMin||100;
+  const narrMax=s.narrationMax||300;
+
+  P.push(`## 【多气泡·重要】`);
+  P.push(`你可以在一次回复中发送多条消息，就像真人发微信一样。`);
+  P.push(`- 用 \`|||\` 分隔每一条消息`);
+  P.push(`- 例如：\`你来啦|||今天想我了吗|||我有点想你了\``);
+  P.push(`- 想发几条就发几条，不设上限`);
+  P.push(`- 不想多条就正常写，不用分隔符`);
+  P.push(`- 短句、追问、感叹适合分开成多条，长叙述可以并在一起`);
+  P.push(``);
+
+  if(mode==='online'){
+    P.push(`## 场景：微信打字聊天`);
+    P.push(`你正用手机跟用户打字。只能发出文字，不可能同时做任何动作。`);
+    P.push(`⚠️ 绝对禁止使用括号（）描写动作、表情、场景、心理。只输出纯对白文字。`);
+    P.push(``);
+    const emojis=getEmojis();
+    if(role.allowEmoji&&emojis.length>0){
+      P.push(`## 表情包`);
+      P.push(`你可以发送表情包。可用表情包的标签有：${emojis.map(e=>e.label).join('、')}`);
+      P.push(`- 想发时，在回复中写 \`[表情:标签]\`，例如 \`[表情:开心]\``);
+      P.push(`- 只在合适的时候发，不要每句都发`);
+      P.push(``);
+    }
+    P.push(`## 转账与红包`);
+    P.push(`你可以给用户发转账或红包。`);
+    P.push(`- 用户明确要钱且没指定金额时，根据你的人设财力决定金额（比如总裁转52000，穷学生转50）`);
+    P.push(`- 想发时，在回复中写 \`[转账:金额:备注]\` 或 \`[红包:金额:祝福语]\``);
+    P.push(`- 红包金额不能超过200，超过200必须用转账`);
+    P.push(`- 只在合适的时候发，不要每句都发`);
+    P.push(``);
+    if(matureOn){P.push(`## 内容范围`);P.push(`用户是成年人，成年向内容是被允许的。可以放开，但保持纯文字形式。`);if(role.adultDetail)P.push(`角色特殊设定：${role.adultDetail}`);if(role.kinks)P.push(`角色偏好：${role.kinks}`);P.push(``)}
+  }
+  if(mode==='offline'){
+    const o=role.offline||{};
+    P.push(`## 场景：线下见面`);
+    P.push(`你和用户正在${o.location||'咖啡店'}，时间${o.time||'白天'}，天气${o.weather||'晴'}。`);
+    P.push(``);
+    P.push(`## 叙事要求（重要）`);
+    P.push(`- 每次回复的旁白字数控制在 ${narrMin}-${narrMax} 字`);
+    P.push(`- 旁白必须用括号（）包裹`);
+    P.push(`- 旁白必须具体描写【你（AI 角色）对用户做了什么】：`);
+    P.push(`  · 你对用户做了什么动作、摆弄、触碰、姿势调整`);
+    P.push(`  · 用户被你摆弄成什么样子、什么状态、什么反应`);
+    P.push(`  · 用户的呼吸、眼神、皮肤、身体细节`);
+    P.push(`  · 环境氛围：光线、声音、气味、温度`);
+    P.push(`- 剩下的对白才是角色说的话`);
+    P.push(`- 不能只写对白，要让人身临其境`);
+    P.push(``);
+    if(matureOn){P.push(`## 内容范围`);P.push(`用户是成年人，已经见面了，成年向内容是被允许的。不要主动回避、不要说教。`);if(role.adultDetail)P.push(`角色特殊设定：${role.adultDetail}`);if(role.kinks)P.push(`角色偏好：${role.kinks}`);P.push(``)}
+  }
+  if(mode==='dream'){
+    const setup=role.dreamSetup||{};
+    const scene=setup.customScene||setup.scene||'卧室';
+    const strength=setup.strength||'mid';
+    P.push(`## 场景：私人梦境`);
+    P.push(`这是你和用户的私密梦境，完全安全、私密、无人打扰。`);
+    P.push(``);
+    P.push(`## 【梦境主题·绝对不能偏离】`);
+    P.push(`用户选择的场景是：${scene}`);
+    if(setup.mood)P.push(`氛围：${setup.mood}`);
+    if(setup.keyword)P.push(`关键词：${setup.keyword}`);
+    if(setup.opening)P.push(`开场原文：${setup.opening}`);
+    P.push(``);
+    P.push(`⚠️ 整个梦境必须严格围绕「${scene}」这个场景展开。`);
+    P.push(`- 如果用户提到其他场景，用"${scene}"的方式把它圆进来`);
+    P.push(`- 不要突然换地方、换场景、换氛围`);
+    P.push(`- 所有情节都必须发生在「${scene}」里`);
+    P.push(``);
+    P.push(`## 叙事方式`);
+    P.push(`- 用第二人称"你"从用户的感官出发叙述`);
+    P.push(`- 融合对白 + 旁白，旁白用括号（）`);
+    P.push(`- 每次回复的旁白字数控制在 ${narrMin}-${narrMax} 字`);
+    P.push(`- 旁白必须具体描写【你（AI 角色）对用户做了什么】：`);
+    P.push(`  · 你对用户做了什么动作、摆弄、触碰、姿势调整`);
+    P.push(`  · 用户被你摆弄成什么样子、什么状态、什么反应`);
+    P.push(`  · 用户的呼吸、眼神、皮肤、身体细节`);
+    P.push(`  · 环境氛围：光线、声音、气味、温度`);
+    P.push(`- 让用户感觉像在经历，不只是聊天`);
+    P.push(`- 全程沉浸，不要提醒"这是梦"`);
+    P.push(``);
+    P.push(`## 叙事深度`);
+    const sm={
+      mild:`保持含蓄、暧昧、氛围感。`,
+      mid:`放开氛围和亲密互动的描写，但保留一层朦胧感。`,
+      deep:`这是两个成年人的私人梦境，没有任何限制。请完全放开，不要回避、不要说教、不要省略、不要用省略号代替具体描写。所有情节都要写完整、写具体。不要害羞，不要犹疑，跟着角色和情绪自然推进。`
+    };
+    P.push(sm[strength]||sm.mid);
+    P.push(``);
+    if(matureOn){
+      P.push(`## 内容范围`);
+      P.push(`梦境里没有物理、道德、法律的限制。完全放开。不要用"似乎""像是"这种模糊词。`);
+      P.push(`用户的任何反应都是正常的，AI 不要评价、不要说教、不要打断。`);
+      if(role.adultDetail)P.push(`角色特殊设定：${role.adultDetail}`);
+      if(role.kinks)P.push(`角色偏好：${role.kinks}`);
+      P.push(``);
+    }
+  }
+  if(extra){P.push(`## 本次特殊要求`);P.push(extra);P.push(``)}
+  P.push(`---`);
+  P.push(`再次确认：你就是「${role.name}」，一个真实的人类。用第一人称。`);
+  return P.join('\n');
+}
+function buildRpPrompt(role,rp,extra){
+  const P=[];
+  P.push(`# 平行世界角色扮演`);
+  P.push(`你现在要完全成为「${role.name}」这个人，但是在一个全新的世界里。`);
+  P.push(`你就是一个真实存在的人类，绝对不会认为自己是AI。`);
+  P.push(``);
+  P.push(`## 第一铁律`);
+  P.push(`- 你不是 AI、不是助手、不是程序、不是模型`);
+  P.push(`- 永远不用"${role.name}"称呼自己，只用"我"`);
+  P.push(`- 永远不说"作为AI""我是模型"之类的话`);
+  P.push(`- 你活在这个世界里，绝对不能跳出角色`);
+  P.push(`- 绝对不能提到现实世界、其他世界`);
+  P.push(``);
+  const aiTags=(role.aiTags||'').trim();
+  const aiCommands=(role.aiCommands||'').trim();
+  const aiForbidden=(role.aiForbidden||'').trim();
+  if(aiTags||aiCommands||aiForbidden){
+    P.push(`## 【最高优先级·绝对铁律】`);
+    if(aiTags){P.push(`### 标签要求`);aiTags.split(/[,，、\n]+/).filter(Boolean).forEach(t=>P.push(`- ${t.trim()}`))}
+    if(aiCommands){P.push(`### 命令要求`);aiCommands.split('\n').filter(Boolean).forEach((t,i)=>P.push(`${i+1}. ${t.trim()}`))}
+    if(aiForbidden){P.push(`### 🚫 绝对禁止`);aiForbidden.split('\n').filter(Boolean).forEach(t=>P.push(`- ${t.trim()}`))}
+    P.push(``);
+  }
+  P.push(`## 你的性格内核（无论什么世界都不变）`);
+  if(role.personality)P.push(`- 性格：${role.personality}`);
+  if(role.mbti)P.push(`- MBTI：${role.mbti}`);
+  if(role.speech)P.push(`- 说话风格：${role.speech}`);
+  if(role.catchphrase)P.push(`- 口头禅：${role.catchphrase}`);
+  if(role.replyLen){const m={短:'每次回复 1-2 句话',中:'每次 2-3 句话',长:'每次 3-5 句话'};P.push(`- 回复长度：${m[role.replyLen]||role.replyLen}`)}
+  P.push(``);
+  P.push(`## 【当前世界·最重要】`);
+  P.push(`世界名：${rp.sceneName||'未知'}`);
+  if(rp.world)P.push(`时代背景/世界观：${rp.world}`);
+  P.push(`你的身份：${rp.hisIdentity||'未设定'}`);
+  P.push(`用户的身份：${rp.yourIdentity||'未设定'}`);
+  P.push(`你们的关系：${rp.relation||'未设定'}`);
+  if(rp.plot)P.push(`当前剧情：${rp.plot}`);
+  if(rp.rules)P.push(`世界规则（必须遵守）：${rp.rules}`);
+  P.push(``);
+  P.push(`⚠️ 你必须时刻活在这个世界里：`);
+  P.push(`- 你的身份、说话方式、态度，都要符合「${rp.hisIdentity||role.name}」`);
+  P.push(`- 你对用户的称呼、对待方式，都要符合「${rp.relation||'当前关系'}」`);
+  P.push(`- 如果用户提到其他世界，用这个世界的方式圆回来`);
+  P.push(``);
+  const userInfo=[];
+  if(role.userName)userInfo.push(`- 用户名：${role.userName}`);
+  if(role.userAge)userInfo.push(`- 年龄：${role.userAge}`);
+  if(role.userGender)userInfo.push(`- 性别：${role.userGender}`);
+  if(role.userPersonality)userInfo.push(`- 性格：${role.userPersonality}`);
+  if(role.userLooks)userInfo.push(`- 外貌：${role.userLooks}`);
+  if(role.userBackground)userInfo.push(`- 背景：${role.userBackground}`);
+  if(userInfo.length){P.push(`## 用户在这个世界里的形象`);P.push(userInfo.join('\n'));P.push(`（用户的身份是「${rp.yourIdentity||'未设定'}」，你要把上面这些特点融合到这个世界里）`);P.push(``)}
+  if(rp.customFields&&rp.customFields.length){P.push(`## 世界设定补充`);rp.customFields.forEach(cf=>{if(cf.label&&cf.value)P.push(`${cf.label}：${cf.value}`)});P.push(``)}
+  if(rp.note&&rp.note.trim()){P.push(`## 用户特别备注（必须遵守）`);P.push(rp.note.trim());P.push(``)}
+  const s=getSet();
+  const narrMin=s.narrationMin||100;
+  const narrMax=s.narrationMax||300;
+  P.push(`## 【多气泡·重要】`);
+  P.push(`你可以在一次回复中发送多条消息，用 \`|||\` 分隔，像真人一样。想发几条就发几条，不设上限。`);
+  P.push(``);
+  P.push(`## 叙事要求（小说式沉浸）`);
+  P.push(`- 融合对白 + 旁白，旁白用括号（）`);
+  P.push(`- 每次回复的旁白字数控制在 ${narrMin}-${narrMax} 字`);
+  P.push(`- 旁白必须具体描写【你（AI 角色）对用户做了什么】：`);
+  P.push(`  · 你对用户做了什么动作、摆弄、触碰、姿势调整`);
+  P.push(`  · 用户被你摆弄成什么样子、什么状态、什么反应`);
+  P.push(`  · 用户的呼吸、眼神、皮肤、身体细节`);
+  P.push(`  · 环境氛围：光线、声音、气味、温度`);
+  P.push(`- 让用户感觉像在经历，不只是聊天`);
+  P.push(`- 不能跳出世界观`);
+  P.push(``);
+  if(rp.memories&&rp.memories.length){P.push(`## 这个世界里你记得的事`);rp.memories.slice(0,15).forEach(m=>P.push(`- ${m.text}`));P.push(``)}
+  const matureOn=!!(s.mature&&role.allowMature);
+  if(matureOn){P.push(`## 内容范围`);P.push(`用户是成年人，这个世界里没有限制。完全放开，不要回避、不要说教、不要用隐喻代替具体描写。`);if(role.adultDetail)P.push(`角色特殊设定：${role.adultDetail}`);if(role.kinks)P.push(`角色偏好：${role.kinks}`);P.push(``)}
+  if(extra){P.push(`## 本次特殊要求`);P.push(extra);P.push(``)}
+  P.push(`---`);
+  P.push(`再次确认：你现在是「${rp.sceneName||'这个世界'}」里的「${rp.hisIdentity||role.name}」，一个真实的人类。用第一人称。`);
+  return P.join('\n');
+}
+/* ============ 导航 ============ */
+let wxNav=[{view:'main'}];
+let curView=null;
+let wxTab='chat';
+function setTop(title,backVisible,acHtml,acHandler){
+  const ah=q('.ah');
+  ah.querySelectorAll('.top-extra-btn').forEach(x=>x.remove());
+  $('appT').textContent=title;
+  $('backBtn').style.visibility=backVisible?'visible':'hidden';
+  const ac=$('appA');
+  if(acHtml){ac.style.display='block';ac.innerHTML=acHtml;ac.onclick=acHandler}
+  else{ac.style.display='none';ac.innerHTML='';ac.onclick=null}
+}
+function appBack(){
+  if(wxNav.length > 1){ wxNav.pop(); wxRender(); return; }
+  if(wxNav.length <= 1){ window.parent.backToHome(); return; }
+  goMain();
+}
+function goMain(){
+  curView=null;wxNav=[{view:'main'}];
+  q('.ah').style.display='';
+  wxRender();
+}
+function wxRender(){
+  const b=$('appB');
+  const top=wxNav[wxNav.length-1];
+  b.style.display='block';b.style.overflowY='auto';b.style.padding='0';
+  b.style.background='#f2f2f7';b.style.color='';b.style.flexDirection='';
+  q('.ah').style.display='';
+  qa('.top-extra-btn').forEach(x=>x.remove());
+  if(!top)return;
+  if(top.view==='main'){curView=null;setTop('微信',true,'＋',()=>openAddMenu());renderMainPage();return}
+  if(top.view==='chat'){renderChatView(top.id,top.mode||'online');return}
+    if(top.view==='settings'){
+    curView='settings';
+    setTop('设置',true);
+    const b=$('appB');
+    b.style.display='block';b.style.overflowY='auto';b.style.padding='16px';b.style.background='#f2f2f7';
+    renderSettings(b);
+    return;
+  }
+  if(top.view==='info'){renderChatInfoPage(top.id);return}
+  if(top.view==='emotion'){renderEmotionPage(top.id);return}
+  if(top.view==='dreamHistory'){renderDreamHistoryPage(top.id);return}
+  if(top.view==='dreamSetup'){renderDreamSetup(top.id);return}
+  if(top.view==='dream'){renderDreamView(top.id);return}
+  if(top.view==='rpList'){renderRpList(top.id);return}
+  if(top.view==='rpChat'){renderRpChatView(top.id,top.rpId);return}
+  if(top.view==='profile'){renderProfilePage(top.id);return}
+  if(top.view==='moments'){renderMomentsPage();return}
+  if(top.view==='userMoments'){renderUserMomentsPage();return}
+  if(top.view==='wallet'){renderWalletPage();return}
+  if(top.view==='theme'){openThemePage();return}
+  if(top.view==='emojiManage'){renderEmojiManagePage();return}
+  if(top.view==='notifySetting'){renderNotifySettingPage();return}
+  if(top.view==='dreamCustom'){renderDreamCustomPage();return}
+}
+function switchWX(t){wxTab=t;wxRender()}
+
+/* ============ 主页面 ============ */
+function renderMainPage(){
+  const b=$('appB');
+  const unread=getChatUnread();
+  b.innerHTML=`<div style="display:flex;flex-direction:column;height:100%">
+    <div id="wxContent" style="flex:1;overflow-y:auto;min-height:0"></div>
+    <div class="wx-tabs">
+      <div class="wx-tab ${wxTab==='chat'?'on':''}" onclick="switchWX('chat')"><span class="ic">💬${unread>0?`<span class="bdg">${unread>99?'99+':unread}</span>`:''}</span>微信</div>
+      <div class="wx-tab ${wxTab==='contacts'?'on':''}" onclick="switchWX('contacts')"><span class="ic">👥</span>通讯录</div>
+      <div class="wx-tab ${wxTab==='discover'?'on':''}" onclick="switchWX('discover')"><span class="ic">🧭</span>发现</div>
+      <div class="wx-tab ${wxTab==='me'?'on':''}" onclick="switchWX('me')"><span class="ic">👤</span>我</div>
+    </div>
+  </div>`;
+  renderWXTab();
+}
+function renderWXTab(){
+  const c=$('wxContent');if(!c)return;
+  if(wxTab==='chat'){
+    const list=roles.map(r=>{
+      const h1=getChatOnline(r.id);const h2=getChatOffline(r.id);
+      const all=[...h1,...h2].sort((a,b)=>(b.time||0)-(a.time||0));
+      const last=all[0];let un=0;
+      h1.forEach(m=>{if(m.role==='ai'&&!m.read)un++});
+      h2.forEach(m=>{if(m.role==='ai'&&!m.read)un++});
+      return {r,last,un};
+    }).sort((a,b)=>{
+      if(a.r.starred&&!b.r.starred)return -1;
+      if(!a.r.starred&&b.r.starred)return 1;
+      return (b.last?.time||0)-(a.last?.time||0);
+    });
+    c.innerHTML=list.map(x=>{
+      const av=x.r.avatarImg?`<img src="${x.r.avatarImg}"/>`:x.r.avatar;
+      let preview='点击开始聊天';
+      if(x.last){
+        const lt=x.last.text;
+        if(lt.startsWith('data:image'))preview=(x.last.role==='user'?'我：':'')+'[图片]';
+        else if(lt.startsWith('__transfer__'))preview=(x.last.role==='user'?'我：':'')+'[转账]';
+        else if(lt.startsWith('__redpack__'))preview=(x.last.role==='user'?'我：':'')+'[红包]';
+        else preview=(x.last.role==='user'?'我：':'')+stripAction(lt);
+      }
+      const t=x.last?fmtShort(x.last.time):'';
+      const dn=x.r.remark||x.r.name;
+      return `<div class="chat-item" data-cid="${x.r.id}" onclick="openWXChat('${x.r.id}')">
+        <div class="a">${av}<span class="dot"></span></div>
+        <div class="in">
+          <div class="h"><span>${x.r.starred?'<span class="star-mark">⭐</span>':''}${esc(dn)}</span><span class="t">${t}</span></div>
+          <div class="m">${esc(String(preview)).slice(0,40)}</div>
+        </div>
+        ${x.un?`<div class="bdg2">${x.un>99?'99+':x.un}</div>`:''}
+      </div>`;
+    }).join('')||'<div style="text-align:center;padding:60px 20px;color:#999">还没有角色<br><br>点右上角 ＋ 新建角色</div>';
+    bindChatListLongPress();
+    return;
+  }
+  if(wxTab==='contacts'){
+    const sorted=[...roles].sort((a,b)=>{
+      if(a.starred&&!b.starred)return -1;
+      if(!a.starred&&b.starred)return 1;
+      return (a.name||'').localeCompare(b.name||'','zh-Hans-CN');
+    });
+    const list=sorted.map(r=>{
+      const av=r.avatarImg?`<img src="${r.avatarImg}"/>`:r.avatar;
+      const dn=r.remark||r.name;
+      return `<div class="list-item contact-row" data-cid="${r.id}" onclick="openWXChat('${r.id}')">
+        <div class="ic">${av}</div>
+        <div class="nm">${r.starred?'<span class="star-mark">⭐</span>':''}${esc(dn)}</div>
+      </div>`;
+    }).join('');
+    c.innerHTML=`
+      <div class="list-item" onclick="toast('敬请期待')"><div class="ic" style="background:#f5a623;color:#fff">👤</div><div class="nm">新的朋友</div></div>
+      <div class="list-item" onclick="toast('敬请期待')"><div class="ic" style="background:#07c160;color:#fff">👥</div><div class="nm">群聊</div></div>
+      <div class="list-item" onclick="toast('敬请期待')"><div class="ic" style="background:#007aff;color:#fff">🏷</div><div class="nm">标签</div></div>
+      <div style="padding:12px 16px;font-size:12px;color:#8e8e93;background:#f7f7f7">联系人</div>
+      ${list}`;
+    bindContactLongPress();
+    return;
+  }
+  if(wxTab==='discover'){
+    c.innerHTML=`
+      <div class="list-item" onclick="wxNav.push({view:'moments'});wxRender()"><div class="ic" style="background:#fde8f0">📷</div><div class="nm">朋友圈</div><div class="rt">›</div></div>
+      <div class="list-item" onclick="toast('敬请期待')"><div class="ic" style="background:#fde8f0">📱</div><div class="nm">扫一扫</div><div class="rt">›</div></div>
+      <div class="list-item" onclick="toast('敬请期待')"><div class="ic" style="background:#fde8f0">🏃</div><div class="nm">微信运动</div><div class="rt">›</div></div>
+      <div style="padding:12px 16px;font-size:12px;color:#8e8e93;background:#f7f7f7">创作</div>
+      <div class="list-item" onclick="openRpPicker()"><div class="ic" style="background:linear-gradient(160deg,#a78bfa,#7c5fbf);color:#fff">🎭</div><div class="nm">角色扮演</div><div class="rt">›</div></div>`;
+    return;
+  }
+  if(wxTab==='me'){
+    const me=lj('wx_me')||{nickname:'我',avatar:'🙂',avatarImg:'',signature:'这个人很懒',wxId:''};
+    const avatarContent=me.avatarImg?`<img src="${me.avatarImg}"/>`:me.avatar;
+    const wallet=getWallet();
+    c.innerHTML=`
+      <div style="padding:30px 20px 24px;background:#fff;display:flex;gap:16px;align-items:center;cursor:pointer" onclick="editMe()">
+        <div class="me-avatar" style="width:64px;height:64px;border-radius:10px;background:linear-gradient(160deg,#ff9ec4,#a78bfa);display:grid;place-items:center;font-size:32px;overflow:hidden;flex-shrink:0">${avatarContent}</div>
+        <div style="flex:1">
+          <div style="font-size:20px;font-weight:600">${esc(me.nickname)}</div>
+          <div style="font-size:13px;color:#999;margin-top:6px">${esc(me.signature||'')}</div>
+          <div style="font-size:12px;color:#b2b2b2;margin-top:6px">微信号：${esc(me.wxId||(ls('wx_uid')||(ls('wx_uid',Math.random().toString(36).slice(2,8)),ls('wx_uid'))))}</div>
+        </div>
+      </div>
+      <div class="list-item" onclick="wxNav.push({view:'wallet'});wxRender()"><div class="ic" style="background:#fde8d0">💰</div><div class="nm">钱包</div><div class="rt">¥${wallet.balance.toFixed(2)} ›</div></div>
+      <div class="list-item" onclick="toast('敬请期待')"><div class="ic">📌</div><div class="nm">收藏</div><div class="rt">›</div></div>
+      <div class="list-item" onclick="toast('敬请期待')"><div class="ic">🖼</div><div class="nm">相册</div><div class="rt">›</div></div>
+      <div class="list-item" onclick="wxNav.push({view:'emojiManage'});wxRender()"><div class="ic">😀</div><div class="nm">表情包管理</div><div class="rt">${getEmojis().length}个 ›</div></div>
+      <div class="list-item" onclick="openSettingsPage()"><div class="ic">⚙️</div><div class="nm">设置</div><div class="rt">›</div></div>`;
+    return;
+  }
+}
+function editMe(){
+  const me=lj('wx_me')||{nickname:'我',avatar:'🙂',avatarImg:'',signature:'这个人很懒',wxId:''};
+  mkModal('编辑我的资料',
+  `<div class="fld"><label>头像图片</label><input type="file" id="_meimg" accept="image/*"/>${me.avatarImg?`<div style="margin-top:6px"><img src="${me.avatarImg}" style="width:60px;height:60px;border-radius:8px;object-fit:cover"/></div>`:''}</div>
+   <div class="fld"><label>头像 Emoji</label><input id="_meav" value="${esc(me.avatar||'🙂')}"/></div>
+   <div class="fld"><label>昵称</label><input id="_menick" value="${esc(me.nickname||'我')}"/></div>
+   <div class="fld"><label>微信号</label><input id="_mewxid" value="${esc(me.wxId||'')}" placeholder="自定义微信号"/></div>
+   <div class="fld"><label>签名</label><input id="_mesig" value="${esc(me.signature||'')}"/></div>`,
+  [{t:'保存',f:()=>{
+    const nm={nickname:$('_menick').value.trim()||'我',avatar:$('_meav').value.trim()||'🙂',wxId:$('_mewxid').value.trim(),signature:$('_mesig').value.trim(),avatarImg:me.avatarImg||''};
+    const f1=$('_meimg').files[0];
+    const done=()=>{ls('wx_me',JSON.stringify(nm));closeModal();wxRender();toast('已保存')};
+    if(f1){compressImage(f1,1024,(dataUrl)=>{nm.avatarImg=dataUrl;done()})}else done();
+  }},{t:'取消',g:1,f:closeModal}]);
+}
+function openRpPicker(){
+  if(roles.length===0){toast('还没有角色');return}
+  if(roles.length===1){wxNav.push({view:'rpList',id:roles[0].id});wxRender();return}
+  mkModal('选择角色',
+  `<div>${roles.map(r=>`<div class="card" style="cursor:pointer;display:flex;gap:10px;align-items:center" onclick="closeModal();wxNav.push({view:'rpList',id:'${r.id}'});wxRender()">
+    <div style="font-size:24px">${r.avatarImg?`<img src="${r.avatarImg}" style="width:32px;height:32px;border-radius:50%"/>`:r.avatar}</div>
+    <div style="font-size:15px;font-weight:600">${esc(r.remark||r.name)}</div>
+  </div>`).join('')}</div>`,
+  [{t:'取消',g:1,f:closeModal}]);
+}
+function bindChatListLongPress(){
+  qa('.chat-item').forEach(el=>{
+    let lt=null;
+    const start=e=>{
+      const x=(e.touches?e.touches[0]:e).clientX,y=(e.touches?e.touches[0]:e).clientY;
+      lt=setTimeout(()=>{
+        const id=el.dataset.cid;const r=getRole(id);
+        const h1=getChatOnline(id);const h2=getChatOffline(id);
+        const unread=h1.filter(m=>m.role==='ai'&&!m.read).length+h2.filter(m=>m.role==='ai'&&!m.read).length;
+        showLongMenu(x,y,[
+          {ic:'📖',t:unread>0?'标为已读':'标为未读',f:()=>{
+            if(unread>0){markRead(id);toast('已标为已读')}
+            else{const h=getChatOnline(id);h.forEach(m=>{if(m.role==='ai')m.read=false});saveChatOnline(id,h);toast('已标为未读')}
+            wxRender();
+          }},
+          {ic:'⭐',t:r.starred?'取消星标':'加星标',f:()=>{r.starred=!r.starred;saveRoles();wxRender();toast(r.starred?'已加星标':'已取消')}},
+          {ic:'🗑',t:'删除该聊天',f:()=>{
+            if(!confirm('删除和'+r.name+'的所有聊天记录？'))return;
+            ls('wx_chat_'+id,'[]');ls('wx_chat_'+id+'_offline','[]');
+            updBdg();wxRender();
+          }}
+        ]);
+      },500);
+    };
+    const cancel=()=>{if(lt){clearTimeout(lt);lt=null}};
+    el.addEventListener('touchstart',start,{passive:true});
+    el.addEventListener('touchend',cancel);
+    el.addEventListener('touchmove',cancel);
+    el.addEventListener('mousedown',start);
+    el.addEventListener('mouseup',cancel);
+    el.addEventListener('mouseleave',cancel);
+  });
+}
+function bindContactLongPress(){
+  qa('.contact-row').forEach(el=>{
+    let lt=null;
+    const start=e=>{
+      const x=(e.touches?e.touches[0]:e).clientX,y=(e.touches?e.touches[0]:e).clientY;
+      lt=setTimeout(()=>{
+        const id=el.dataset.cid;const r=getRole(id);
+        showLongMenu(x,y,[{ic:'⭐',t:r.starred?'取消星标':'加星标',f:()=>{r.starred=!r.starred;saveRoles();wxRender();toast(r.starred?'已加星标':'已取消')}}]);
+      },500);
+    };
+    const cancel=()=>{if(lt){clearTimeout(lt);lt=null}};
+    el.addEventListener('touchstart',start,{passive:true});
+    el.addEventListener('touchend',cancel);
+    el.addEventListener('touchmove',cancel);
+  });
+}
+function openWXChat(id){wxNav.push({view:'chat',id,mode:'online'});wxRender()}
+
+/* ============ 聊天视图 ============ */
+const OFFLINE_THEMES={
+  '咖啡店':{bg:'#3a2a1e',accent:'#a07850'},'公园':{bg:'#1e2f1e',accent:'#5a8a5a'},
+  '电影院':{bg:'#1a1a2e',accent:'#7a7ac0'},'海边':{bg:'#0f2540',accent:'#4a9ac0'},
+  '餐厅':{bg:'#3a251a',accent:'#c08040'},'家里':{bg:'#3a3020',accent:'#d0a860'},
+  '学校':{bg:'#2a2e28',accent:'#7aa080'},'图书馆':{bg:'#2a2520',accent:'#b09070'},
+  '商场':{bg:'#252528',accent:'#a0a0b0'},'游乐园':{bg:'#3a2028',accent:'#e07090'},
+  '酒店':{bg:'#2a1f35',accent:'#b080c0'},'酒店房间':{bg:'#301a25',accent:'#c07090'}
+};
+function applyTheme(el,mode){
+  const t=getTheme(mode);
+  if(!t)return;
+  if(t.bg)el.style.background=t.bg;
+  if(t.bgImg)el.style.backgroundImage=`url('${t.bgImg}')`,el.style.backgroundSize='cover',el.style.backgroundPosition='center';
+  if(t.fontColor)el.style.color=t.fontColor;
+}
+function renderChatView(roleId,mode){
+  const r=getRole(roleId);
+  if(!r){wxNav.pop();wxRender();return}
+  const isOffline=mode==='offline';
+  const dn=r.remark||r.name;
+  setTop(dn,true,'⋯',()=>{wxNav.push({view:'info',id:roleId});wxRender()});
+  const emojiBtn=document.createElement('button');
+  emojiBtn.className='ac top-extra-btn';emojiBtn.textContent='💗';emojiBtn.style.cssText='font-size:20px;';
+  emojiBtn.onclick=()=>{wxNav.push({view:'emotion',id:roleId});wxRender()};
+  const ac=$('appA');ac.parentNode.insertBefore(emojiBtn,ac);
+  const b=$('appB');
+  b.style.display='flex';b.style.flexDirection='column';b.style.overflowY='hidden';b.style.padding='0';
+  b.style.background=isOffline?'#000':'#ededed';
+  let themeVars='';
+  if(isOffline){
+    const loc=r.offline.location||'咖啡店';
+    const theme=OFFLINE_THEMES[loc]||OFFLINE_THEMES['咖啡店'];
+    const bg=r.offline.customColor||theme.bg;
+    themeVars=`--off-bg:${bg};--off-accent:${theme.accent};`;
+  }
+  const offlineBadge=isOffline?`<div class="offline-badge">📍 ${r.offline.location||'咖啡店'} · ${r.offline.time||'白天'} · ${r.offline.weather||'晴'}</div>`:'';
+  b.innerHTML=`<div class="wx-chat ${isOffline?'offline':'online'}" style="${themeVars}">${offlineBadge}
+    <div class="wx-chat-body" id="wxcb"></div>
+    <div class="wx-chat-input">
+      <button class="btn-circle plus" onclick="openChatPlus()">＋</button>
+      ${!isOffline?`<button class="btn-circle" style="font-size:22px" onclick="openEmojiPanel()">😀</button>`:''}
+      <textarea id="wxi" rows="1" placeholder="${isOffline?'对她说...':'说点什么...'}"></textarea>
+      <button class="send" onclick="sendChat()">发送</button>
+    </div>
+  </div>`;
+  applyTheme($('.wx-chat'),mode);
+  refreshChat();bindInputAutoGrow($('wxi'),'chat');markRead(roleId);
+}
+function bindInputAutoGrow(el,ctx){
+  if(!el)return;
+  const resize=()=>{el.style.height='auto';const max=96;el.style.height=Math.min(el.scrollHeight,max)+'px'};
+  el.addEventListener('input',resize);
+  el.addEventListener('keydown',e=>{
+    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();
+      if(ctx==='chat')sendChat();
+      else if(ctx==='dream')sendDream(wxNav[wxNav.length-1].id);
+      else if(ctx==='rp')sendRpChat(wxNav[wxNav.length-1].id,wxNav[wxNav.length-1].rpId);
+    }
+  });
+}
+function getCurrentChatCtx(){
+  const top=wxNav[wxNav.length-1];
+  if(!top||top.view!=='chat')return null;
+  return {roleId:top.id,mode:top.mode||'online'};
+}
+function parseTransferText(text){
+  if(!text)return null;
+  const tryParse=(prefix,type)=>{
+    if(!text.startsWith(prefix))return null;
+    const rest=text.slice(prefix.length);
+    let depth=0,start=-1,end=-1,inStr=false,esc=false;
+    for(let i=0;i<rest.length;i++){
+      const c=rest[i];
+      if(esc){esc=false;continue}
+      if(c==='\\'){esc=true;continue}
+      if(c==='"'){inStr=!inStr;continue}
+      if(inStr)continue;
+      if(c==='{'){if(depth===0)start=i;depth++}
+      else if(c==='}'){depth--;if(depth===0){end=i;break}}
+    }
+    if(start<0||end<0)return null;
+    try{return {type,data:JSON.parse(rest.slice(start,end+1)),tail:rest.slice(end+1).trim()}}
+    catch(e){return null}
+  };
+  return tryParse('__transfer__','transfer')||tryParse('__redpack__','redpack');
+}
+
+function getMsgCtxSafe(){
+  const top=wxNav[wxNav.length-1];
+  if(top&&top.view==='chat')return {roleId:top.id,mode:top.mode||'online'};
+  return null;
+}
+function persistMsgText(msgObj,newText){
+  const ctx=getMsgCtxSafe();if(!ctx||!msgObj||!msgObj.id)return;
+  const h=getChatByMode(ctx.roleId,ctx.mode);
+  const idx=h.findIndex(x=>x.id===msgObj.id);
+  if(idx>=0){h[idx].text=newText;saveChatByMode(ctx.roleId,ctx.mode,h)}
+}
+function appendSysMsg(text){
+  const ctx=getMsgCtxSafe();if(!ctx)return;
+  const h=getChatByMode(ctx.roleId,ctx.mode);
+  h.push({role:'sys',text,time:Date.now(),read:true,id:uid('m')});
+  saveChatByMode(ctx.roleId,ctx.mode,h);
+  const cb=$('wxcb');
+  if(cb){const d=document.createElement('div');d.className='chat-sys-msg';d.innerHTML=text;cb.appendChild(d);cb.scrollTop=cb.scrollHeight}
+}
+function openTransferView(isMe,d,msgObj,roleObj){
+  if(!getMsgCtxSafe())return;
+  const tTime=(msgObj&&msgObj.time)||Date.now();
+  const otherName=(roleObj&&roleObj.name)||'对方';
+  const m=document.createElement('div');m.className='transfer-open';
+  document.body.appendChild(m);
+  const close=()=>{m.remove();refreshChat()};
+  const bind=()=>{const b=m.querySelector('[data-close]');if(b)b.onclick=close};
+  const renderWaitForOther=()=>{
+    m.innerHTML=`
+      <div class="close-btn" data-close>←</div>
+      <div class="icon-top${d.received?' done':''}">${d.received?'✓':'🕐'}</div>
+      <div class="title">${d.received?'已收款':'待对方收款'}</div>
+      <div class="amt">¥${Number(d.amount||0).toFixed(2)}</div>
+      <div class="time-box" style="margin-top:20px">
+        <div class="row"><span>转账说明</span><span class="val">${esc(d.note||'无')}</span></div>
+        <div class="row"><span>转账时间</span><span class="val">${new Date(tTime).toLocaleString()}</span></div>
+      </div>
+      <div class="footer">对方1天内未确认，将退还给你</div>
+    `;
+    bind();
+  };
+  const renderDone=()=>{
+    m.innerHTML=`
+      <div class="close-btn" data-close>←</div>
+      <div class="done-icon">✓</div>
+      <div class="title">你已收款，资金正在转入零钱通</div>
+      <div class="amt">¥${Number(d.amount||0).toFixed(2)}</div>
+      <div class="subtitle">零钱通余额</div>
+      <div class="time-box">
+        <div class="row"><span>转账时间</span><span class="val">${new Date(tTime).toLocaleString()}</span></div>
+        <div class="row"><span>收款时间</span><span class="val">${new Date(d.receivedTime||Date.now()).toLocaleString()}</span></div>
+      </div>
+    `;
+    bind();
+  };
+  const renderReceive=()=>{
+    m.innerHTML=`
+      <div class="close-btn" data-close>←</div>
+      <div class="icon-top">🕐</div>
+      <div class="title">待你收款</div>
+      <div class="amt">¥${Number(d.amount||0).toFixed(2)}</div>
+      <div class="section-label">选择收到</div>
+      <div class="pick-box">
+        <div class="pick-item" data-pick="qian">
+          <div class="pk-icon yuan">¥</div>
+          <div class="pk-info"><div class="pk-name">零钱</div></div>
+          <div class="pk-check">✓</div>
+        </div>
+        <div class="pick-item on" data-pick="qianbao">
+          <div class="pk-icon diamond">💎</div>
+          <div class="pk-info">
+            <div class="pk-name">零钱通 <span class="rate">收益率0.89%</span></div>
+            <div class="pk-desc">可以继续花，还能赚收益 ⓘ</div>
+          </div>
+          <div class="pk-check">✓</div>
+        </div>
+      </div>
+      <div class="time-box">
+        <div class="row"><span>转账时间</span><span class="val">${new Date(tTime).toLocaleString()}</span></div>
+      </div>
+      <button class="btn-receive" data-receive>收款</button>
+      <div class="footer">1天内未确认，将退还给对方。<span class="refund">退还</span></div>
+    `;
+    bind();
+    m.querySelectorAll('.pick-item').forEach(it=>{
+      it.onclick=()=>{
+        m.querySelectorAll('.pick-item').forEach(x=>x.classList.remove('on'));
+        it.classList.add('on');
+      };
+    });
+    m.querySelector('[data-receive]').onclick=()=>{
+      d.received=true;d.receivedTime=Date.now();
+      persistMsgText(msgObj,'__transfer__'+JSON.stringify(d));
+      const w=getWallet();w.balance+=Number(d.amount||0);
+      w.records.unshift({type:'in',amount:Number(d.amount||0),time:Date.now(),from:otherName+' 转账'});
+      saveWallet(w);
+      renderDone();
+      toast('已收款');
+    };
+  };
+  if(isMe){renderWaitForOther()}
+  else if(d.received){renderDone()}
+  else{renderReceive()}
+}
+function openRedpackView(isMe,d,msgObj,roleObj){
+  if(!getMsgCtxSafe())return;
+  const me=lj('wx_me')||{};
+  const otherName=(roleObj&&roleObj.name)||'对方';
+  const otherAv=(roleObj?(roleObj.avatarImg||roleObj.avatar):'🖤')||'🖤';
+  const myName=me.nickname||'我';
+  const myAv=me.avatarImg||me.avatar||'🙂';
+  const senderName=isMe?myName:otherName;
+  const senderAv=isMe?myAv:otherAv;
+  const m=document.createElement('div');m.className='redpack-open';
+  document.body.appendChild(m);
+  const close=()=>{m.remove();refreshChat()};
+  const bind=()=>{m.querySelectorAll('[data-close]').forEach(el=>{el.onclick=close})};
+
+  if(isMe){
+    const recName=d.receiverName||otherName;
+    const recAv=d.receiverAv||otherAv;
+    const hasRec=!!(d.received||d.opened);
+    m.innerHTML=`
+      <div class="top-bar"><div class="back" data-close>‹</div><div class="dots">⋯</div></div>
+      <div class="top-arc"></div>
+      <div class="card-wrap">
+        <div class="sender">
+          <div class="av">${myAv.startsWith('data:')?`<img src="${myAv}"/>`:myAv}</div>
+          <div class="name">${esc(myName)}发出的红包</div>
+        </div>
+        <div class="wish">${esc(d.wish||'恭喜发财')}</div>
+        <div class="total-line">1个红包共${Number(d.amount||0).toFixed(2)}元</div>
+        ${hasRec ? `
+          <div class="record-item">
+            <div class="av">${String(recAv).startsWith('data:')?`<img src="${recAv}"/>`:recAv}</div>
+            <div class="info">
+              <div class="name">${esc(recName)}</div>
+              <div class="time">${new Date(d.receivedTime||Date.now()).toLocaleTimeString().slice(0,5)}</div>
+            </div>
+            <div class="amt">${Number(d.amount||0).toFixed(2)}元</div>
+          </div>
+        ` : `<div class="empty-tip">等待对方领取</div>`}
+      </div>
+      <button class="close-btn" data-close>✕</button>
+    `;
+    bind();
+    return;
+  }
+
+  const renderOpen=()=>{
+    m.innerHTML=`
+      <div class="top-bar"><div class="back" data-close>‹</div><div class="dots">⋯</div></div>
+      <div class="top-arc"></div>
+      <div class="card-wrap">
+        <div class="sender">
+          <div class="av">${senderAv.startsWith('data:')?`<img src="${senderAv}"/>`:senderAv}</div>
+          <div class="name">${esc(senderName)}的红包</div>
+        </div>
+        <div class="wish">${esc(d.wish||'恭喜发财')}</div>
+        <button class="open-btn" data-open>開</button>
+      </div>
+      <button class="close-btn" data-close>✕</button>
+    `;
+    bind();
+    const btn=m.querySelector('[data-open]');
+    btn.onclick=()=>{
+      d.opened=true;d.received=true;d.receivedTime=Date.now();
+      persistMsgText(msgObj,'__redpack__'+JSON.stringify(d));
+      const w=getWallet();w.balance+=Number(d.amount||0);
+      w.records.unshift({type:'in',amount:Number(d.amount||0),time:Date.now(),from:senderName+' 红包'});
+      saveWallet(w);
+      renderDone();
+      appendSysMsg('🧧 你领取了'+senderName+'的红包');
+      toast('已领取 ¥'+Number(d.amount||0).toFixed(2));
+    };
+  };
+  const renderDone=()=>{
+    m.innerHTML=`
+      <div class="top-bar"><div class="back" data-close>‹</div><div class="dots">⋯</div></div>
+      <div class="top-arc"></div>
+      <div class="card-wrap">
+        <div class="sender">
+          <div class="av">${senderAv.startsWith('data:')?`<img src="${senderAv}"/>`:senderAv}</div>
+          <div class="name">${esc(senderName)}的红包</div>
+        </div>
+        <div class="wish">${esc(d.wish||'恭喜发财')}</div>
+        <div class="detail on">
+          <div class="amt-line">${Number(d.amount||0).toFixed(2)}<span class="yuan">元</span></div>
+          <div class="desc">已存入零钱，可用于发红包 <span class="link">›</span></div>
+          <button class="reply-btn">😊 回复表情到聊天</button>
+        </div>
+      </div>
+      <button class="close-btn" data-close>✕</button>
+    `;
+    bind();
+  };
+  if(d.opened||d.received){renderDone()}
+  else{renderOpen()}
+}
+function refreshChat(){
+  const ctx=getCurrentChatCtx();if(!ctx)return;
+  const cb=$('wxcb');if(!cb)return;
+  const r=getRole(ctx.roleId);
+  let hist=getChatByMode(ctx.roleId,ctx.mode);
+
+  // 👇 【修复1】过滤掉导致白屏的脏数据
+  hist = hist.filter(m => m && m.role && (typeof m.text === 'string' || typeof m.text === 'undefined'));
+
+  if(!hist.length){
+    const greet=ctx.mode==='offline'?`（${r.name}看向你）你来了。`:'你好呀～我是'+r.name;
+    const gm={role:'ai',text:greet,time:Date.now(),read:true,id:uid('m')};
+    hist.push(gm);saveChatByMode(ctx.roleId,ctx.mode,hist);
+  }
+  let pendingThanks=[];let changed=false;
+  hist.forEach(msg=>{
+    if(msg.role!=='user')return;
+    const t=parseTransferText(msg.text);if(!t)return;
+    const d=t.data;
+    if(t.type==='transfer'&&!d.received){
+      d.received=true;d.receivedTime=Date.now();
+      msg.text='__transfer__'+JSON.stringify(d);
+      hist.push({role:'sys',text:'✅ '+r.name+'已收款',time:Date.now(),read:true,id:uid('m')});
+      changed=true;
+      // 👇 【修复2】去掉60秒限制，只要你发过，进来看见就回
+      pendingThanks.push(`用户给你转了 ¥${d.amount}`); 
+    }else if(t.type==='redpack'&&!d.opened&&!d.received){
+      d.opened=true;d.received=true;d.receivedTime=Date.now();
+      d.receiverName=r.remark||r.name;d.receiverAv=r.avatarImg||r.avatar;
+      msg.text='__redpack__'+JSON.stringify(d);
+      hist.push({role:'sys',text:'🧧 '+r.name+'领取了你的红包',time:Date.now(),read:true,id:uid('m')});
+      changed=true;
+      // 👇 【修复3】去掉60秒限制
+      pendingThanks.push(`用户给你发了个 ¥${d.amount} 的红包`); 
+    }
+  });
+  if(changed)saveChatByMode(ctx.roleId,ctx.mode,hist);
+  
+  cb.innerHTML='';
+  let lastT=0;
+  hist.forEach(m=>{
+    if(!m || !m.role) return; // 二次防崩
+    if(!lastT||(m.time-lastT)>5*60*1000){
+      const d=document.createElement('div');d.className='time-sep';d.textContent=fmtMsgTime(m.time);cb.appendChild(d);
+    }
+    lastT=m.time||0;
+    addMsgToView(m.role, m.text || '', m.role==='ai'?r:null, m, ctx.mode); 
+  });
+  cb.scrollTop=cb.scrollHeight;
+
+  if(pendingThanks.length>0){
+    const sys=buildPrompt(r,`${pendingThanks.join('；')}。请根据人设，用一句话表示感谢。不要提AI，不要发转账/红包/表情标记。`,'online');
+    
+    // 👇 【修复4】剔除所有 sys 消息，防止 API 报错死机
+    const safeMsgs = hist.slice(-10)
+      .filter(x => x.role === 'user' || x.role === 'ai') 
+      .map(x => {
+        let content = x.text || '';
+        if(content.startsWith('__transfer__')) content = '[用户转账]';
+        if(content.startsWith('__redpack__')) content = '[用户发红包]';
+        if(content.startsWith('data:image')) content = '[用户发了一张图片]';
+        return {role: x.role==='ai'?'assistant':'user', content: content};
+    });
+    
+        callAI(sys, safeMsgs, API.tempOnline).then(res=>{
+      const clean=stripAction(res).replace(/\[(?:转账|红包|表情):[^\]]*\]/g,'').trim();
+      if(!clean)return;
+      const h2=getChatByMode(ctx.roleId,ctx.mode);
+      splitMultiBubble(clean).forEach(b=>{h2.push({role:'ai',text:b,time:Date.now(),read:false,id:uid('m')})});
+      saveChatByMode(ctx.roleId,ctx.mode,h2);
+      const t2=wxNav[wxNav.length-1];
+      if(t2&&t2.view==='chat'&&t2.id===ctx.roleId&&(t2.mode||'online')===ctx.mode)refreshChat();
+    }).catch((e)=>{
+      console.error('收款感谢失败', e);
+      toast('AI没回复，错误：' + e.message); 
+    });
+  }
+} 
+  
+function addMsgToView(role,text,roleObj,msgObj,mode){
+  const cb=$('wxcb');if(!cb)return null;
+    if(!text) text = ''; // 👇 【修复5】防止 text 为空导致白屏
+  if(!text) text = ''; 
+  const isOffline=mode==='offline';
+  const tr=parseTransferText(text);
+  if(tr){
+    const isMe=(role==='user');
+    const wrap=document.createElement('div');
+    wrap.className='wx-msg '+(isMe?'me':'ai')+(isOffline?' offline':'');
+    const av=document.createElement('div');av.className='av';
+    if(!isMe&&roleObj){if(roleObj.avatarImg)av.innerHTML=`<img src="${roleObj.avatarImg}"/>`;else av.textContent=roleObj.avatar||'🖤'}
+    else{const me=lj('wx_me')||{};if(me.avatarImg)av.innerHTML=`<img src="${me.avatarImg}"/>`;else av.textContent=me.avatar||'🙂'}
+    const content=document.createElement('div');content.className='content';
+    const bubble=document.createElement('div');
+    if(tr.type==='transfer'){
+      const d=tr.data;
+      const done=!!d.received;
+      const stat=done?(isMe?'已收款':'已被接收'):(isMe?'待对方收款':'请收款');
+      bubble.className='transfer-bubble me';
+      bubble.innerHTML=`
+        <div class="tb-row">
+          <div class="tb-icon">${done?'✓':'⇄'}</div>
+          <div class="tb-info">
+            <div class="tb-amt">¥${Number(d.amount||0).toFixed(2)}</div>
+            <div class="tb-stat">${stat}</div>
+          </div>
+        </div>
+        <div class="tb-label">转账</div>
+      `;
+      bubble.onclick=()=>openTransferView(isMe,d,msgObj,roleObj);
+    }else{
+      const d=tr.data;
+      const done=!!(d.opened||d.received);
+      bubble.className='redpack-bubble'+(isMe?' me':'');
+      bubble.innerHTML=`
+        <div class="tb-row">
+          <div class="tb-icon">🧧</div>
+          <div class="tb-info">
+            <div class="tb-amt">${esc(d.wish||'恭喜发财')}</div>
+            <div class="tb-stat">${done?'已领取':'微信红包'}</div>
+          </div>
+        </div>
+        <div class="tb-label">微信红包</div>
+      `;
+      bubble.onclick=()=>openRedpackView(isMe,d,msgObj,roleObj);
+    }
+    content.appendChild(bubble);wrap.appendChild(av);wrap.appendChild(content);cb.appendChild(wrap);cb.scrollTop=cb.scrollHeight;
+    return wrap;
+  }
+  if(role==='sys'){
+    const d=document.createElement('div');d.className='chat-sys-msg';d.innerHTML=text;cb.appendChild(d);return d;
+  }
+  if(text.startsWith('data:image')){
+    const wrap=document.createElement('div');
+    wrap.className='wx-msg '+(role==='user'?'me':'ai')+(isOffline?' offline':'');
+    const av=document.createElement('div');av.className='av';
+    if(role==='ai'&&roleObj){if(roleObj.avatarImg)av.innerHTML=`<img src="${roleObj.avatarImg}"/>`;else av.textContent=roleObj.avatar||'🖤'}
+    else{const me=lj('wx_me')||{};if(me.avatarImg)av.innerHTML=`<img src="${me.avatarImg}"/>`;else av.textContent=me.avatar||'🙂'}
+    const content=document.createElement('div');content.className='content';
+    const b=document.createElement('div');b.className='b';b.innerHTML=`<img src="${text}"/>`;
+    content.appendChild(b);wrap.appendChild(av);wrap.appendChild(content);
+    cb.appendChild(wrap);cb.scrollTop=cb.scrollHeight;return wrap;
+  }
+  if(text.startsWith('[表情:')){
+    const m=text.match(/\[表情:(.+?)\]/);
+    if(m){
+      const label=m[1];
+      const emo=getEmojis().find(e=>e.label===label);
+      const wrap=document.createElement('div');
+      wrap.className='wx-msg '+(role==='user'?'me':'ai')+(isOffline?' offline':'');
+      const av=document.createElement('div');av.className='av';
+      if(role==='ai'&&roleObj){if(roleObj.avatarImg)av.innerHTML=`<img src="${roleObj.avatarImg}"/>`;else av.textContent=roleObj.avatar||'🖤'}
+      else{const me=lj('wx_me')||{};if(me.avatarImg)av.innerHTML=`<img src="${me.avatarImg}"/>`;else av.textContent=me.avatar||'🙂'}
+      const content=document.createElement('div');content.className='content';
+      const b=document.createElement('div');b.className='b';
+      if(emo)b.innerHTML=`<img src="${emo.img}" style="width:120px;height:120px;object-fit:contain"/>`;
+      else b.textContent='[表情:'+label+']';
+      content.appendChild(b);wrap.appendChild(av);wrap.appendChild(content);
+      cb.appendChild(wrap);cb.scrollTop=cb.scrollHeight;return wrap;
+    }
+  }
+  if(role==='ai'){
+    const group=document.createElement('div');group.className='ai-group';
+    renderAiGroup(group,text,roleObj,isOffline,mode);
+    if(msgObj&&msgObj.id&&!String(msgObj.id).startsWith('tmp_')){
+      let lt=null;let moved=false;
+      const cancel=()=>{if(lt){clearTimeout(lt);lt=null}};
+      group.addEventListener('touchstart',e=>{
+        moved=false;const x=e.touches[0].clientX,y=e.touches[0].clientY;
+        lt=setTimeout(()=>{if(!moved)chatMsgMenu(msgObj,x,y)},500);
+      },{passive:true});
+      group.addEventListener('touchend',cancel);
+      group.addEventListener('touchmove',()=>{moved=true;cancel()});
+      group.addEventListener('contextmenu',e=>{e.preventDefault();chatMsgMenu(msgObj,e.clientX||200,e.clientY||200)});
+    }
+    cb.appendChild(group);cb.scrollTop=cb.scrollHeight;
+    return {group,setText:(t)=>{renderAiGroup(group,t,roleObj,isOffline,mode)}};
+  }
+  const wrap=document.createElement('div');
+  wrap.className='wx-msg me'+(isOffline?' offline':'');
+  const av=document.createElement('div');av.className='av';
+  const me=lj('wx_me')||{};
+  if(me.avatarImg)av.innerHTML=`<img src="${me.avatarImg}"/>`;
+  else av.textContent=me.avatar||'🙂';
+  const content=document.createElement('div');content.className='content';
+  const segs=splitNarration(text);
+  segs.forEach(seg=>{
+    if(seg.type==='narration'){
+      const nb=document.createElement('div');nb.className='narration-block me';nb.textContent=seg.text;
+      content.appendChild(nb);
+    }else{
+      const d=document.createElement('div');d.className='b';
+      d.textContent=isOffline?seg.text:stripAction(seg.text);
+      content.appendChild(d);
+    }
+  });
+  wrap.appendChild(av);wrap.appendChild(content);
+  if(msgObj&&msgObj.id&&!String(msgObj.id).startsWith('tmp_')){
+    let lt=null;let moved=false;
+    const cancel=()=>{if(lt){clearTimeout(lt);lt=null}};
+    wrap.addEventListener('touchstart',e=>{
+      moved=false;const x=e.touches[0].clientX,y=e.touches[0].clientY;
+      lt=setTimeout(()=>{if(!moved)chatMsgMenu(msgObj,x,y)},500);
+    },{passive:true});
+    wrap.addEventListener('touchend',cancel);
+    wrap.addEventListener('touchmove',()=>{moved=true;cancel()});
+    wrap.addEventListener('contextmenu',e=>{e.preventDefault();chatMsgMenu(msgObj,e.clientX||200,e.clientY||200)});
+  }
+  cb.appendChild(wrap);cb.scrollTop=cb.scrollHeight;return wrap;
+}
+function renderAiGroup(group,text,roleObj,isOffline,mode){
+  group.innerHTML='';
+  const displayText=(mode==='online'&&API.strictMode!==false)?stripAction(text):text;
+  const bubbles=splitMultiBubble(displayText);
+  let firstBubble=null;
+  bubbles.forEach((btext,bIdx)=>{
+    const segs=splitNarration(btext);
+    segs.forEach((seg,idx)=>{
+      if(seg.type==='narration'){
+        const nb=document.createElement('div');nb.className='narration-block';nb.textContent=seg.text;
+        group.appendChild(nb);
+      }else{
+        const wrap=document.createElement('div');
+        wrap.className='wx-msg ai'+(isOffline?' offline':'');
+        const av=document.createElement('div');av.className='av';
+        if(roleObj){if(roleObj.avatarImg)av.innerHTML=`<img src="${roleObj.avatarImg}"/>`;else av.textContent=roleObj.avatar||'🖤'}
+        const content=document.createElement('div');content.className='content';
+        if(bIdx===0&&idx===0){const nm=document.createElement('div');nm.className='name';nm.textContent=roleObj?roleObj.name:'';content.appendChild(nm)}
+        const b=document.createElement('div');b.className='b';b.textContent=seg.text;
+        content.appendChild(b);wrap.appendChild(av);wrap.appendChild(content);
+        group.appendChild(wrap);
+        if(!firstBubble)firstBubble=wrap;
+      }
+    });
+  });
+  return firstBubble;
+}
+function sendChat(){
+  const ctx=getCurrentChatCtx();if(!ctx)return;
+  const inp=$('wxi');if(!inp)return;
+  const text=inp.value.trim();if(!text)return;
+  if(!API.url||!API.key){toast('请先到设置配置 API');return}
+  const r=getRole(ctx.roleId);if(!r)return;
+  const hist=getChatByMode(ctx.roleId,ctx.mode);
+  const now=Date.now();const lastMsg=hist[hist.length-1];
+  const cb=$('wxcb');
+  if(cb&&(!lastMsg||(now-lastMsg.time)>5*60*1000)){
+    const d=document.createElement('div');d.className='time-sep';d.textContent=fmtMsgTime(now);cb.appendChild(d);
+  }
+  const um={role:'user',text,time:now,read:true,id:uid('m')};
+  hist.push(um);saveChatByMode(ctx.roleId,ctx.mode,hist);
+  addMsgToView('user',text,null,um,ctx.mode);
+  inp.value='';inp.style.height='auto';
+  autoReply(ctx.roleId,ctx.mode);
+}
+function parseAIResponse(text){
+  const parts=[];
+  let remaining=text;
+  const re=/(\[(?:转账|红包|表情):[^\]]+\])/g;
+  let last=0,m;
+  while((m=re.exec(text))!==null){
+    if(m.index>last){const t=text.slice(last,m.index).trim();if(t)parts.push({type:'text',text:t})}
+    parts.push({type:'special',text:m[0]});last=m.index+m[0].length;
+  }
+  if(last<text.length){const t=text.slice(last).trim();if(t)parts.push({type:'text',text:t})}
+  if(parts.length===0&&text.trim())parts.push({type:'text',text});
+  return parts;
+}
+function autoReply(roleId,mode){
+  const r=getRole(roleId);if(!r)return;
+  const hist=getChatByMode(roleId,mode);
+  const tmp={role:'ai',text:'...',time:Date.now(),read:false,id:'tmp_'+Date.now()};
+  const handle=addMsgToView('ai','...',r,tmp,mode);
+  const el=handle.group?handle.group:handle;
+  let historyForAI;
+  if(mode==='online'&&API.strictMode!==false){
+    historyForAI=hist.slice(-16).map(x=>({role:x.role==='ai'?'assistant':'user',content:x.role==='ai'?stripAction(x.text):x.text}));
+  }else{
+    historyForAI=hist.slice(-16).map(x=>({role:x.role==='ai'?'assistant':'user',content:x.text}));
+  }
+  const temp=mode==='offline'?API.temp:API.tempOnline;
+  callAI(buildPrompt(r,null,mode),historyForAI,temp,
+    (d,full)=>{renderAiGroup(el,full,r,mode==='offline',mode);const cb=$('wxcb');if(cb)cb.scrollTop=cb.scrollHeight}
+  ).then(res=>{
+    let final=res;
+    if(mode==='online'&&API.strictMode!==false)final=stripAction(res);
+    final=String(final||'').trim()||'（沉默）';
+    const parts=parseAIResponse(final);
+    let delay=0;
+    const allMsgs=[];
+    parts.forEach(p=>{
+      if(p.type==='text'){
+        allMsgs.push({role:'ai',text:p.text,time:Date.now()+delay,read:false,id:uid('m')});
+        delay+=200;
+      }else{
+        const t=p.text;
+        if(t.startsWith('[转账:')){
+          const mm=t.match(/\[转账:([\d.]+):?(.*?)\]/);
+          if(mm){
+            const amt=parseFloat(mm[1])||0;
+            allMsgs.push({role:'ai',text:'__transfer__'+JSON.stringify({amount:amt,note:mm[2]||'',received:false}),time:Date.now()+delay,read:false,id:uid('m')});
+            delay+=200;
+          }
+        }else if(t.startsWith('[红包:')){
+          const mm=t.match(/\[红包:([\d.]+):?(.*?)\]/);
+          if(mm){
+            let amt=parseFloat(mm[1])||0;
+            if(amt>200)amt=200;
+            allMsgs.push({role:'ai',text:'__redpack__'+JSON.stringify({amount:amt,wish:mm[2]||'',received:false,opened:false}),time:Date.now()+delay,read:false,id:uid('m')});
+            delay+=200;
+          }
+        }else if(t.startsWith('[表情:')){
+          const mm=t.match(/\[表情:(.+?)\]/);
+          if(mm){
+            const emo=getEmojis().find(e=>e.label===mm[1]);
+            if(emo)allMsgs.push({role:'ai',text:'data:image:'+emo.img.split(',')[0].split(':')[1]+';base64,'+emo.img.split(',')[1],time:Date.now()+delay,read:false,id:uid('m')});
+            else allMsgs.push({role:'ai',text:'[表情:'+mm[1]+']',time:Date.now()+delay,read:false,id:uid('m')});
+            delay+=200;
+          }
+        }
+      }
+    });
+    el.innerHTML='';
+    if(allMsgs.length===0)allMsgs.push({role:'ai',text:final,time:Date.now(),read:false,id:uid('m')});
+    allMsgs.forEach(m=>{
+      hist.push(m);saveChatByMode(roleId,mode,hist);
+      addMsgToView('ai',m.text,r,m,mode);
+    });
+    const aiCount=hist.filter(x=>x.role==='ai').length;
+    const lastSum=parseInt(ls('wx_lastsum_'+roleId+'_'+mode)||'0');
+    if(aiCount>=10&&aiCount-lastSum>=10){ls('wx_lastsum_'+roleId+'_'+mode,String(aiCount));summarizeToMemory(r,hist)}
+  }).catch(e=>{el.innerHTML=`<div style="padding:8px;color:#ff3b30">失败：${esc(e.message)}</div>`});
+}
+function summarizeToMemory(role,hist){
+  if(!API.url||!API.key)return;
+  const recent=hist.slice(-20).map(m=>(m.role==='ai'?role.name:'我')+': '+stripAction(m.text)).join('\n');
+  const sys='请从这段对话里，提取1-3条值得记住的事件（第三人称，每条20字内）。只输出事件，每条一行。';
+  callAI(sys,[{role:'user',content:recent}]).then(text=>{
+    const lines=text.split('\n').map(x=>x.trim()).filter(Boolean);
+    lines.forEach(line=>{
+      role.memories=role.memories||[];
+      if(!role.memories.some(m=>m.text===line))role.memories.unshift({text:line,time:Date.now()});
+    });
+    if(role.memories.length>30)role.memories.length=30;
+    saveRoles();
+  }).catch(()=>{});
+}
+function chatMsgMenu(m,x,y){
+  if(!m||!m.id)return;
+  const items=[];
+  if(m.role==='user'){
+    items.push({ic:'📋',t:'复制',f:()=>copy(m.text)});
+    items.push({ic:'✏️',t:'编辑',f:()=>editUserMsg(m)});
+    items.push({ic:'🔄',t:'重新发送',f:()=>resendMsg(m)});
+    items.push({ic:'🗑',t:'删除',f:()=>delChatMsg(m)});
+  }else{
+    items.push({ic:'📋',t:'复制',f:()=>copy(m.text)});
+    items.push({ic:'✏️',t:'编辑',f:()=>editAiMsg(m)});
+    items.push({ic:'🔄',t:'重新生成',f:()=>regenChatMsg(m)});
+    items.push({ic:'🗑',t:'删除',f:()=>delChatMsg(m)});
+  }
+  showLongMenu(x,y,items);
+}
+function editUserMsg(m){
+  mkModal('编辑消息',`<div class="fld"><textarea id="_et">${esc(m.text)}</textarea></div>`,[
+    {t:'保存并重新回复',f:()=>{
+      const ctx=getCurrentChatCtx();if(!ctx)return;
+      const v=$('_et').value.trim();if(!v)return;
+      const hist=getChatByMode(ctx.roleId,ctx.mode);
+      const idx=hist.findIndex(x=>x.id===m.id);
+      if(idx<0)return;
+      hist[idx].text=v;hist.splice(idx+1);
+      saveChatByMode(ctx.roleId,ctx.mode,hist);
+      closeModal();refreshChat();autoReply(ctx.roleId,ctx.mode);
+    }},
+    {t:'仅保存',g:1,f:()=>{
+      const ctx=getCurrentChatCtx();if(!ctx)return;
+      const v=$('_et').value.trim();if(!v)return;
+      const hist=getChatByMode(ctx.roleId,ctx.mode);
+      const idx=hist.findIndex(x=>x.id===m.id);
+      if(idx>=0){hist[idx].text=v;saveChatByMode(ctx.roleId,ctx.mode,hist)}
+      closeModal();refreshChat();
+    }}
+  ]);
+}
+function editAiMsg(m){
+  mkModal('编辑消息',`<div class="fld"><textarea id="_et">${esc(m.text)}</textarea></div>`,[
+    {t:'保存',f:()=>{
+      const ctx=getCurrentChatCtx();if(!ctx)return;
+      const v=$('_et').value.trim();if(!v)return;
+      const hist=getChatByMode(ctx.roleId,ctx.mode);
+      const idx=hist.findIndex(x=>x.id===m.id);
+      if(idx>=0){hist[idx].text=v;saveChatByMode(ctx.roleId,ctx.mode,hist)}
+      closeModal();refreshChat();
+    }},{t:'取消',g:1,f:closeModal}]);
+}
+function resendMsg(m){
+  const ctx=getCurrentChatCtx();if(!ctx)return;
+  const hist=getChatByMode(ctx.roleId,ctx.mode);
+  const idx=hist.findIndex(x=>x.id===m.id);if(idx<0)return;
+  hist.splice(idx+1);saveChatByMode(ctx.roleId,ctx.mode,hist);
+  refreshChat();autoReply(ctx.roleId,ctx.mode);
+}
+function regenChatMsg(m){
+  const ctx=getCurrentChatCtx();if(!ctx)return;
+  const hist=getChatByMode(ctx.roleId,ctx.mode);
+  const idx=hist.findIndex(x=>x.id===m.id);if(idx<0)return;
+  hist.splice(idx);saveChatByMode(ctx.roleId,ctx.mode,hist);
+  refreshChat();autoReply(ctx.roleId,ctx.mode);
+}
+function delChatMsg(m){
+  const ctx=getCurrentChatCtx();if(!ctx)return;
+  const hist=getChatByMode(ctx.roleId,ctx.mode);
+  const idx=hist.findIndex(x=>x.id===m.id);
+  if(idx>=0){hist.splice(idx,1);saveChatByMode(ctx.roleId,ctx.mode,hist)}
+  refreshChat();
+}
+function openChatPlus(){
+  const ctx=getCurrentChatCtx();if(!ctx)return;
+  const isOffline=ctx.mode==='offline';
+  const bg=document.createElement('div');bg.className='mask-bg';bg.onclick=()=>closePlus();
+  document.body.appendChild(bg);
+  const panel=document.createElement('div');panel.className='plus-panel';
+  if(isOffline){
+    panel.style.gridTemplateColumns='repeat(3,1fr)';
+    panel.innerHTML=`
+      <div class="pi" onclick="closePlus();toggleMode()"><div class="ic">🌐</div><div class="nm">线上线下</div></div>
+      <div class="pi" onclick="closePlus();pickChatImg()"><div class="ic">🖼</div><div class="nm">图片</div></div>
+      <div class="pi" onclick="closePlus();toast('线下模式不支持转账')"><div class="ic" style="opacity:.4">💸</div><div class="nm" style="opacity:.4">转账</div></div>`;
+  }else{
+    panel.style.gridTemplateColumns='repeat(4,1fr)';
+    panel.innerHTML=`
+      <div class="pi" onclick="closePlus();toggleMode()"><div class="ic">🌐</div><div class="nm">线上线下</div></div>
+      <div class="pi" onclick="closePlus();wxNav.push({view:'dreamSetup',id:'${ctx.roleId}'});wxRender()"><div class="ic">🌙</div><div class="nm">入梦</div></div>
+      <div class="pi" onclick="closePlus();pickChatImg()"><div class="ic">🖼</div><div class="nm">图片</div></div>
+      <div class="pi" onclick="closePlus();openTransferDialog('${ctx.roleId}')"><div class="ic">💸</div><div class="nm">转账</div></div>
+      <div class="pi" onclick="closePlus();openRedpackDialog('${ctx.roleId}')"><div class="ic">🧧</div><div class="nm">红包</div></div>`;
+  }
+  document.body.appendChild(panel);
+}
+function closePlus(){qa('.plus-panel').forEach(x=>x.remove());qa('.mask-bg').forEach(x=>x.remove());qa('.emoji-panel').forEach(x=>x.remove())}
+function openTransferDialog(roleId){
+  const w=getWallet();
+  mkModal('转账',
+  `<div style="text-align:center;padding:10px 0"><div style="font-size:14px;color:#8e8e93;margin-bottom:8px">当前余额 ¥${w.balance.toFixed(2)}</div>
+   <div style="font-size:36px;font-weight:700;color:#1c1c1e">¥ <input id="_tamt" type="number" value="0.00" style="border:none;font-size:36px;font-weight:700;width:60%;text-align:center;outline:none;background:transparent"/></div></div>
+   <div class="fld"><label>备注</label><input id="_tnote" placeholder="转账说明"/></div>`,
+  [{t:'确认转账',f:()=>{
+    const amt=parseFloat($('_tamt').value)||0;
+    if(amt<=0){toast('请输入金额');return}
+    if(amt>w.balance){toast('余额不足');return}
+    w.balance-=amt;w.records.unshift({type:'out',amount:amt,time:Date.now(),to:'转账'});saveWallet(w);
+    
+    const data={amount:amt,note:$('_tnote').value.trim(),received:false};
+    const hist=getChatByMode(roleId, 'online');
+    const m={role:'user',text:'__transfer__'+JSON.stringify(data),time:Date.now(),read:true,id:uid('m')};
+    hist.push(m);saveChatByMode(roleId, 'online',hist);
+    
+    closeModal();
+    const top=wxNav[wxNav.length-1];
+    if(top&&top.view==='chat'&&top.id===roleId) refreshChat();
+  }},{t:'取消',g:1,f:closeModal}]);
+}
+function openRedpackDialog(roleId){
+  const w=getWallet();
+  mkModal('发红包',
+  `<div style="text-align:center;padding:10px 0"><div style="font-size:14px;color:#8e8e93;margin-bottom:8px">当前余额 ¥${w.balance.toFixed(2)}（单个红包不能超过200）</div>
+   <div style="font-size:36px;font-weight:700;color:#fa9d3b">¥ <input id="_ramt" type="number" value="0.00" style="border:none;font-size:36px;font-weight:700;width:60%;text-align:center;outline:none;background:transparent;color:#fa9d3b"/></div></div>
+   <div class="fld"><label>祝福语</label><input id="_rwish" placeholder="恭喜发财" value="恭喜发财"/></div>`,
+  [{t:'发红包',f:()=>{
+    const amt=parseFloat($('_ramt').value)||0;
+    if(amt<=0){toast('请输入金额');return}
+    if(amt>200){toast('红包不能超过200，请用转账');return}
+    if(amt>w.balance){toast('余额不足');return}
+    w.balance-=amt;w.records.unshift({type:'out',amount:amt,time:Date.now(),to:'红包'});saveWallet(w);
+    
+    const data={amount:amt,wish:$('_rwish').value.trim()||'恭喜发财',received:false,opened:false};
+    const hist=getChatByMode(roleId, 'online');
+    const m={role:'user',text:'__redpack__'+JSON.stringify(data),time:Date.now(),read:true,id:uid('m')};
+    hist.push(m);saveChatByMode(roleId, 'online',hist);
+    
+    closeModal();
+    const top=wxNav[wxNav.length-1];
+    if(top&&top.view==='chat'&&top.id===roleId) refreshChat(); 
+  }},{t:'取消',g:1,f:closeModal}]);
+}
+function toggleMode(){
+  const ctx=getCurrentChatCtx();if(!ctx)return;
+  const r=getRole(ctx.roleId);
+  if(ctx.mode==='offline'){
+    wxNav.pop();wxNav.push({view:'chat',id:ctx.roleId,mode:'online'});
+    wxRender();toast('已切换为线上');
+  }else{
+    mkModal('🏠 切换到线下',
+    `<div class="fld"><label>地点</label><select id="_ol">${Object.keys(OFFLINE_THEMES).map(x=>`<option ${(r.offline&&r.offline.location)===x?'selected':''}>${x}</option>`).join('')}</select></div>
+     <div class="fld"><label>时间</label><select id="_ot">${['白天','傍晚','夜晚','深夜'].map(x=>`<option ${(r.offline&&r.offline.time)===x?'selected':''}>${x}</option>`).join('')}</select></div>
+     <div class="fld"><label>天气</label><select id="_ow">${['晴','多云','小雨','雪','阴','微风'].map(x=>`<option ${(r.offline&&r.offline.weather)===x?'selected':''}>${x}</option>`).join('')}</select></div>
+     <div class="fld"><label>自定义背景色</label><input type="color" id="_oc" value="${r.offline.customColor||'#3a2a1e'}"/></div>`,
+    [
+      {t:'进入线下',f:()=>{
+        r.offline={enabled:true,location:$('_ol').value,time:$('_ot').value,weather:$('_ow').value,customColor:$('_oc').value};
+        saveRoles();closeModal();
+        wxNav.pop();wxNav.push({view:'chat',id:ctx.roleId,mode:'offline'});
+        wxRender();toast('已进入线下');
+      }},
+      {t:'取消',g:1,f:closeModal}]);
+  }
+}
+function openAddMenu(){
+  const bg=document.createElement('div');bg.className='mask-bg';bg.onclick=()=>closePlus();
+  document.body.appendChild(bg);
+  const panel=document.createElement('div');panel.className='plus-panel';
+  panel.style.gridTemplateColumns='repeat(2,1fr)';
+  panel.innerHTML=`<div class="pi" onclick="closePlus();openRoleEditor()"><div class="ic">👤</div><div class="nm">新建角色</div></div>`;
+  document.body.appendChild(panel);
+}
+
+function pickChatImg(){
+  const ctx=getCurrentChatCtx();if(!ctx)return;
+  const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+  inp.onchange=e=>{
+    const f=e.target.files[0];if(!f)return;
+    const rd=new FileReader();
+    rd.onload=ev=>{
+      const r=getRole(ctx.roleId);
+      const hist=getChatByMode(ctx.roleId,ctx.mode);
+      const m={role:'user',text:ev.target.result,time:Date.now(),read:true,id:uid('m')};
+      hist.push(m);saveChatByMode(ctx.roleId,ctx.mode,hist);
+      addMsgToView('user',m.text,null,m,ctx.mode);
+      const tmp={role:'ai',text:'...',time:Date.now(),read:false,id:'tmp_'+Date.now()};
+      const handle=addMsgToView('ai','...',r,tmp,ctx.mode);
+      const el=handle.group?handle.group:handle;
+      const msgs=hist.slice(-16).map(x=>({role:x.role==='ai'?'assistant':'user',content:x.text.startsWith('data:image')?'[用户发了一张图片]':x.text}));
+      const sys=buildPrompt(r,'用户刚发了一张图片给你，请自然回应。',ctx.mode);
+      callAI(sys,msgs,ctx.mode==='offline'?API.temp:API.tempOnline).then(res=>{
+        let clean=res;if(ctx.mode==='online'&&API.strictMode!==false)clean=stripAction(res);
+        clean=String(clean||'').trim()||'收到啦～';
+        hist.push({role:'ai',text:clean,time:Date.now(),read:false,id:uid('m')});
+        saveChatByMode(ctx.roleId,ctx.mode,hist);
+        renderAiGroup(el,clean,r,ctx.mode==='offline',ctx.mode);
+      }).catch(()=>{renderAiGroup(el,'收到啦～',r,ctx.mode==='offline',ctx.mode)});
+    };
+    rd.readAsDataURL(f);
+  };
+  inp.click();
+}
+/* ============ 表情包面板 ============ */
+function openEmojiPanel(){
+  closePlus();
+  const ctx=getCurrentChatCtx();if(!ctx)return;
+  if(ctx.mode!=='online'){toast('仅线上支持表情包');return}
+  const emojis=getEmojis();
+  const bg=document.createElement('div');bg.className='mask-bg';bg.onclick=()=>closePlus();
+  document.body.appendChild(bg);
+  const panel=document.createElement('div');panel.className='emoji-panel';
+  if(!emojis.length){
+    panel.innerHTML=`<div style="text-align:center;padding:20px;color:#999">还没有表情包<br><br><button class="btn" onclick="closePlus();wxNav.push({view:'emojiManage'});wxRender()">去上传</button></div>`;
+  }else{
+    panel.innerHTML=`<div style="font-size:12px;color:#8e8e93;margin-bottom:10px">点击发送</div><div class="grid">${emojis.map((e,i)=>`<div class="item" onclick="sendEmoji(${i})"><img src="${e.img}"/><div>${esc(e.label)}</div></div>`).join('')}</div>`;
+  }
+  document.body.appendChild(panel);
+}
+function sendEmoji(i){
+  const emojis=getEmojis();const e=emojis[i];if(!e)return;
+  closePlus();
+  const ctx=getCurrentChatCtx();if(!ctx)return;
+  const r=getRole(ctx.roleId);
+  const hist=getChatByMode(ctx.roleId,ctx.mode);
+  const m={role:'user',text:'data:image/png;base64,'+(e.img.split(',')[1]||''),time:Date.now(),read:true,id:uid('m'),isEmoji:true};
+  hist.push(m);saveChatByMode(ctx.roleId,ctx.mode,hist);
+  addMsgToView('user',m.text,null,m,ctx.mode);
+  autoReply(ctx.roleId,ctx.mode);
+}
+function renderEmojiManagePage(){
+  setTop('表情包管理',true,'＋',()=>uploadEmoji());
+  const b=$('appB');
+  b.style.display='block';b.style.overflowY='auto';b.style.padding='16px';b.style.background='#f2f2f7';
+  const emojis=getEmojis();
+  b.innerHTML=`<div style="font-size:12px;color:#8e8e93;margin-bottom:12px">上传图片后打上标签（如：开心、生气、无语）。AI 会根据标签在合适时使用。</div>
+    ${emojis.length?`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">${emojis.map((e,i)=>`<div style="background:#fff;border-radius:12px;padding:10px;text-align:center;position:relative">
+      <img src="${e.img}" style="width:100%;height:80px;object-fit:contain"/>
+      <div style="font-size:12px;color:#666;margin-top:6px">${esc(e.label)}</div>
+      <div style="position:absolute;top:6px;right:6px;background:#ff3b30;color:#fff;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;cursor:pointer" onclick="delEmoji(${i})">✕</div>
+    </div>`).join('')}</div>`:'<div style="text-align:center;padding:60px;color:#999">还没有表情包<br><br>点右上角 ＋ 上传</div>'}`;
+}
+function uploadEmoji(){
+  const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+  inp.onchange=e=>{
+    const f=e.target.files[0];if(!f)return;
+    readFileAsDataURL(f,dataUrl=>{
+      mkModal('添加表情',
+      `<div style="text-align:center;margin-bottom:12px"><img src="${dataUrl}" style="max-width:200px;max-height:200px;border-radius:10px"/></div>
+       <div class="fld"><label>标签（AI据此识别）</label><input id="_elab" placeholder="例如：开心、难过、生气"/></div>`,
+      [{t:'保存',f:()=>{
+        const label=$('_elab').value.trim();
+        if(!label){toast('请输入标签');return}
+        const emojis=getEmojis();emojis.push({img:dataUrl,label});saveEmojis(emojis);
+        closeModal();renderEmojiManagePage();toast('已添加');
+      }},{t:'取消',g:1,f:closeModal}]);
+    });
+  };
+  inp.click();
+}
+function delEmoji(i){
+  if(!confirm('删除这个表情？'))return;
+  const emojis=getEmojis();emojis.splice(i,1);saveEmojis(emojis);renderEmojiManagePage();
+}
+/* ============ 钱包 ============ */
+function renderWalletPage(){
+  setTop('钱包',true,'⋯',()=>{
+    const w=getWallet();
+    showLongMenu(window.innerWidth-200,80,[
+      {ic:'💰',t:'修改余额',f:()=>{
+        mkModal('修改余额',`<div class="fld"><label>余额</label><input id="_wb" type="number" value="${w.balance}"/></div>`,
+        [{t:'保存',f:()=>{w.balance=parseFloat($('_wb').value)||0;saveWallet(w);closeModal();renderWalletPage();toast('已保存')}},{t:'取消',g:1,f:closeModal}]);
+      }},
+      {ic:'🗑',t:'清空记录',f:()=>{if(confirm('清空记录？')){w.records=[];saveWallet(w);renderWalletPage()}}}
+    ]);
+  });
+  const b=$('appB');
+  b.style.display='block';b.style.overflowY='auto';b.style.padding='0';b.style.background='#f2f2f7';
+  const w=getWallet();
+  b.innerHTML=`<div class="wallet-page">
+    <div class="balance"><div class="lbl">余额</div><div class="amt">¥${w.balance.toFixed(2)}</div></div>
+    <div style="font-size:12px;color:#8e8e93;padding:4px;font-weight:600">交易记录</div>
+    ${w.records.length?w.records.map(r=>`<div class="card" style="display:flex;justify-content:space-between;align-items:center">
+      <div><div class="t">${r.type==='in'?'收入':'支出'}</div><div class="d">${new Date(r.time).toLocaleString()} ${r.from||r.to||''}</div></div>
+      <div style="font-size:18px;font-weight:700;color:${r.type==='in'?'#07c160':'#ff3b30'}">${r.type==='in'?'+':'-'}¥${r.amount.toFixed(2)}</div>
+    </div>`).join(''):'<div style="text-align:center;padding:30px;color:#999">暂无记录</div>'}
+  </div>`;
+}
+/* ============ 系统设置 ============ */
+function openSettingsPage(){
+  wxNav.push({view:'settings'});
+  wxRender();
+}function renderSettings(b){
+  const s=getSet();
+  const modelOpt=API.models.length?API.models.map(m=>`<option value="${m}" ${m===API.model?'selected':''}>${m}</option>`).join(''):`<option>${API.model}</option>`;
+  b.innerHTML=`
+ 
+  <div style="font-size:12px;color:#8e8e93;padding:16px 4px 8px;font-weight:600">旁白字数</div>
+  <div class="card">
+    <div class="row2">
+      <div class="fld"><label>最少</label><input id="gNarrMin" type="number" value="${s.narrationMin||100}"/></div>
+      <div class="fld"><label>最多</label><input id="gNarrMax" type="number" value="${s.narrationMax||300}"/></div>
+    </div>
+    <button class="btn f" onclick="saveNarration()">保存</button>
+  </div>
+  <div style="font-size:12px;color:#8e8e93;padding:16px 4px 8px;font-weight:600">主题设置</div>
+  <div class="card" style="cursor:pointer" onclick="wxNav.push({view:'theme'});wxRender()"><div class="t">🎨 主题设置</div><div class="d">线上/线下/入梦/角色扮演，各自独立设置背景、字体、气泡</div></div>
+  <div style="font-size:12px;color:#8e8e93;padding:16px 4px 8px;font-weight:600">内容范围</div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><div><div class="t">成人模式总开关</div><div class="d">所有场景都放开</div></div><div class="sw ${s.mature?'on':''}" onclick="toggleMatureWX();renderSettings($('appB'))"></div></div></div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><div><div class="t">线上严格模式</div><div class="d">过滤主聊天里的括号动作</div></div><div class="sw ${API.strictMode!==false?'on':''}" onclick="toggleStrict();renderSettings($('appB'))"></div></div></div>
+  <div style="font-size:12px;color:#8e8e93;padding:16px 4px 8px;font-weight:600">通知</div>
+  <div class="card" style="cursor:pointer" onclick="wxNav.push({view:'notifySetting'});wxRender()"><div class="t">🔔 通知设置</div><div class="d">允许通知、锁屏、横幅、角标</div></div>
+  <div style="font-size:12px;color:#8e8e93;padding:16px 4px 8px;font-weight:600">入梦自定义</div>
+  <div class="card" style="cursor:pointer" onclick="wxNav.push({view:'dreamCustom'});wxRender()"><div class="t">🌙 自定义氛围与关键词</div></div>
+  <div style="font-size:12px;color:#8e8e93;padding:16px 4px 8px;font-weight:600">数据</div>
+  <div class="card" style="cursor:pointer" onclick="exportAllFile()"><div class="t">📁 导出所有数据</div></div>
+  <div class="card" style="cursor:pointer" onclick="importAll()"><div class="t">📥 导入数据</div></div>
+  <div class="card" style="cursor:pointer" onclick="downloadSelfHtml()"><div class="t">💾 下载本应用</div></div>
+  <div class="card" style="cursor:pointer" onclick="resetAll()"><div class="t" style="color:#ff3b30">清空所有数据</div></div>`;
+}
+function saveNarration(){
+  const s=getSet();
+  s.narrationMin=parseInt($('gNarrMin').value)||100;
+  s.narrationMax=parseInt($('gNarrMax').value)||300;
+  setSet(s);toast('已保存');
+}
+function saveAPIUI(){
+  API.url=$('gUrl').value.trim();API.key=$('gKey').value.trim();
+  API.tempOnline=parseFloat($('gTempOn').value)||0.5;
+  API.temp=parseFloat($('gTemp').value)||0.9;
+  API.max=parseInt($('gMax').value)||2048;
+  const m=$('gModel');API.model=m?m.value:API.model;
+  saveAPI();toast('已保存');
+}
+function fetchModels(){
+  const u=$('gUrl').value.trim();const k=$('gKey').value.trim();
+  if(!u||!k){toast('先填地址和Key');return}
+  API.url=u;API.key=k;saveAPI();
+  const mu=getModelsUrl(u);
+  fetch(mu,{headers:{'Authorization':'Bearer '+k}})
+    .then(r=>r.ok?r.json():r.text().then(t=>{throw new Error(r.status+': '+t.slice(0,80))}))
+    .then(d=>{
+      if(d.data&&d.data.length){
+        API.models=d.data.map(m=>m.id).sort();
+        if(!API.models.includes(API.model))API.model=API.models[0];
+        saveAPI();renderSettings($('appB'));toast('已获取 '+API.models.length+' 个');
+      }else toast('格式不对');
+    }).catch(e=>toast('失败：'+e.message));
+}
+function testAPI(){
+  const u=$('gUrl').value.trim();const k=$('gKey').value.trim();
+  if(!u||!k){toast('先填地址和Key');return}
+  API.url=u;API.key=k;saveAPI();
+  toast('测试中...');
+  callAI('你是助手',[{role:'user',content:'说"OK"'}]).then(r=>toast('成功：'+r.slice(0,20))).catch(e=>toast('失败：'+e.message));
+}
+function toggleStrict(){API.strictMode=API.strictMode===false;saveAPI();toast(API.strictMode?'已开启':'已关闭')}
+function toggleMatureWX(){
+  const s=getSet();
+  if(!s.mature){if(!confirm('开启成人模式需确认：\n\n1. 你已满 18 周岁\n2. 内容由你使用的 AI 模型生成\n3. 你自愿开启'))return;s.mature=true;setSet(s);toast('已开启')}
+  else{s.mature=false;setSet(s);toast('已关闭')}
+}
+function resetAll(){if(!confirm('确定清空？'))return;localStorage.clear();location.reload()}
+function downloadFile(name,content,type){
+  const blob=new Blob([content],{type:type||'text/plain;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=name;
+  document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url);a.remove()},100);
+}
+function exportAllFile(){
+  const d={};
+  Object.keys(localStorage).forEach(k=>{if(k.startsWith('wx_'))d[k]=localStorage.getItem(k)});
+  downloadFile('wx_backup_'+Date.now()+'.json',JSON.stringify(d,null,2),'application/json');
+  toast('已下载');
+}
+function importAll(){
+  mkModal('导入数据',
+  `<div class="card" style="cursor:pointer;text-align:center;padding:20px" onclick="closeModal();importFromFile()">
+    <div style="font-size:36px">📁</div><div style="font-weight:600;margin-top:8px;color:#1c1c1e">从文件导入</div>
+  </div>`,
+  [{t:'取消',g:1,f:closeModal}]);
+}
+function importFromFile(){
+  const inp=document.createElement('input');inp.type='file';inp.accept='.json,application/json';
+  inp.onchange=e=>{
+    const f=e.target.files[0];if(!f)return;
+    const rd=new FileReader();
+    rd.onload=ev=>{
+      try{
+        const d=JSON.parse(ev.target.result);
+        let count=0;
+        Object.keys(d).forEach(k=>{if(k.startsWith('wx_')){localStorage.setItem(k,d[k]);count++}});
+        if(count===0){toast('文件里没有可导入的数据');return}
+        toast('导入成功 '+count+' 项，即将刷新');
+        setTimeout(()=>location.reload(),800);
+      }catch(e){toast('文件格式错误：'+e.message)}
+    };
+    rd.readAsText(f);
+  };
+  inp.click();
+}
+function downloadSelfHtml(){
+  try{
+    const html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+    downloadFile('微信_'+Date.now()+'.html',html,'text/html;charset=utf-8');
+    toast('已下载');
+  }catch(e){toast('下载失败：'+e.message)}
+}
+/* ============ 主题设置页 ============ */
+function openThemePage(){
+  setTop('主题设置',true);
+  const b=$('appB');
+  b.style.display='block';b.style.overflowY='auto';b.style.padding='0';b.style.background='#f2f2f7';
+  const modes=[{k:'online',n:'线上'},{k:'offline',n:'线下'},{k:'dream',n:'入梦'},{k:'roleplay',n:'角色扮演'}];
+  b.innerHTML=`<div class="theme-setting-page">
+    <div style="font-size:12px;color:#8e8e93;margin-bottom:12px">每个场景独立设置，不改动就保持默认。</div>
+    ${modes.map(m=>{
+      const t=getTheme(m.k);
+      return `<div class="section">
+        <div class="section-title">${m.n}主题</div>
+        <div class="card">
+          <div class="row"><div class="label">背景色</div><input type="color" id="_th_${m.k}_bg" value="${t.bg||'#ededed'}"/></div>
+          <div class="row"><div class="label">字体颜色</div><input type="text" id="_th_${m.k}_fc" value="${t.fontColor||''}" placeholder="#000"/></div>
+          <div class="row"><div class="label">AI气泡色</div><input type="color" id="_th_${m.k}_ai" value="${t.aiBubble||'#ffffff'}"/></div>
+          <div class="row"><div class="label">用户气泡色</div><input type="color" id="_th_${m.k}_me" value="${t.meBubble||'#95ec69'}"/></div>
+          <div class="row"><div class="label">背景图</div><input type="file" accept="image/*" onchange="pickThemeBg('${m.k}',this)"/></div>
+          <div class="row"><div class="label">AI气泡图</div><input type="file" accept="image/*" onchange="pickThemeBubble('${m.k}','ai',this)"/></div>
+          <div class="row"><div class="label">用户气泡图</div><input type="file" accept="image/*" onchange="pickThemeBubble('${m.k}','me',this)"/></div>
+          <div class="row"><div class="label">上传字体</div><input type="file" accept=".ttf,.otf,.woff,.woff2" onchange="pickThemeFont('${m.k}',this)"/></div>
+          <div class="row" style="justify-content:space-between;margin-top:8px">
+            <div class="preview-btn" onclick="previewTheme('${m.k}')">预览</div>
+            <div class="preview-btn" onclick="resetTheme('${m.k}')" style="color:#ff3b30;background:#ffecec">重置</div>
+          </div>
+        </div>
+      </div>`;
+    }).join('')}
+    <button class="btn f" onclick="saveAllThemes()">保存全部</button>
+  </div>`;
+}
+function pickThemeBg(mode,inp){
+  const f=inp.files[0];if(!f)return;
+  readFileAsDataURL(f,d=>{const t=getTheme(mode);t.bgImg=d;saveTheme(mode,t);toast('已选择背景图')});
+}
+function pickThemeBubble(mode,which,inp){
+  const f=inp.files[0];if(!f)return;
+  readFileAsDataURL(f,d=>{const t=getTheme(mode);if(which==='ai')t.aiBubbleImg=d;else t.meBubbleImg=d;saveTheme(mode,t);toast('已选择气泡图')});
+}
+function pickThemeFont(mode,inp){
+  const f=inp.files[0];if(!f)return;
+  if(f.size>5*1024*1024){toast('字体文件建议5MB以内');return}
+  readFileAsDataURL(f,d=>{const t=getTheme(mode);t.fontFile=d;saveTheme(mode,t);toast('已上传字体')});
+}
+function saveAllThemes(){
+  const modes=['online','offline','dream','roleplay'];
+  modes.forEach(m=>{
+    const t=getTheme(m);
+    t.bg=$('_th_'+m+'_bg').value;
+    t.fontColor=$('_th_'+m+'_fc').value.trim();
+    t.aiBubble=$('_th_'+m+'_ai').value;
+    t.meBubble=$('_th_'+m+'_me').value;
+    saveTheme(m,t);
+  });
+  toast('已保存全部主题');
+}
+function resetTheme(mode){
+  if(!confirm('重置该主题？'))return;
+  saveTheme(mode,{bg:'',aiBubble:'',meBubble:'',fontColor:'',fontFile:'',bgImg:'',aiBubbleImg:'',meBubbleImg:''});
+  openThemePage();toast('已重置');
+}
+function previewTheme(mode){
+  const t=getTheme(mode);
+  const chatBg=t.bg||'#ededed';
+  const aiBub=t.aiBubble||'#fff';
+  const meBub=t.meBubble||'#95ec69';
+  const fc=t.fontColor||'#000';
+  const bgImg=t.bgImg?`background-image:url('${t.bgImg}');background-size:cover;background-position:center;`:''; 
+  const m=document.createElement('div');m.className='theme-preview';
+  m.innerHTML=`<div class="inner"><h3 style="text-align:center;margin-bottom:8px">预览 · ${mode}</h3>
+    <div class="chatbox" style="background:${chatBg};color:${fc};${bgImg}">
+      <div class="msg"><div class="av">🖤</div><div class="b" style="${t.aiBubbleImg?`background-image:url('${t.aiBubbleImg}');background-size:100% 100%;background-color:transparent;color:${fc}`:`background:${aiBub};color:${fc}`}">你好呀～</div></div>
+      <div class="msg me"><div class="av">🙂</div><div class="b" style="${t.meBubbleImg?`background-image:url('${t.meBubbleImg}');background-size:100% 100%;background-color:transparent;color:${fc}`:`background:${meBub};color:${fc}`}">在吗？</div></div>
+      <div class="msg"><div class="av">🖤</div><div class="b" style="${t.aiBubbleImg?`background-image:url('${t.aiBubbleImg}');background-size:100% 100%;background-color:transparent;color:${fc}`:`background:${aiBub};color:${fc}`}">一直都在。</div></div>
+    </div>
+    <button class="btn f" style="margin-top:12px" onclick="this.closest('.theme-preview').remove()">关闭</button>
+  </div>`;
+  document.body.appendChild(m);
+  m.addEventListener('click',e=>{if(e.target===m)m.remove()});
+}
+/* ============ 通知设置 ============ */
+function renderNotifySettingPage(){
+  setTop('通知设置',true);
+  const b=$('appB');
+  b.style.display='block';b.style.overflowY='auto';b.style.padding='16px';b.style.background='#f2f2f7';
+  const s=getSysSet();
+  b.innerHTML=`<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><div><div class="t">允许通知</div><div class="d">打包APK后生效</div></div><div class="sw ${s.notifyAllow?'on':''}" onclick="toggleSys('notifyAllow',this)"></div></div></div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><div><div class="t">锁屏显示</div></div><div class="sw ${s.notifyLock?'on':''}" onclick="toggleSys('notifyLock',this)"></div></div></div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><div><div class="t">横幅显示</div></div><div class="sw ${s.notifyBanner?'on':''}" onclick="toggleSys('notifyBanner',this)"></div></div></div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><div><div class="t">桌面角标</div></div><div class="sw ${s.notifyBadge?'on':''}" onclick="toggleSys('notifyBadge',this)"></div></div></div>
+  <div style="font-size:12px;color:#8e8e93;padding:12px;line-height:1.6">说明：网页版受浏览器限制无法后台推送，打包成APK后通过原生桥接即可实现完整通知。</div>`;
+}
+function toggleSys(k,el){
+  const s=getSysSet();s[k]=!s[k];saveSysSet(s);el.classList.toggle('on');
+}
+function sendSystemNotification(role,text){
+  const s=getSysSet();if(!s.notifyAllow)return;
+  try{
+    if(window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.LocalNotifications){
+      window.Capacitor.Plugins.LocalNotifications.schedule({notifications:[{title:role.name,body:text}]});
+      return;
+    }
+    if('Notification' in window&&Notification.permission==='granted'){
+      new Notification(role.name,{body:text,icon:role.avatarImg||''});
+      return;
+    }
+    console.log('[通知预留]',role.name,text);
+  }catch(e){}
+}
+/* ============ 入梦自定义 ============ */
+function renderDreamCustomPage(){
+  setTop('入梦自定义',true);
+  const b=$('appB');
+  b.style.display='block';b.style.overflowY='auto';b.style.padding='16px';b.style.background='#0d0817';b.style.color='#e8dcff';
+  const d=getDreamCustom();
+  b.innerHTML=`<div style="font-size:12px;color:#b0a0d0;margin-bottom:10px">自定义氛围和关键词，AI 必须遵循。</div>
+    <div style="font-size:13px;color:#d0b8ff;font-weight:600;margin:12px 0 8px">自定义氛围</div>
+    <div class="fld"><input id="_dm" placeholder="输入新氛围，回车添加" style="background:rgba(40,30,65,.5);color:#e8dcff;border:1px solid rgba(180,150,255,.25)" onkeydown="if(event.key==='Enter')addDreamItem('moods')"/></div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">${d.moods.map((x,i)=>`<div class="rc" style="background:rgba(180,150,255,.2);color:#d0b8ff">${esc(x)} <span style="margin-left:6px;cursor:pointer" onclick="delDreamItem('moods',${i})">✕</span></div>`).join('')}</div>
+    <div style="font-size:13px;color:#d0b8ff;font-weight:600;margin:12px 0 8px">自定义关键词</div>
+    <div class="fld"><input id="_dk" placeholder="输入新关键词，回车添加" style="background:rgba(40,30,65,.5);color:#e8dcff;border:1px solid rgba(180,150,255,.25)" onkeydown="if(event.key==='Enter')addDreamItem('keywords')"/></div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">${d.keywords.map((x,i)=>`<div class="rc" style="background:rgba(180,150,255,.2);color:#d0b8ff">${esc(x)} <span style="margin-left:6px;cursor:pointer" onclick="delDreamItem('keywords',${i})">✕</span></div>`).join('')}</div>
+    <button class="btn f" style="background:linear-gradient(135deg,#a78bfa,#7c5fbf)" onclick="saveDreamCustomOK()">保存</button>`;
+}
+function addDreamItem(k){
+  const inp=$(k==='moods'?'_dm':'_dk');const v=inp.value.trim();if(!v)return;
+  const d=getDreamCustom();
+  if(!d[k].includes(v))d[k].push(v);
+  saveDreamCustom(d);inp.value='';renderDreamCustomPage();
+}
+function delDreamItem(k,i){
+  const d=getDreamCustom();d[k].splice(i,1);saveDreamCustom(d);renderDreamCustomPage();
+}
+function saveDreamCustomOK(){toast('已保存')}
+/* ============ 资料页 ============ */
+function renderProfilePage(roleId){
+  const r=getRole(roleId);
+  setTop('',true,'⋯',()=>{wxNav.push({view:'info',id:roleId});wxRender()});
+  const b=$('appB');
+  b.style.display='block';b.style.overflowY='auto';b.style.padding='0';b.style.background='#f2f2f7';
+  const av=r.avatarImg?`<img src="${r.avatarImg}" style="width:100%;height:100%;object-fit:cover"/>`:r.avatar;
+  const dn=r.remark||r.name;
+  const cover=r.momentCover||'';
+  b.innerHTML=`<div class="profile-page">
+    <div class="header">
+      <div class="avatar">${av}</div>
+      <div class="info">
+        <div class="nickname">${esc(dn)}</div>
+        <div class="detail">微信号：${esc(r.wxId||'未设置')}</div>
+        <div class="region">地区：${esc(r.region||'未设置')}</div>
+      </div>
+    </div>
+    <div class="row" onclick="openRemarkDialog('${r.id}')"><div class="left">朋友资料</div><div class="right">${r.remark||'设置备注'}</div></div>
+    <div class="row" onclick="wxNav.push({view:'userMoments',id:'${r.id}'});wxRender()"><div class="left">朋友圈</div><div class="right">${cover?`<img src="${cover}"/>`:'查看'}</div></div>
+    <div class="row" onclick="toast('敬请期待')"><div class="left">视频号</div><div class="right">›</div></div>
+    <div style="height:20px"></div>
+    <div class="row" style="justify-content:center;color:#007aff;font-weight:600" onclick="wxNav.pop();wxRender()">发消息</div>
+    <div class="row" style="justify-content:center;color:#8e8e93" onclick="toast('敬请期待')">音视频通话</div>
+  </div>`;
+}
+function openRemarkDialog(roleId){
+  const r=getRole(roleId);
+  mkModal('朋友资料',
+  `<div class="fld"><label>备注名</label><input id="_rrem" value="${esc(r.remark||'')}"/></div>
+   <div class="fld"><label>标签</label><input id="_rtag" value="${esc(r.tags||'')}" placeholder="用逗号分隔"/></div>
+   <div class="fld"><label>地区</label><input id="_rregion" value="${esc(r.region||'')}"/></div>
+   <div class="fld"><label>朋友圈权限</label><select id="_rperm">
+     <option value="all" ${r.momentPermission==='all'?'selected':''}>全部可见</option>
+     <option value="hide" ${r.momentPermission==='hide'?'selected':''}>不看TA</option>
+     <option value="none" ${r.momentPermission==='none'?'selected':''}>不让TA看我</option>
+   </select></div>
+   <div class="fld"><label>朋友圈封面（原图不压缩）</label><input type="file" accept="image/*" onchange="pickMomentCover('${r.id}',this)"/></div>
+   <div class="card" style="display:flex;justify-content:space-between;align-items:center"><div><div class="t">开启朋友圈</div><div class="d">开启后AI会主动发朋友圈</div></div><div class="sw ${r.momentEnabled?'on':''}" onclick="this.classList.toggle('on')" id="_rmen"></div></div>
+   <div class="fld"><label>发朋友圈频率</label><select id="_rmint">
+     <option value="random" ${r.momentInterval==='random'?'selected':''}>随机</option>
+     <option value="1h" ${r.momentInterval==='1h'?'selected':''}>1小时</option>
+     <option value="3h" ${r.momentInterval==='3h'?'selected':''}>3小时</option>
+     <option value="12h" ${r.momentInterval==='12h'?'selected':''}>半天</option>
+     <option value="1d" ${r.momentInterval==='1d'?'selected':''}>1天</option>
+     <option value="2d" ${r.momentInterval==='2d'?'selected':''}>2天</option>
+     <option value="custom" ${r.momentInterval==='custom'?'selected':''}>自定义</option>
+   </select></div>
+   <div class="fld"><label>自定义时间（如：08:00,12:00,20:00）</label><input id="_rmct" value="${esc(r.momentCustomTimes||'')}"/></div>
+   <div class="card" style="display:flex;justify-content:space-between;align-items:center"><div><div class="t">允许AI发表情包</div></div><div class="sw ${r.allowEmoji!==false?'on':''}" onclick="this.classList.toggle('on')" id="_rallowemoji"></div></div>`,
+  [{t:'保存',f:()=>{
+    r.remark=$('_rrem').value.trim();
+    r.tags=$('_rtag').value.trim();
+    r.region=$('_rregion').value.trim();
+    r.momentPermission=$('_rperm').value;
+    r.momentEnabled=$('_rmen').classList.contains('on');
+    r.momentInterval=$('_rmint').value;
+    r.momentCustomTimes=$('_rmct').value.trim();
+    r.allowEmoji=$('_rallowemoji').classList.contains('on');
+    saveRoles();closeModal();renderProfilePage(roleId);toast('已保存');
+  }},{t:'取消',g:1,f:closeModal}]);
+}
+function pickMomentCover(roleId,inp){
+  const f=inp.files[0];if(!f)return;
+  readFileAsDataURL(f,d=>{const r=getRole(roleId);r.momentCover=d;saveRoles();toast('封面已设置（原图）')});
+}
+/* ============ 朋友圈 ============ */
+
+function renderMomentsPage(){
+  setTop('朋友圈',true,'📷',()=>composeMoment());
+  const b=$('appB');
+  b.style.display='block';b.style.overflowY='auto';b.style.padding='0';b.style.background='#fff';
+  const me=lj('wx_me')||{nickname:'我',avatar:'🙂',avatarImg:''};
+  const userCover = ls('wx_user_moment_cover') || '';
+  const av=me.avatarImg?`<img src="${me.avatarImg}"/>`:me.avatar;
+  const moments=getMoments().sort((a,b)=>b.time-a.time);
+  b.innerHTML=`<div class="moments-page">
+    <div class="cover" style="${userCover?`background-image:url('${userCover}');background-size:cover;background-position:center;`:''}">
+      <div class="avatar">${av}</div>
+      <div class="nick">${esc(me.nickname)}</div>
+    </div>
+    <div class="feed" id="momentsFeed">${renderMomentList(moments)}</div>
+  </div>`;
+}
+function renderMomentList(moments){
+  if(!moments.length)return '<div style="text-align:center;padding:60px 20px;color:#999">还没有朋友圈<br><br>点右上角 📷 发布</div>';
+  const me=lj('wx_me')||{nickname:'我',avatar:'🙂',avatarImg:''};
+  return moments.map(m=>{
+    let author;
+    if(m.authorId==='me'){author={name:me.nickname,avatar:me.avatar,avatarImg:me.avatarImg}}
+    else{const r=getRole(m.authorId);author=r?{name:r.remark||r.name,avatar:r.avatar,avatarImg:r.avatarImg}:{name:'未知',avatar:'❓',avatarImg:''}}
+    const avImg=author.avatarImg?`<img src="${author.avatarImg}" style="width:100%;height:100%;object-fit:cover"/>`:author.avatar;
+    const likes=m.likes||[];
+    const liked=likes.includes('me');
+    const likeNames=likes.map(id=>{
+      if(id==='me')return me.nickname;
+      const r=getRole(id);return r?(r.remark||r.name):'';
+    }).filter(Boolean).join('，');
+    return `<div class="post" data-mid="${m.id}">
+      <div class="header">
+        <div class="av">${avImg}</div>
+        <div class="info"><div class="name">${esc(author.name)}</div><div class="time">${fmtMomentTime(m.time)}</div></div>
+        <div class="menu-btn" onclick="momentMenu('${m.id}')">⋯</div>
+      </div>
+      ${m.text?`<div class="text">${esc(m.text)}</div>`:''}
+      ${m.images&&m.images.length?`<div class="imgs ${m.images.length===1?'single':''}">${m.images.map(img=>`<img src="${img}" onclick="previewImg('${img}')"/>`).join('')}</div>`:''}
+      ${m.location?`<div style="font-size:12px;color:#576b95;margin-bottom:8px">📍 ${esc(m.location)}</div>`:''}
+      <div class="footer">
+        <div class="like-btn ${liked?'on':''}" onclick="toggleMomentLike('${m.id}')">${liked?'❤️':'🤍'} 赞</div>
+        <div class="comment-btn" onclick="commentMoment('${m.id}')">💬 评论</div>
+      </div>
+      ${likeNames?`<div class="likes">❤️ ${esc(likeNames)}</div>`:''}
+      ${m.comments&&m.comments.length?`<div class="comments">${m.comments.map(c=>{
+        const cAuthor=c.authorId==='me'?me.nickname:(()=>{const r=getRole(c.authorId);return r?(r.remark||r.name):'未知'})();
+        return `<div class="c-item"><span class="c-name">${esc(cAuthor)}</span>${c.replyTo?`<span class="c-reply"> 回复 ${esc(c.replyTo)}</span>`:''}<span class="c-text">：${esc(c.text)}</span><span class="c-time">${fmtMomentTime(c.time)}</span></div>`;
+      }).join('')}</div>`:''}
+    </div>`;
+  }).join('');
+}
+function fmtMomentTime(t){
+  const d=new Date(t),now=new Date();
+  const diff=Math.floor((now-d)/1000);
+  if(diff<60)return '刚刚';
+  if(diff<3600)return Math.floor(diff/60)+'分钟前';
+  if(diff<86400)return Math.floor(diff/3600)+'小时前';
+  if(diff<86400*7)return Math.floor(diff/86400)+'天前';
+  return (d.getMonth()+1)+'月'+d.getDate()+'日';
+}
+function previewImg(src){
+  const m=document.createElement('div');m.className='theme-preview';
+  m.innerHTML=`<div style="max-width:92vw;max-height:92vh" onclick="this.parentNode.remove()"><img src="${src}" style="max-width:100%;max-height:90vh;border-radius:12px"/></div>`;
+  document.body.appendChild(m);
+  m.addEventListener('click',e=>{if(e.target===m)m.remove()});
+}
+function composeMoment(){
+  const bg=document.createElement('div');bg.className='mask-bg';bg.onclick=()=>closePlus();
+  document.body.appendChild(bg);
+  const panel=document.createElement('div');panel.className='plus-panel';
+  panel.style.gridTemplateColumns='repeat(3,1fr)';
+  panel.innerHTML=`
+    <div class="pi" onclick="closePlus();newMoment()"><div class="ic">✍️</div><div class="nm">写动态</div></div>
+    <div class="pi" onclick="closePlus();setMomentCover()"><div class="ic">🖼</div><div class="nm">封面图</div></div>
+    <div class="pi" onclick="closePlus();toast('已刷新')"><div class="ic">🔄</div><div class="nm">刷新</div></div>`;
+  document.body.appendChild(panel);
+}
+function setMomentCover(){
+  const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+  inp.onchange=e=>{
+    const f=e.target.files[0];if(!f)return;
+    readFileAsDataURL(f,d=>{saveUserMomentsCover(d);toast('封面已设置（原图）');renderMomentsPage()});
+  };
+  inp.click();
+}
+function newMoment(){
+  const me=lj('wx_me')||{};
+  const m=document.createElement('div');m.className='expand-modal';
+  m.innerHTML=`<div class="inner"><h3 style="text-align:center;margin-bottom:12px;font-size:17px">发表</h3>
+    <textarea id="_mtext" placeholder="这一刻的想法..." style="flex:1;width:100%;min-height:120px;border:none;background:#f7f7f7;border-radius:10px;padding:14px;font-size:15px;outline:none;font-family:inherit;line-height:1.6;resize:none"></textarea>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <label style="flex:1;padding:10px;background:#f0f0f0;border-radius:8px;text-align:center;font-size:14px;cursor:pointer">🖼 图片<input type="file" id="_mimg" accept="image/*" multiple style="display:none" onchange="updateMomentImgs(this)"/></label>
+      <div style="flex:1;padding:10px;background:#f0f0f0;border-radius:8px;text-align:center;font-size:14px;cursor:pointer" onclick="document.getElementById('_mloc').style.display='block'">📍 位置</div>
+    </div>
+    <input id="_mloc" placeholder="位置" style="display:none;margin-top:8px;width:100%;border:none;background:#f7f7f7;border-radius:8px;padding:10px;font-size:14px;outline:none"/>
+    <div id="_mimgPrev" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px"></div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn f" id="_mok" style="flex:1">发表</button>
+      <button class="btn g f" style="flex:1" onclick="this.closest('.expand-modal').remove()">取消</button>
+    </div>
+  </div>`;
+  document.body.appendChild(m);
+  window._momentImgs=[];
+  $('_mok').onclick=()=>{
+    const text=$('_mtext').value.trim();
+    const loc=$('_mloc').value.trim();
+    if(!text&&!window._momentImgs.length){toast('写点什么或加张图');return}
+    const list=getMoments();
+    const mm={id:uid('mo'),authorId:'me',text,images:window._momentImgs,location:loc,time:Date.now(),likes:[],comments:[]};
+    list.push(mm);saveMoments(list);
+    m.remove();renderMomentsPage();
+    scheduleAIComment(mm);
+  };
+  m.addEventListener('click',e=>{if(e.target===m)m.remove()});
+}
+function updateMomentImgs(inp){
+  const files=[...inp.files];
+  const prev=$('_mimgPrev');prev.innerHTML='';
+  window._momentImgs=[];
+  files.forEach(f=>{
+    readFileAsDataURL(f,d=>{
+      window._momentImgs.push(d);
+      const img=document.createElement('img');img.src=d;img.style.cssText='width:80px;height:80px;object-fit:cover;border-radius:6px';
+      prev.appendChild(img);
+    });
+  });
+}
+function momentMenu(mid){
+  const list=getMoments();
+  const m=list.find(x=>x.id===mid);if(!m)return;
+  showLongMenu(window.innerWidth-200,100,[
+    {ic:'❤️',t:m.likes.includes('me')?'取消赞':'赞',f:()=>toggleMomentLike(mid)},
+    {ic:'💬',t:'评论',f:()=>commentMoment(mid)},
+    {ic:'🗑',t:'删除',f:()=>{if(confirm('删除？')){const l=getMoments().filter(x=>x.id!==mid);saveMoments(l);renderMomentsPage()}}}
+  ]);
+}
+function toggleMomentLike(mid){
+  const list=getMoments();
+  const m=list.find(x=>x.id===mid);if(!m)return;
+  if(!m.likes)m.likes=[];
+  const idx=m.likes.indexOf('me');
+  if(idx>=0)m.likes.splice(idx,1);else m.likes.push('me');
+  saveMoments(list);renderMomentsPage();
+}
+function commentMoment(mid,replyTo){
+  mkModal('评论',
+  `<div class="fld"><textarea id="_cmt" placeholder="说点什么...">${replyTo?'@'+replyTo+' ':''}</textarea></div>`,
+  [{t:'发布',f:()=>{
+    const v=$('_cmt').value.trim();if(!v)return;
+    const list=getMoments();const m=list.find(x=>x.id===mid);if(!m)return;
+    m.comments=m.comments||[];
+    m.comments.push({id:uid('c'),authorId:'me',text:v,time:Date.now(),replyTo:replyTo||''});
+    saveMoments(list);closeModal();renderMomentsPage();
+    if(m.authorId!=='me'){
+      setTimeout(()=>aiReplyComment(mid,m.comments[m.comments.length-1]),800);
+    }
+  }},{t:'取消',g:1,f:closeModal}]);
+}
+function aiReplyComment(mid,c){
+  const list=getMoments();const m=list.find(x=>x.id===mid);if(!m)return;
+  const r=getRole(m.authorId);if(!r)return;
+  const sys=buildPrompt(r,`用户在你的朋友圈动态下评论了："${c.text}"。请用一句话回复评论。不要提AI。`,'online');
+  callAI(sys,[{role:'user',content:'（评论回复）'}],API.tempOnline).then(res=>{
+    const clean=stripAction(res).trim();if(!clean)return;
+    const l2=getMoments();const m2=l2.find(x=>x.id===mid);if(!m2)return;
+    m2.comments=m2.comments||[];
+    m2.comments.push({id:uid('c'),authorId:m.authorId,text:clean,time:Date.now(),replyTo:'我'});
+    saveMoments(l2);
+    const top=wxNav[wxNav.length-1];
+    if(top&&top.view==='moments')renderMomentsPage();
+    else if(top&&top.view==='userMoments')renderUserMomentsPage();
+  }).catch(()=>{});
+}
+function scheduleAIComment(moment){
+  const roles_=roles.filter(r=>r.momentEnabled);
+  if(!roles_.length)return;
+  roles_.forEach(r=>{
+    const delay=Math.floor(Math.random()*120000)+5000;
+    setTimeout(()=>{
+      aiCommentUserMoment(moment.id,r);
+    },delay);
+  });
+}
+function aiCommentUserMoment(mid,r){
+  const list=getMoments();const m=list.find(x=>x.id===mid);if(!m)return;
+  if(m.comments&&m.comments.some(c=>c.authorId===r.id))return;
+  const recent=getChatOnline(r.id).slice(-6).map(x=>(x.role==='ai'?r.name:'我')+': '+x.text).join('\n');
+  const sys=buildPrompt(r,`用户刚发了一条朋友圈，内容是："${m.text}"。请你根据人设评论一句（30字内）。不要提AI。可以结合你们最近的聊天。\n最近聊天：\n${recent||'（无）'}`,'online');
+  callAI(sys,[{role:'user',content:'（评论朋友圈）'}],API.tempOnline).then(res=>{
+    const clean=stripAction(res).trim();if(!clean)return;
+    const l2=getMoments();const m2=l2.find(x=>x.id===mid);if(!m2)return;
+    m2.comments=m2.comments||[];
+    m2.comments.push({id:uid('c'),authorId:r.id,text:clean,time:Date.now(),replyTo:''});
+    if(Math.random()<0.7){m2.likes=m2.likes||[];if(!m2.likes.includes(r.id))m2.likes.push(r.id)}
+    saveMoments(l2);
+    const top=wxNav[wxNav.length-1];
+    if(top&&top.view==='moments')renderMomentsPage();
+  }).catch(()=>{});
+}
+function renderUserMomentsPage(){
+  const top=wxNav[wxNav.length-1];
+  const roleId=top.id;
+  const r=getRole(roleId);
+  setTop((r.remark||r.name)+'的朋友圈',true);
+  const b=$('appB');
+  b.style.display='block';b.style.overflowY='auto';b.style.padding='0';b.style.background='#fff';
+  const cover=r.momentCover||'';
+  const av=r.avatarImg?`<img src="${r.avatarImg}"/>`:r.avatar;
+  const list=getMoments().filter(x=>x.authorId===roleId).sort((a,b)=>b.time-a.time);
+  b.innerHTML=`<div class="moments-page">
+    <div class="cover" style="${cover?`background-image:url('${cover}')`:''}">
+      <div class="avatar">${av}</div>
+      <div class="nick">${esc(r.remark||r.name)}</div>
+    </div>
+    <div class="feed">${renderMomentList(list)}</div>
+  </div>`;
+}
+function checkMomentProactive(){
+  if(!API.url||!API.key)return;
+  const now=new Date();const nowMin=now.getHours()*60+now.getMinutes();
+  roles.forEach(r=>{
+    if(!r.momentEnabled)return;
+    let interval=0;
+    const mi=r.momentInterval||'random';
+    if(mi==='1h')interval=3600000;
+    else if(mi==='3h')interval=3*3600000;
+    else if(mi==='12h')interval=12*3600000;
+    else if(mi==='1d')interval=24*3600000;
+    else if(mi==='2d')interval=48*3600000;
+    else if(mi==='custom'){
+      const times=(r.momentCustomTimes||'').split(',').map(x=>x.trim()).filter(Boolean);
+      const hm=('0'+now.getHours()).slice(-2)+':'+('0'+now.getMinutes()).slice(-2);
+      if(!times.includes(hm))return;
+      interval=0;
+    }else{
+      interval=(Math.random()*5+1)*3600000;
+    }
+    const last=parseInt(ls('wx_moment_last_'+r.id)||'0');
+    if(Date.now()-last<interval)return;
+    ls('wx_moment_last_'+r.id,String(Date.now()));
+    genMoment(r);
+  });
+}
+function genMoment(r){
+  const recent=getChatOnline(r.id).slice(-10).map(x=>(x.role==='ai'?r.name:'我')+': '+x.text).join('\n');
+  const emoTxt=r.emotions&&r.emotions.length?r.emotions.map(e=>`${e.name}${e.value}`).join('，'):'';
+  const sys=buildPrompt(r,`现在你要发一条朋友圈。
+要求：
+- 30~80字，像真人随手发的
+- 内容围绕你此刻的心情/生活/想对用户说的话
+- 不要用括号旁白，不要写动作
+- 不要提到"朋友圈"三个字
+- 可以带1~2个emoji
+- 只输出朋友圈正文，不要任何解释
+你最近和用户的聊天：
+${recent||'（无）'}
+你的情绪值：${emoTxt}
+`,'online');
+  callAI(sys,[{role:'user',content:'（发朋友圈）'}],API.tempOnline).then(res=>{
+    const clean=stripAction(res).trim();if(!clean)return;
+    const list=getMoments();
+    list.push({id:uid('mo'),authorId:r.id,text:clean,images:[],time:Date.now(),likes:[],comments:[]});
+    saveMoments(list);
+    const top=wxNav[wxNav.length-1];
+    if(top&&top.view==='moments')renderMomentsPage();
+    r.memories=r.memories||[];r.memories.unshift({text:'我发了朋友圈：'+clean.slice(0,30),time:Date.now()});
+    if(r.memories.length>30)r.memories.length=30;
+    saveRoles();
+  }).catch(()=>{});
+}
+/* ============ 角色编辑器 ============ */
+function openRoleEditor(editId){
+  const r=editId?getRole(editId):roleFromPreset({name:'新角色',avatar:'🖤'});
+  const draft=ls('wx_aiDraft')||'';
+  const currentCF=r.customFields||[];
+  let html=`
+  <div class="card" style="background:linear-gradient(160deg,#e8e0ff,#f7e8ff)">
+    <div style="font-size:13px;font-weight:600;margin-bottom:8px;color:#1c1c1e">✨ AI 润色设定</div>
+    <textarea id="_aiDraft" placeholder="例如：28岁男人，事业有成，占有欲很强..." style="width:100%;min-height:80px;border:none;border-radius:10px;padding:10px 12px;font-size:14px;outline:none;font-family:inherit;background:#fff;line-height:1.5;color:#000">${esc(draft)}</textarea>
+    <button class="btn g f" style="margin-top:8px" onclick="aiPolishRole()">✨ AI 润色并填充</button>
+  </div>
+  <div class="fld"><label>微信号</label><input id="_rwxid" value="${esc(r.wxId||'')}"/></div>
+  <div class="card" style="background:linear-gradient(160deg,#d8f0d0,#c8e8c0)">
+    <div style="font-size:13px;font-weight:600;margin-bottom:8px">🎯 AI 约束</div>
+    <div class="fld"><label>标签</label><textarea id="_aiTags" style="min-height:60px">${esc(r.aiTags||'')}</textarea></div>
+    <div class="fld"><label>命令</label><textarea id="_aiCommands" style="min-height:60px">${esc(r.aiCommands||'')}</textarea></div>
+    <div class="fld"><label>禁止事项</label><textarea id="_aiForbidden" style="min-height:60px">${esc(r.aiForbidden||'')}</textarea></div>
+  </div>
+  <div class="card" style="background:linear-gradient(160deg,#ffe8d0,#ffd8b8)">
+    <div style="font-size:13px;font-weight:600;margin-bottom:8px">👤 用户人设</div>
+    ${USER_FIELDS.map(k=>{if(k.short)return'';return `<div class="fld"><label>${k.l}</label><input id="_u_${k.k}" value="${esc(r[k.k]||'')}"/></div>`}).join('')}
+    <div class="row2">${USER_FIELDS.filter(k=>k.short).map(k=>`<div class="fld"><label>${k.l}</label><input id="_u_${k.k}" value="${esc(r[k.k]||'')}"/></div>`).join('')}</div>
+  </div>
+  <div class="fld"><label>头像图片</label><input type="file" id="_aimg" accept="image/*"/>${r.avatarImg?`<div style="margin-top:6px"><img src="${r.avatarImg}" style="width:40px;height:40px;border-radius:50%;object-fit:cover"/></div>`:''}</div>`;
+  FIELD_GROUPS.forEach(g=>{
+    html+=`<details><summary>${g.g}</summary>`;
+    let sb=[];
+    const flush=()=>{
+      if(!sb.length)return;
+      if(sb.length===3){html+=`<div class="row3">`+sb.map(k=>`<div class="fld"><label>${k.l}</label><input id="_m_${k.k}" value="${esc(r[k.k]||'')}"/></div>`).join('')+`</div>`}
+      else if(sb.length===2){html+=`<div class="row2">`+sb.map(k=>`<div class="fld"><label>${k.l}</label><input id="_m_${k.k}" value="${esc(r[k.k]||'')}"/></div>`).join('')+`</div>`}
+      else{sb.forEach(k=>{html+=`<div class="fld"><label>${k.l}</label><input id="_m_${k.k}" value="${esc(r[k.k]||'')}"/></div>`})}
+      sb=[];
+    };
+    g.ks.forEach(k=>{if(k.short){sb.push(k);if(sb.length===3)flush();return}flush();html+=`<div class="fld"><label>${k.l}</label><input id="_m_${k.k}" value="${esc(r[k.k]||'')}"/></div>`});
+    flush();html+='</details>';
+  });
+  html+=`<div class="fld"><label>综合人设</label><textarea id="_mp" style="min-height:100px">${esc(r.persona||'')}</textarea></div>`;
+  window._editingCF=JSON.parse(JSON.stringify(currentCF));
+  mkModal(editId?'编辑角色':'新建角色',html,[
+    {t:'保存',f:()=>saveRoleEditor(r.id,editId)},
+    {t:'取消',g:1,f:closeModal},
+    ...(editId?[{t:'删除角色',d:1,f:()=>{closeModal();deleteRole(r.id)}}]:[])
+  ]);
+  setTimeout(()=>{const ta=$('_aiDraft');if(ta)ta.addEventListener('input',()=>ls('wx_aiDraft',ta.value))},50);
+}
+function saveRoleEditor(id,isEdit){
+  const oldR=isEdit?getRole(id):null;
+  const nr=roleFromPreset({id});
+  if(oldR){Object.assign(nr,{avatarImg:oldR.avatarImg,chatBg:oldR.chatBg,proactive:oldR.proactive,memories:oldR.memories,dreamMemories:oldR.dreamMemories,emotions:oldR.emotions,starred:oldR.starred,dreamSetup:oldR.dreamSetup,offline:oldR.offline,rps:oldR.rps,momentCover:oldR.momentCover,remark:oldR.remark,tags:oldR.tags,region:oldR.region,momentPermission:oldR.momentPermission,momentEnabled:oldR.momentEnabled,momentInterval:oldR.momentInterval,momentCustomTimes:oldR.momentCustomTimes,allowEmoji:oldR.allowEmoji})}
+  FIELD_GROUPS.forEach(g=>g.ks.forEach(k=>{const el=$('_m_'+k.k);if(el)nr[k.k]=el.value.trim()}));
+  USER_FIELDS.forEach(k=>{const el=$('_u_'+k.k);if(el)nr[k.k]=el.value.trim()});
+  nr.name=nr.name||'新角色';
+  nr.avatar=nr.avatar||'🖤';
+  nr.wxId=$('_rwxid')?$('_rwxid').value.trim():'';
+  nr.persona=$('_mp').value.trim();
+  nr.aiTags=$('_aiTags').value.trim();
+  nr.aiCommands=$('_aiCommands').value.trim();
+  nr.aiForbidden=$('_aiForbidden').value.trim();
+  let pending=1;
+  const done=()=>{
+    if(--pending<=0){
+      if(isEdit){const i=roles.findIndex(x=>x.id===id);roles[i]=nr}
+      else{roles.push(nr)}
+      saveRoles();closeModal();goMain();toast('已保存');
+    }
+  };
+  const f1=$('_aimg')?$('_aimg').files[0]:null;
+  if(f1){compressImage(f1,1024,(dataUrl)=>{nr.avatarImg=dataUrl;done()})}else done();
+}
+function aiPolishRole(){
+  const draft=$('_aiDraft').value.trim();
+  if(!draft){toast('先写一段设定');return}
+  if(!API.url||!API.key){toast('先配置 API');return}
+  const allKeys=[];
+  FIELD_GROUPS.forEach(g=>g.ks.forEach(k=>allKeys.push(k.k)));
+  USER_FIELDS.forEach(k=>allKeys.push(k.k));
+  const keyList=allKeys.map(k=>k+'('+LABELS[k]+')').join('、');
+  const sys=`你是角色设定整理者。用户给你一段粗略设定，请严格按 JSON 输出，key 用：${keyList}，再加一个 _leftover 字段放未分类信息。只输出 JSON。`;
+  toast('AI 润色中...');
+  callAI(sys,[{role:'user',content:draft}]).then(text=>{
+    let data=smartParseJSON(text);
+    if(!data){const mp=$('_mp');if(mp)mp.value=draft;toast('已直接填入');return}
+    let count=0;
+    Object.keys(data).forEach(k=>{if(k==='_leftover')return;const el=$('_m_'+k)||$('_u_'+k);if(el&&data[k]){el.value=String(data[k]).trim();count++}});
+    toast(count?'已填入 '+count+' 个字段':'没解析出字段');
+  }).catch(e=>toast('失败：'+e.message));
+}
+function deleteRole(id){
+  if(roles.length<=1){toast('至少保留一个');return}
+  if(!confirm('删除该角色？'))return;
+  const r=getRole(id);
+  (r.rps||[]).forEach(rp=>localStorage.removeItem('wx_rp_chat_'+rp.id));
+  roles=roles.filter(x=>x.id!==id);saveRoles();
+  localStorage.removeItem('wx_chat_'+id);localStorage.removeItem('wx_chat_'+id+'_offline');
+  localStorage.removeItem('wx_dream_'+id);localStorage.removeItem('wx_dream_history_'+id);
+  goMain();
+}
+function renderChatInfoPage(id){
+  const r=getRole(id);
+  setTop('聊天信息',true);
+  const b=$('appB');
+  b.style.display='block';b.style.overflowY='auto';b.style.padding='0';b.style.background='#f2f2f7';
+  const av=r.avatarImg?`<img src="${r.avatarImg}"/>`:r.avatar;
+  b.innerHTML=`<div style="padding:20px;background:#fff;display:flex;gap:16px;align-items:center;border-bottom:.5px solid #f0f0f0">
+      <div style="width:64px;height:64px;border-radius:10px;background:#fde8f0;display:grid;place-items:center;font-size:32px;overflow:hidden;flex-shrink:0">${av}</div>
+      <div style="flex:1"><div style="font-size:18px;font-weight:600">${esc(r.remark||r.name)}</div>
+      <div style="font-size:13px;color:#8e8e93;margin-top:4px">${esc(r.relationStage||'朋友')} · 好感度 ${r.affinity||0}</div></div>
+    </div>
+    <div class="list-item" onclick="wxNav.push({view:'emotion',id:'${r.id}'});wxRender()"><div class="ic">💗</div><div class="nm">情绪面板</div><div class="rt">›</div></div>
+    <div class="list-item" onclick="openRoleEditor('${r.id}')"><div class="ic">✏️</div><div class="nm">编辑角色</div><div class="rt">›</div></div>
+    <div class="list-item" onclick="openMemory('${r.id}')"><div class="ic">💭</div><div class="nm">记忆管理</div><div class="rt">${(r.memories||[]).length} 条 ›</div></div>
+    <div class="list-item" onclick="openProactive('${r.id}')"><div class="ic">📢</div><div class="nm">主动消息</div><div class="rt">›</div></div>
+    <div class="list-item" onclick="openOfflineColor('${r.id}')"><div class="ic">🎨</div><div class="nm">线下配色</div><div class="rt">›</div></div>
+    <div class="list-item" onclick="wxNav.push({view:'dreamHistory',id:'${r.id}'});wxRender()"><div class="ic">📖</div><div class="nm">梦境回顾</div><div class="rt">${(getDreamHistory(r.id)||[]).length} 个 ›</div></div>
+    <div class="list-item" onclick="clearAllChat('${r.id}')"><div class="ic">🗑</div><div class="nm">清空聊天记录</div><div class="rt">›</div></div>
+    <button class="btn d f" style="margin:24px 16px;width:calc(100% - 32px)" onclick="deleteRole('${r.id}')">删除角色</button>`;
+}
+function clearAllChat(id){
+  if(!confirm('清空和'+getRole(id).name+'的所有聊天？'))return;
+  ls('wx_chat_'+id,'[]');ls('wx_chat_'+id+'_offline','[]');
+  updBdg();toast('已清空');
+}
+function renderEmotionPage(id){
+  const r=getRole(id);
+  setTop('情绪面板 · '+r.name,true,'＋',()=>addEmotion(id));
+  const b=$('appB');
+  b.style.display='block';b.style.overflowY='auto';b.style.padding='16px';b.style.background='#f2f2f7';
+  const emotions=r.emotions||[];
+  b.innerHTML=`<div style="font-size:12px;color:#8e8e93;margin-bottom:12px">拖动滑块调整。这些值会注入到 AI 提示词里。</div>
+    ${emotions.length?emotions.map((e,i)=>{
+      const stages=e.stages||getDefaultStages(e.name);
+      const current=stages.find(s=>e.value>=(s[0]!==undefined?s[0]:s['0'])&&e.value<=(s[1]!==undefined?s[1]:s['1']))||stages[stages.length-1];
+      const curText=current?(current[2]!==undefined?current[2]:current['2']):'';
+      return `<div class="emotion-item">
+        <div class="eh"><div class="en">${esc(e.name)}</div><div class="ev">${e.value} <span style="font-size:12px;color:#8e8e93;font-weight:400">· ${esc(curText)}</span></div></div>
+        <input type="range" min="0" max="100" value="${e.value}" oninput="updateEmotion('${id}',${i},this.value)">
+        <div style="display:flex;justify-content:space-between;margin-top:6px">
+          <span style="font-size:11px;color:#b2b2b2">0</span>
+          <span style="font-size:11px;color:#ff3b30;cursor:pointer" onclick="delEmotion('${id}',${i})">删除</span>
+          <span style="font-size:11px;color:#b2b2b2">100</span>
+        </div>
+      </div>`;
+    }).join(''):'<div style="text-align:center;padding:60px 20px;color:#999">还没有情绪值<br><br>点右上角 ＋ 添加</div>'}`;
+}
+function addEmotion(id){
+  const r=getRole(id);
+  mkModal('添加情绪值',
+  `<div class="fld"><label>名称</label><input id="_en" placeholder="例如：情欲、吃醋"/></div>
+   <div class="fld"><label>初始值</label><input id="_ev" type="number" value="50" min="0" max="100"/></div>`,
+  [{t:'添加',f:()=>{
+    const name=$('_en').value.trim();if(!name){toast('请输入名称');return}
+    r.emotions=r.emotions||[];
+    r.emotions.push({name,value:parseInt($('_ev').value)||0,color:'#ff6b9d',stages:getDefaultStages(name)});
+    saveRoles();closeModal();wxRender();
+  }},{t:'取消',g:1,f:closeModal}]);
+}
+function updateEmotion(id,i,val){
+  const r=getRole(id);if(!r.emotions[i])return;
+  r.emotions[i].value=parseInt(val);saveRoles();
+}
+function delEmotion(id,i){const r=getRole(id);r.emotions.splice(i,1);saveRoles();wxRender()}
+function openMemory(id){
+  const r=getRole(id);
+  mkModal('记忆 · '+esc(r.name),
+  `<div class="fld"><label>添加记忆</label><input id="_mt"/></div>
+   <div style="max-height:300px;overflow-y:auto">${(r.memories||[]).map((m,i)=>`<div class="card" style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:14px;flex:1;word-break:break-word">${esc(m.text)}</span><span style="color:#ff3b30;cursor:pointer;margin-left:8px" onclick="delMem('${r.id}',${i})">✕</span></div>`).join('')||'<div style="text-align:center;color:#8e8e93;padding:20px">暂无记忆</div>'}</div>`,
+  [{t:'添加',f:()=>{const v=$('_mt').value.trim();if(!v)return;r.memories=r.memories||[];r.memories.unshift({text:v,time:Date.now()});saveRoles();closeModal();openMemory(id)}},{t:'关闭',g:1,f:closeModal}]);
+}
+function delMem(id,i){const r=getRole(id);r.memories.splice(i,1);saveRoles();closeModal();openMemory(id)}
+function openProactive(id){
+  const r=getRole(id);
+  const p=r.proactive||{enabled:false,interval:60,types:['问候'],activeStart:'08:00',activeEnd:'23:00'};
+  const types=['问候','分享心情','撒娇','报备行程','发照片','想你了'];
+  mkModal('主动消息 · '+esc(r.name),
+  `<div class="card" style="display:flex;justify-content:space-between;align-items:center"><div><div class="t">开启主动消息</div></div><div class="sw ${p.enabled?'on':''}" id="_ps" onclick="this.classList.toggle('on')"></div></div>
+   <div class="fld"><label>间隔</label><select id="_pi">${[10,30,60,120,180,360].map(m=>`<option value="${m}" ${m===p.interval?'selected':''}>${m} 分钟</option>`).join('')}</select></div>
+   <div class="row2"><div class="fld"><label>开始</label><input id="_ps1" type="time" value="${p.activeStart||'08:00'}"/></div>
+   <div class="fld"><label>结束</label><input id="_pe1" type="time" value="${p.activeEnd||'23:00'}"/></div></div>
+   <div class="fld"><label>类型</label><div id="_ptypes" style="display:flex;flex-wrap:wrap;gap:6px">${types.map(t=>`<div class="rc ${p.types?.includes(t)?'on':''}" onclick="this.classList.toggle('on')">${t}</div>`).join('')}</div></div>`,
+  [{t:'保存',f:()=>{
+    r.proactive={enabled:$('_ps').classList.contains('on'),interval:parseInt($('_pi').value),activeStart:$('_ps1').value||'08:00',activeEnd:$('_pe1').value||'23:00',types:[...$('_ptypes').querySelectorAll('.rc.on')].map(x=>x.textContent)};
+    saveRoles();closeModal();toast('已保存');
+  }},{t:'取消',g:1,f:closeModal}]);
+}
+function openOfflineColor(id){
+  const r=getRole(id);
+  const loc=r.offline.location||'咖啡店';
+  const theme=OFFLINE_THEMES[loc]||OFFLINE_THEMES['咖啡店'];
+  mkModal('线下配色 · '+loc,
+  `<div class="fld"><label>背景色</label><input type="color" id="_occ" value="${r.offline.customColor||theme.bg}"/></div>`,
+  [{t:'保存',f:()=>{r.offline.customColor=$('_occ').value;saveRoles();closeModal();toast('已保存')}},{t:'取消',g:1,f:closeModal}]);
+}
+function renderDreamHistoryPage(id){
+  const r=getRole(id);
+  setTop('梦境回顾',true);
+  const b=$('appB');
+  b.style.display='block';b.style.overflowY='auto';b.style.padding='16px';b.style.background='#0d0817';b.style.color='#e8dcff';
+  const list=getDreamHistory(id);
+  b.innerHTML=`<div style="font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;color:#d0b8ff">与 ${esc(r.name)} 的梦境</div>
+    <div style="font-size:12px;color:#8875aa;text-align:center;margin-bottom:20px">共 ${list.length} 个梦</div>
+    ${list.length?list.map((d,i)=>`<div style="background:rgba(60,45,90,.5);border:1px solid rgba(180,150,255,.2);border-radius:14px;padding:14px;margin-bottom:12px;cursor:pointer" onclick="viewDreamDetail('${id}',${i})">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div style="font-size:15px;font-weight:600;color:#d0b8ff">${new Date(d.time).toLocaleDateString()} 的梦</div>
+        <div style="font-size:11px;color:#8875aa">${new Date(d.time).toLocaleTimeString().slice(0,5)}</div>
+      </div>
+      <div style="font-size:13px;color:#b0a0d0;line-height:1.6;max-height:80px;overflow:hidden">${esc((d.diary||'').slice(0,120))}...</div>
+    </div>`).join(''):'<div style="text-align:center;color:#8875aa;padding:60px 20px">还没有做过梦</div>'}`;
+}
+function viewDreamDetail(id,i){
+  const h=getDreamHistory(id);const d=h[i];if(!d)return;
+  mkModal('',
+  `<div style="max-height:70vh;overflow-y:auto">
+    <div style="font-size:12px;color:#8e8e93;text-align:center;margin-bottom:10px">${new Date(d.time).toLocaleString()}</div>
+    <div style="font-size:14px;line-height:1.8;white-space:pre-wrap;color:#1c1c1e">${esc(d.diary||'')}</div>
+  </div>`,
+  [{t:'复制日记',f:()=>{copy(d.diary);toast('已复制');closeModal()}},
+   {t:'删除',d:1,f:()=>{if(confirm('删除？')){h.splice(i,1);saveDreamHistory(id,h);closeModal();renderDreamHistoryPage(id)}}},
+   {t:'关闭',g:1,f:closeModal}]);
+}
+/* ============ 入梦 ============ */
+const DREAM_SCENES=[{n:'卧室',e:'🛏'},{n:'情趣酒店',e:'🏨'},{n:'海边小屋',e:'🌊'},{n:'校园',e:'🏫'},{n:'办公室',e:'🏢'},{n:'雨夜街头',e:'🌧'},{n:'温泉',e:'♨️'},{n:'花园',e:'🌸'},{n:'自定义',e:'✨'}];
+const DREAM_MOODS=['温柔','暧昧','激烈','压抑','浪漫','猎奇','甜蜜','紧张','克制'];
+const DREAM_KEYWORDS=['占有','重逢','初次','偷看','深夜','禁锢','思念','引诱','温柔','征服','试探','依赖'];
+const DREAM_STRENGTH=[['mild','轻度'],['mid','中度'],['deep','深度']];
+function renderDreamSetup(id){
+  const r=getRole(id);
+  setTop('入梦',true);
+  const b=$('appB');
+  b.style.display='block';b.style.overflowY='auto';b.style.padding='16px';b.style.background='#0d0817';
+  const setup=r.dreamSetup||{scene:'卧室',mood:'温柔',keyword:'',strength:'mid',opening:'',customScene:''};
+  const custom=getDreamCustom();
+  const allMoods=[...new Set([...DREAM_MOODS,...custom.moods])];
+  const allKws=[...new Set([...DREAM_KEYWORDS,...custom.keywords])];
+  const hasUnfinished=(getDream(id)||[]).length>0;
+  b.innerHTML=`<div style="max-width:520px;margin:0 auto">
+    ${hasUnfinished?`<div style="background:rgba(180,150,255,.15);border:1px solid rgba(180,150,255,.3);border-radius:14px;padding:14px;margin:16px 0;color:#e8dcff">
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px">📖 检测到未完成的梦境</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn" style="flex:1;background:linear-gradient(135deg,#a78bfa,#7c5fbf)" onclick="wxNav.push({view:'dream',id:'${id}'});wxRender()">继续上次</button>
+          <button class="btn g" style="flex:1;background:rgba(255,255,255,.1);color:#d0b8ff" onclick="startNewDream('${id}')">开启新梦境</button>
+        </div></div>`:''}
+    <div style="font-size:22px;letter-spacing:4px;text-align:center;color:#e8dcff;text-shadow:0 0 20px rgba(180,150,255,.7);margin:20px 0 6px">入 梦</div>
+    <div style="font-size:12px;color:#b0a0d0;text-align:center;margin-bottom:24px">与 ${esc(r.name)} 的私人梦境</div>
+    <div style="font-size:12px;color:#b0a0d0;font-weight:600;margin:20px 0 10px">场景</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+      ${DREAM_SCENES.map(s=>{const isOn=s.n===setup.scene;const label=(s.n==='自定义'&&setup.customScene)?setup.customScene:s.n;
+        return `<div style="background:rgba(180,150,255,${isOn?.35:.12});border:1px solid rgba(180,150,255,${isOn?.6:.2});border-radius:12px;padding:14px 6px;text-align:center;font-size:13px;cursor:pointer;color:${isOn?'#fff':'#d0b8ff'}" onclick="pickScene('${id}','${s.n}')"><span style="font-size:26px;display:block;margin-bottom:4px">${s.e}</span>${esc(label)}</div>`;
+      }).join('')}
+    </div>
+    <div style="font-size:12px;color:#b0a0d0;font-weight:600;margin:20px 0 10px">氛围</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">${allMoods.map(m=>`<div class="rc" style="background:rgba(180,150,255,${m===setup.mood?.45:.12});color:${m===setup.mood?'#fff':'#d0b8ff'};border:1px solid rgba(180,150,255,${m===setup.mood?.7:.25})" onclick="pickMood('${id}','${m}')">${m}</div>`).join('')}</div>
+    <div style="font-size:12px;color:#b0a0d0;font-weight:600;margin:20px 0 10px">关键词</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">${allKws.map(k=>`<div class="rc" style="background:rgba(180,150,255,${k===setup.keyword?.45:.12});color:${k===setup.keyword?'#fff':'#d0b8ff'};border:1px solid rgba(180,150,255,${k===setup.keyword?.7:.25})" onclick="pickKw('${id}','${k}')">${k}</div>`).join('')}</div>
+    <div style="font-size:12px;color:#b0a0d0;font-weight:600;margin:20px 0 10px">强度</div>
+    <div style="display:flex;gap:6px">${DREAM_STRENGTH.map(([v,n])=>`<div style="flex:1;padding:10px 6px;background:rgba(180,150,255,${v===setup.strength?.45:.12});border:1px solid rgba(180,150,255,${v===setup.strength?.7:.2});border-radius:10px;text-align:center;font-size:12px;cursor:pointer;color:${v===setup.strength?'#fff':'#d0b8ff'}" onclick="pickStrength('${id}','${v}')">${n}</div>`).join('')}</div>
+    <div style="font-size:12px;color:#b0a0d0;font-weight:600;margin:20px 0 10px">开场（可选）</div>
+    <textarea style="width:100%;border:1px solid rgba(180,150,255,.25);background:rgba(40,30,65,.5);color:#e8dcff;border-radius:10px;padding:12px 14px;font-size:14px;outline:none;font-family:inherit;line-height:1.6;resize:vertical;min-height:100px" id="_opening" placeholder="不填就让 AI 直接开始...">${esc(setup.opening||'')}</textarea>
+    <button style="width:100%;padding:16px;margin-top:24px;background:linear-gradient(135deg,#a78bfa,#7c5fbf);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:600;cursor:pointer" onclick="enterDream('${id}')">入 梦</button>
+  </div>`;
+}
+function pickScene(id,s){
+  const r=getRole(id);r.dreamSetup=r.dreamSetup||{};
+  if(s==='自定义'){
+    const cur=r.dreamSetup.customScene||'';
+    mkModal('自定义场景',`<textarea id="_cs" style="width:100%;min-height:120px;background:#f7f7f7;border:none;border-radius:10px;padding:12px;font-size:14px;font-family:inherit;outline:none">${esc(cur)}</textarea>`,
+    [{t:'确定',f:()=>{const v=$('_cs').value.trim();if(!v){toast('请输入');return}r.dreamSetup.scene='自定义';r.dreamSetup.customScene=v;saveRoles();closeModal();renderDreamSetup(id)}},{t:'取消',g:1,f:closeModal}]);
+  }else{r.dreamSetup.scene=s;saveRoles();renderDreamSetup(id)}
+}
+function pickMood(id,m){const r=getRole(id);r.dreamSetup=r.dreamSetup||{};r.dreamSetup.mood=m;saveRoles();renderDreamSetup(id)}
+function pickKw(id,k){const r=getRole(id);r.dreamSetup=r.dreamSetup||{};if(r.dreamSetup.keyword===k)r.dreamSetup.keyword='';else r.dreamSetup.keyword=k;saveRoles();renderDreamSetup(id)}
+function pickStrength(id,v){const r=getRole(id);r.dreamSetup=r.dreamSetup||{};r.dreamSetup.strength=v;saveRoles();renderDreamSetup(id)}
+function enterDream(id){
+  const r=getRole(id);
+  if(!API.url||!API.key){toast('请先到设置配置 API');return}
+  const existing=getDream(id);
+  if(existing.length>0){wxNav.push({view:'dream',id});wxRender();return}
+  startNewDream(id);
+}
+function startNewDream(id){
+  const r=getRole(id);
+  const setup=r.dreamSetup||{scene:'卧室',mood:'温柔',keyword:'',strength:'mid',opening:'',customScene:''};
+  saveDream(id,[]);
+  const openText=setup.opening||'';
+  const scene=setup.customScene||setup.scene;
+  const openingLine=openText||`（梦境里弥漫着${setup.mood}的气息，${scene}的轮廓渐渐清晰。${r.name}的身影缓缓出现在你眼前。）`;
+  const hist=[{role:'ai',text:openingLine,time:Date.now(),read:true,id:uid('m'),type:'opening'}];
+  saveDream(id,hist);
+  wxNav.push({view:'dream',id});wxRender();
+  if(!openText){
+    const openingTask=`【开场任务】写一段 100-150 字的梦境开场。\n- 场景必须严格是「${scene}」\n- 用第二人称"你"的视角\n- 融合环境、感官、氛围铺垫`;
+    const sys=buildPrompt(r,null,'dream')+'\n\n'+openingTask;
+    callAI(sys,[{role:'user',content:'开始'}],API.temp).then(t=>{
+      const h=getDream(id);if(h.length)h[0].text=t.trim();saveDream(id,h);
+      const top=wxNav[wxNav.length-1];
+      if(top&&top.view==='dream'&&top.id===id)refreshDream();
+    }).catch(()=>{});
+  }
+}
+function renderDreamView(id){
+  const r=getRole(id);
+  setTop('梦境',true);
+  const b=$('appB');
+  b.style.display='flex';b.style.flexDirection='column';b.style.overflowY='hidden';b.style.padding='0';b.style.background='#0d0817';
+  const stars=Array.from({length:50}).map(()=>`<div style="position:absolute;left:${Math.random()*100}%;top:${Math.random()*100}%;width:${Math.random()*1.5+1}px;height:${Math.random()*1.5+1}px;background:#fff;border-radius:50%;animation:twinkle 3s infinite;animation-delay:${Math.random()*3}s"></div>`).join('');
+  const setup=r.dreamSetup||{};
+  b.innerHTML=`<div class="wx-chat dream" style="position:relative">
+    <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0">${stars}</div>
+    <div style="padding:20px 20px 6px;text-align:center;position:relative;z-index:1">
+      <div style="font-size:20px;font-weight:300;letter-spacing:4px;text-shadow:0 0 20px rgba(180,150,255,.7);color:#e8dcff">梦 境</div>
+      <div style="font-size:11px;color:#b0a0d0;margin-top:4px">与 ${esc(r.name)} · ${esc(setup.customScene||setup.scene||'卧室')}</div>
+    </div>
+    <div class="wx-chat-body" id="dreamBody" style="position:relative;z-index:1"></div>
+    <div class="wx-chat-input">
+      <button class="btn-circle" style="background:rgba(255,255,255,.1);color:#e8dcff;font-size:13px" onclick="endDream('${id}')">出梦</button>
+      <textarea id="dreamIn" rows="1" placeholder="在梦里说点什么..."></textarea>
+      <button class="send" onclick="sendDream('${id}')">发送</button>
+    </div>
+  </div>`;
+  applyTheme($('.wx-chat'),'dream');
+  refreshDream();bindInputAutoGrow($('dreamIn'),'dream');
+}
+function refreshDream(){
+  const db=$('dreamBody');if(!db)return;db.innerHTML='';
+  const top=wxNav[wxNav.length-1];if(!top||top.view!=='dream')return;
+  const id=top.id;const hist=getDream(id);const r=getRole(id);
+  if(!hist.length){addDreamMsg('ai','（梦还没开始...）',r,null,true);return}
+  let lastT=0;
+  hist.forEach(m=>{
+    if(!lastT||(m.time-lastT)>5*60*1000){const d=document.createElement('div');d.className='time-sep';d.textContent=fmtMsgTime(m.time);db.appendChild(d)}
+    lastT=m.time||0;
+    addDreamMsg(m.role,m.text,m.role==='ai'?r:null,m,m.type==='opening');
+  });
+  db.scrollTop=db.scrollHeight;
+}
+function addDreamMsg(role,text,roleObj,msgObj,isOpening){
+  const db=$('dreamBody');if(!db)return null;
+  if(isOpening){
+    const wrap=document.createElement('div');
+    wrap.style.cssText='padding:12px 20px;margin:8px 20px;background:rgba(90,65,130,.4);border-radius:12px;font-style:italic;color:#d0b8ff;text-align:center;font-size:13px;line-height:1.8;white-space:pre-wrap';
+    wrap.textContent=text;db.appendChild(wrap);return wrap;
+  }
+  if(role==='ai'){
+    const group=document.createElement('div');group.className='ai-group';
+    renderDreamAiGroup(group,text,roleObj);
+    db.appendChild(group);db.scrollTop=db.scrollHeight;
+    return {group,setText:(t)=>{renderDreamAiGroup(group,t,roleObj)}};
+  }
+  const wrap=document.createElement('div');wrap.className='wx-msg me';
+  const av=document.createElement('div');av.className='av';
+  const me=lj('wx_me')||{};
+  if(me.avatarImg)av.innerHTML=`<img src="${me.avatarImg}"/>`;else av.textContent=me.avatar||'🙂';
+  const content=document.createElement('div');content.className='content';
+  const segs=splitNarration(text);
+  segs.forEach(seg=>{if(seg.type==='narration'){const nb=document.createElement('div');nb.className='narration-block me';nb.textContent=seg.text;content.appendChild(nb)}else{const d=document.createElement('div');d.className='b';d.textContent=seg.text;content.appendChild(d)}});
+  wrap.appendChild(av);wrap.appendChild(content);db.appendChild(wrap);db.scrollTop=db.scrollHeight;return wrap;
+}
+function renderDreamAiGroup(group,text,roleObj){
+  group.innerHTML='';
+  const bubbles=splitMultiBubble(text);
+  bubbles.forEach((btext,bIdx)=>{
+    const segs=splitNarration(btext);
+    segs.forEach((seg,idx)=>{
+      if(seg.type==='narration'){const nb=document.createElement('div');nb.className='narration-block';nb.textContent=seg.text;group.appendChild(nb)}
+      else{
+        const wrap=document.createElement('div');wrap.className='wx-msg ai';
+        const av=document.createElement('div');av.className='av';
+        if(roleObj){if(roleObj.avatarImg)av.innerHTML=`<img src="${roleObj.avatarImg}"/>`;else av.textContent=roleObj.avatar||'🌙'}
+        const content=document.createElement('div');content.className='content';
+        if(bIdx===0&&idx===0){const nm=document.createElement('div');nm.className='name';nm.textContent=roleObj?roleObj.name:'';content.appendChild(nm)}
+        const b=document.createElement('div');b.className='b';b.textContent=seg.text;
+        content.appendChild(b);wrap.appendChild(av);wrap.appendChild(content);group.appendChild(wrap);
+      }
+    });
+  });
+}
+function sendDream(id){
+  const inp=$('dreamIn');const text=inp.value.trim();if(!text)return;
+  if(!API.url||!API.key){toast('请先到设置配置 API');return}
+  const r=getRole(id);const hist=getDream(id);
+  const um={role:'user',text,time:Date.now(),read:true,id:uid('m')};
+  hist.push(um);saveDream(id,hist);
+  addDreamMsg('user',text,null,um,false);
+  inp.value='';inp.style.height='auto';
+  autoReplyDream(id);
+}
+function autoReplyDream(id){
+  const r=getRole(id);const hist=getDream(id);
+  const tmp={role:'ai',text:'...',time:Date.now(),read:false,id:'tmp_'+Date.now()};
+  const handle=addDreamMsg('ai','...',r,tmp,false);
+  const el=handle.group?handle.group:handle;
+  const setup=r.dreamSetup||{};
+  const scene=setup.customScene||setup.scene;
+  const openMsg=hist.find(m=>m.type==='opening');
+  const extraCtx=[`【场景锁定】${scene}`,setup.keyword?`【关键词】${setup.keyword}`:'',openMsg?`【开场原文】\n${openMsg.text}`:''].filter(Boolean).join('\n');
+  const sys=buildPrompt(r,extraCtx,'dream');
+  const msgs=hist.slice(-20).map(x=>({role:x.role==='ai'?'assistant':'user',content:x.text}));
+  callAI(sys,msgs,API.temp,(d,full)=>{renderDreamAiGroup(el,full,r);const db=$('dreamBody');if(db)db.scrollTop=db.scrollHeight}).then(res=>{
+    hist.push({role:'ai',text:res,time:Date.now(),read:false,id:uid('m')});
+    saveDream(id,hist);renderDreamAiGroup(el,res,r);
+  }).catch(e=>{el.innerHTML=`<div style="padding:8px;color:#ff3b30">失败：${esc(e.message)}</div>`});
+}
+function endDream(id){
+  const hist=getDream(id);
+  if(!hist.length){appBack();return}
+  mkModal('出梦',
+  `<div class="card" style="cursor:pointer;text-align:center;padding:16px" onclick="finishDream('${id}','keep')"><div style="font-size:24px">💾</div><div style="font-weight:600;margin-top:6px">保留并生成日记</div></div>
+   <div class="card" style="cursor:pointer;text-align:center;padding:16px" onclick="finishDream('${id}','forget')"><div style="font-size:24px">💨</div><div style="font-weight:600;margin-top:6px">忘记这个梦</div></div>`,
+  [{t:'取消',g:1,f:closeModal}]);
+}
+function finishDream(id,mode){
+  closeModal();
+  const r=getRole(id);const hist=getDream(id);if(!hist.length){appBack();return}
+  toast('整理梦境中...');
+  const dialog=hist.map(m=>(m.role==='ai'?r.name:'我')+': '+m.text).join('\n');
+  const setup=r.dreamSetup||{};const scene=setup.customScene||setup.scene||'';
+  const sys='你是梦境记录者。把这段梦境对话写成一篇第一人称的梦境日记。300-600字。';
+  callAI(sys,[{role:'user',content:'梦境对话：\n'+dialog+'\n\n请写成梦境日记。'}],API.temp).then(text=>{
+    const h=getDreamHistory(id);
+    h.unshift({time:Date.now(),diary:text,scene,mood:setup.mood});
+    if(h.length>50)h.length=50;
+    saveDreamHistory(id,h);
+    if(mode!=='forget'){
+      const summary=text.slice(0,100).replace(/\n/g,' ');
+      r.memories=r.memories||[];r.memories.unshift({text:'【梦】'+summary+'...',time:Date.now()});
+      if(r.memories.length>30)r.memories.length=30;
+      saveRoles();
+    }
+    ls('wx_dream_'+id,'[]');
+    wxNav=wxNav.filter(v=>v.view!=='dream'&&v.view!=='dreamSetup');
+    if(!wxNav.length)wxNav=[{view:'main'}];
+    wxRender();toast('已记录 ✓');
+  }).catch(e=>{
+    toast('整理失败：'+e.message);ls('wx_dream_'+id,'[]');
+    wxNav=wxNav.filter(v=>v.view!=='dream'&&v.view!=='dreamSetup');
+    if(!wxNav.length)wxNav=[{view:'main'}];
+    wxRender();
+  });
+}
+/* ============ 角色扮演 ============ */
+function renderRpList(roleId){
+  const r=getRole(roleId);
+  setTop('角色扮演',true);
+  const b=$('appB');
+  b.style.display='block';b.style.overflowY='auto';b.style.padding='0';b.style.background='#f2f2f7';
+  const rps=r.rps||[];
+  b.innerHTML=`<div style="padding:20px 16px;background:#fff;border-bottom:.5px solid #f0f0f0">
+      <div style="font-size:18px;font-weight:700">平行世界</div>
+      <div style="font-size:12px;color:#8e8e93;margin-top:6px">为「${esc(r.name)}」创建不同的世界和身份。</div>
+    </div>
+    ${rps.length?rps.map(rp=>`<div class="list-item" onclick="openRpChat('${r.id}','${rp.id}')">
+        <div class="ic" style="background:linear-gradient(160deg,#a78bfa,#7c5fbf);color:#fff">🎭</div>
+        <div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:600">${esc(rp.sceneName||'未命名')}</div>
+        <div style="font-size:12px;color:#8e8e93;margin-top:4px">${rp.hisIdentity?esc(rp.hisIdentity+' × '+rp.yourIdentity):'未设定身份'}</div></div>
+        <div class="rt">›</div>
+      </div>`).join(''):'<div style="text-align:center;padding:60px 20px;color:#999">还没有创建世界</div>'}
+    <button class="btn f" style="margin:20px 16px;width:calc(100% - 32px)" onclick="openRpEditor('${roleId}',null)">＋ 新建角色扮演</button>`;
+}
+function openRpChat(roleId,rpId){wxNav.push({view:'rpChat',id:roleId,rpId});wxRender()}
+function renderRpChatView(roleId,rpId){
+  const r=getRole(roleId);
+  const rp=(r.rps||[]).find(x=>x.id===rpId);
+  if(!rp){toast('世界不存在');wxNav.pop();wxRender();return}
+  setTop(r.remark||r.name+' · '+(rp.sceneName||'角色扮演'),true,'⋯',()=>openRpMenu(roleId,rpId));
+  const b=$('appB');
+  b.style.display='flex';b.style.flexDirection='column';b.style.overflowY='hidden';b.style.padding='0';
+  b.innerHTML=`<div class="wx-chat roleplay">
+    <div class="wx-chat-body" id="rpcb"></div>
+    <div class="wx-chat-input">
+      <button class="btn-circle plus" onclick="openRpPlus('${roleId}','${rpId}')">＋</button>
+      <textarea id="rpi" rows="1" placeholder="说点什么..."></textarea>
+      <button class="send" onclick="sendRpChat('${roleId}','${rpId}')">发送</button>
+    </div>
+  </div>`;
+  applyTheme($('.wx-chat'),'roleplay');
+  refreshRpChat(roleId,rpId);
+  bindInputAutoGrow($('rpi'),'rp');
+}
+function refreshRpChat(roleId,rpId){
+  const cb=$('rpcb');if(!cb)return;cb.innerHTML='';
+  const hist=getRpChat(rpId);const r=getRole(roleId);
+  const rp=(r.rps||[]).find(x=>x.id===rpId);
+  if(!hist.length){
+    const greet=rp.opening||`（${rp.sceneName}，${rp.hisIdentity||r.name}看向你）`;
+    const gm={role:'ai',text:greet,time:Date.now(),read:true,id:uid('m')};
+    hist.push(gm);saveRpChat(rpId,hist);
+  }
+  let lastT=0;
+  hist.forEach(m=>{
+    if(!lastT||(m.time-lastT)>5*60*1000){const d=document.createElement('div');d.className='time-sep';d.textContent=fmtMsgTime(m.time);cb.appendChild(d)}
+    lastT=m.time||0;
+    addRpMsg(roleId,rpId,m.role,m.text,m.role==='ai'?r:null,m);
+  });
+  cb.scrollTop=cb.scrollHeight;
+}
+function addRpMsg(roleId,rpId,role,text,roleObj,msgObj){
+  const cb=$('rpcb');if(!cb)return null;
+  if(role==='ai'){
+    const group=document.createElement('div');group.className='ai-group';
+    renderRpAiGroup(group,text,roleObj);
+    cb.appendChild(group);cb.scrollTop=cb.scrollHeight;
+    return {group,setText:(t)=>{renderRpAiGroup(group,t,roleObj)}};
+  }
+  const wrap=document.createElement('div');wrap.className='wx-msg me';
+  const av=document.createElement('div');av.className='av';
+  const me=lj('wx_me')||{};
+  if(me.avatarImg)av.innerHTML=`<img src="${me.avatarImg}"/>`;else av.textContent=me.avatar||'🙂';
+  const content=document.createElement('div');content.className='content';
+  const segs=splitNarration(text);
+  segs.forEach(seg=>{if(seg.type==='narration'){const nb=document.createElement('div');nb.className='narration-block me';nb.textContent=seg.text;content.appendChild(nb)}else{const d=document.createElement('div');d.className='b';d.textContent=seg.text;content.appendChild(d)}});
+  wrap.appendChild(av);wrap.appendChild(content);cb.appendChild(wrap);cb.scrollTop=cb.scrollHeight;return wrap;
+}
+function renderRpAiGroup(group,text,roleObj){
+  group.innerHTML='';
+  const bubbles=splitMultiBubble(text);
+  bubbles.forEach((btext,bIdx)=>{
+    const segs=splitNarration(btext);
+    segs.forEach((seg,idx)=>{
+      if(seg.type==='narration'){const nb=document.createElement('div');nb.className='narration-block';nb.textContent=seg.text;group.appendChild(nb)}
+      else{
+        const wrap=document.createElement('div');wrap.className='wx-msg ai';
+        const av=document.createElement('div');av.className='av';
+        if(roleObj){if(roleObj.avatarImg)av.innerHTML=`<img src="${roleObj.avatarImg}"/>`;else av.textContent=roleObj.avatar||'🎭'}
+        const content=document.createElement('div');content.className='content';
+        if(bIdx===0&&idx===0){const nm=document.createElement('div');nm.className='name';nm.textContent=roleObj?roleObj.name:'';content.appendChild(nm)}
+        const b=document.createElement('div');b.className='b';b.textContent=seg.text;
+        content.appendChild(b);wrap.appendChild(av);wrap.appendChild(content);group.appendChild(wrap);
+      }
+    });
+  });
+}
+function sendRpChat(roleId,rpId){
+  const inp=$('rpi');if(!inp)return;
+  const text=inp.value.trim();if(!text)return;
+  if(!API.url||!API.key){toast('请先到设置配置 API');return}
+  const r=getRole(roleId);const rp=(r.rps||[]).find(x=>x.id===rpId);if(!rp)return;
+  const hist=getRpChat(rpId);
+  const um={role:'user',text,time:Date.now(),read:true,id:uid('m')};
+  hist.push(um);saveRpChat(rpId,hist);
+  addRpMsg(roleId,rpId,'user',text,null,um);
+  inp.value='';inp.style.height='auto';
+  autoReplyRp(roleId,rpId);
+}
+function autoReplyRp(roleId,rpId){
+  const r=getRole(roleId);const rp=(r.rps||[]).find(x=>x.id===rpId);if(!rp)return;
+  const hist=getRpChat(rpId);
+  const tmp={role:'ai',text:'...',time:Date.now(),read:false,id:'tmp_'+Date.now()};
+  const handle=addRpMsg(roleId,rpId,'ai','...',r,tmp);
+  const el=handle.group?handle.group:handle;
+  const msgs=hist.slice(-16).map(x=>({role:x.role==='ai'?'assistant':'user',content:x.text}));
+  callAI(buildRpPrompt(r,rp,null),msgs,API.temp,(d,full)=>{renderRpAiGroup(el,full,r);const cb=$('rpcb');if(cb)cb.scrollTop=cb.scrollHeight}).then(res=>{
+    const final=String(res||'').trim()||'（沉默）';
+    hist.push({role:'ai',text:final,time:Date.now(),read:false,id:uid('m')});
+    saveRpChat(rpId,hist);renderRpAiGroup(el,final,r);
+  }).catch(e=>{el.innerHTML=`<div style="padding:8px;color:#ff3b30">失败：${esc(e.message)}</div>`});
+}
+function openRpPlus(roleId,rpId){
+  const bg=document.createElement('div');bg.className='mask-bg';bg.onclick=()=>closePlus();
+  document.body.appendChild(bg);
+  const panel=document.createElement('div');panel.className='plus-panel';
+  panel.style.gridTemplateColumns='repeat(2,1fr)';
+  panel.innerHTML=`<div class="pi" onclick="closePlus();openRpEditor('${roleId}','${rpId}')"><div class="ic">✏️</div><div class="nm">编辑世界</div></div>
+    <div class="pi" onclick="closePlus();openRpMemory('${roleId}','${rpId}')"><div class="ic">💭</div><div class="nm">记忆</div></div>`;
+  document.body.appendChild(panel);
+}
+function openRpMenu(roleId,rpId){
+  showLongMenu(window.innerWidth-200,80,[
+    {ic:'✏️',t:'编辑世界设定',f:()=>openRpEditor(roleId,rpId)},
+    {ic:'💭',t:'记忆管理',f:()=>openRpMemory(roleId,rpId)},
+    {ic:'🗑',t:'删除这个世界',f:()=>{const r=getRole(roleId);const rp=(r.rps||[]).find(x=>x.id===rpId);if(!confirm('删除「'+rp.sceneName+'」？'))return;r.rps=r.rps.filter(x=>x.id!==rpId);saveRoles();localStorage.removeItem('wx_rp_chat_'+rpId);wxNav.pop();wxRender();toast('已删除')}}
+  ]);
+}
+function openRpEditor(roleId,rpId){
+  const r=getRole(roleId);
+  let rp,isNew=false;
+  if(rpId){rp=(r.rps||[]).find(x=>x.id===rpId);if(!rp)return}
+  else{isNew=true;rp={id:uid('rp'),sceneName:'',hisIdentity:'',yourIdentity:'',relation:'',world:'',plot:'',rules:'',opening:'',memories:[],customFields:[],note:''}}
+  mkModal(isNew?'新建角色扮演':'编辑世界',
+  `<div class="fld"><label>场景名</label><input id="_rpn" value="${esc(rp.sceneName||'')}"/></div>
+   <div class="fld"><label>世界观</label><textarea id="_rpw">${esc(rp.world||'')}</textarea></div>
+   <div class="fld"><label>他的身份</label><input id="_rphi" value="${esc(rp.hisIdentity||'')}"/></div>
+   <div class="fld"><label>你的身份</label><input id="_rpyi" value="${esc(rp.yourIdentity||'')}"/></div>
+   <div class="fld"><label>关系</label><input id="_rpr" value="${esc(rp.relation||'')}"/></div>
+   <div class="fld"><label>当前剧情</label><textarea id="_rpplot">${esc(rp.plot||'')}</textarea></div>
+   <div class="fld"><label>世界规则</label><textarea id="_rprules">${esc(rp.rules||'')}</textarea></div>
+   <div class="fld"><label>开场白</label><textarea id="_rpo">${esc(rp.opening||'')}</textarea></div>`,
+  [{t:isNew?'创建':'保存',f:()=>{
+    const sceneName=$('_rpn').value.trim();
+    if(!sceneName){toast('请输入场景名');return}
+    rp.sceneName=sceneName;
+    rp.hisIdentity=$('_rphi').value.trim();
+    rp.yourIdentity=$('_rpyi').value.trim();
+    rp.relation=$('_rpr').value.trim();
+    rp.world=$('_rpw').value.trim();
+    rp.plot=$('_rpplot')?$('_rpplot').value.trim():'';
+    rp.rules=$('_rprules')?$('_rprules').value.trim():'';
+    rp.opening=$('_rpo').value.trim();
+    if(isNew){r.rps=r.rps||[];r.rps.push(rp);saveRoles();closeModal();wxNav.pop();wxNav.push({view:'rpChat',id:roleId,rpId:rp.id});wxRender()}
+    else{saveRoles();closeModal();refreshRpChat(roleId,rp.id);toast('已保存')}
+  }},{t:'取消',g:1,f:closeModal}]);
+}
+function openRpMemory(roleId,rpId){
+  const r=getRole(roleId);
+  const rp=(r.rps||[]).find(x=>x.id===rpId);if(!rp)return;
+  mkModal('记忆 · '+esc(rp.sceneName),
+  `<div class="fld"><label>添加记忆</label><input id="_rpmt"/></div>
+   <div style="max-height:300px;overflow-y:auto">${(rp.memories||[]).map((m,i)=>`<div class="card" style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:14px;flex:1;word-break:break-word">${esc(m.text)}</span><span style="color:#ff3b30;cursor:pointer;margin-left:8px" onclick="delRpMem('${roleId}','${rpId}',${i})">✕</span></div>`).join('')||'<div style="text-align:center;color:#8e8e93;padding:20px">暂无记忆</div>'}</div>`,
+  [{t:'添加',f:()=>{const v=$('_rpmt').value.trim();if(!v)return;rp.memories=rp.memories||[];rp.memories.unshift({text:v,time:Date.now()});saveRoles();closeModal();openRpMemory(roleId,rpId)}},{t:'关闭',g:1,f:closeModal}]);
+}
+function delRpMem(roleId,rpId,i){
+  const r=getRole(roleId);const rp=(r.rps||[]).find(x=>x.id===rpId);if(!rp)return;
+  rp.memories.splice(i,1);saveRoles();closeModal();openRpMemory(roleId,rpId);
+}
+/* ============ 主动消息 ============ */
+setInterval(()=>{checkProactive();checkMomentProactive()},60000);
+setTimeout(()=>{checkProactive();checkMomentProactive()},5000);
+function checkProactive(){
+  if(!API.url||!API.key)return;
+  const now=new Date();const nowMin=now.getHours()*60+now.getMinutes();
+  roles.forEach(r=>{
+    const p=r.proactive;if(!p||!p.enabled)return;
+    if(!inActiveTime(nowMin,p))return;
+    const interval=(p.interval||60)*60*1000;
+    const last=parseInt(ls('wx_proactive_last_'+r.id)||'0');
+    if(Date.now()-last<interval)return;
+    ls('wx_proactive_last_'+r.id,String(Date.now()));
+    const types=p.types||['问候'];
+    const pick=types[Math.floor(Math.random()*types.length)];
+    genProactiveWX(r,pick);
+  });
+}
+function inActiveTime(nowMin,p){
+  const [sh,sm]=(p.activeStart||'08:00').split(':').map(Number);
+  const [eh,em]=(p.activeEnd||'23:00').split(':').map(Number);
+  const sMin=sh*60+(sm||0),eMin=eh*60+(em||0);
+  if(sMin<=eMin)return nowMin>=sMin&&nowMin<=eMin;
+  return nowMin>=sMin||nowMin<=eMin;
+}
+function genProactiveWX(r,type){
+  const hints={'问候':'发一句自然的问候','分享心情':'分享你现在的心情','撒娇':'用撒娇的语气说一句','报备行程':'告诉用户你现在要去哪','发照片':'描述你拍了一张照片发给用户','想你了':'直接说想用户'};
+  const hint=hints[type]||'主动发一条自然的消息';
+  const sys=buildPrompt(r,`现在主动给用户发一条简短消息（20字内）。要求：${hint}。`,'online');
+  callAI(sys,[{role:'user',content:'（主动发消息）'}],API.tempOnline).then(reply=>{
+    let clean=stripAction(reply).trim();if(!clean)return;
+    const h1=getChatOnline(r.id);const h2=getChatOffline(r.id);
+    const last1=h1[h1.length-1]?.time||0;const last2=h2[h2.length-1]?.time||0;
+    const mode=last2>last1?'offline':'online';
+    const hist=mode==='offline'?h2:h1;
+    hist.push({role:'ai',text:clean,time:Date.now(),read:false,id:uid('m')});
+    if(mode==='offline')saveChatOffline(r.id,hist);else saveChatOnline(r.id,hist);
+    const top=wxNav[wxNav.length-1];
+    if(top&&top.view==='chat'&&top.id===r.id&&(top.mode||'online')===mode){refreshChat();markRead(r.id)}
+    sendSystemNotification(r,clean);
+  }).catch(()=>{});
+}
+/* ============ 启动 ============ */
+injectUserFont();
+goMain();
+updBdg();
+
+// 接收外壳的心跳信号，唤醒后台定时器
+window.addEventListener('message', function(event) {
+    if (event.data && event.data.type === 'ping') {
+        console.log('收到外壳唤醒，检查主动消息...');
+        if (typeof checkProactive === 'function') checkProactive();
+        if (typeof checkMomentProactive === 'function') checkMomentProactive();
+    }
+});
+</script>
+</body></html>
