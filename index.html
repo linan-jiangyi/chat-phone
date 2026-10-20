@@ -2,20 +2,87 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- 允许缩放，让用户能自己缩放查看，并适配刘海屏 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes, viewport-fit=cover">
     <title>我的小手机</title>
     <style>
-        body { margin: 0; padding: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background-color: #d4d4d8; font-family: -apple-system, sans-serif; overflow: hidden; }
-        .phone-shell { width: 390px; height: 844px; background-color: #000; border-radius: 45px; padding: 10px; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25); position: relative; box-sizing: border-box; }
-        .dynamic-island { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); width: 110px; height: 30px; background-color: #000; border-radius: 20px; z-index: 100; }
-        .screen { width: 100%; height: 100%; background-color: #f2f2f5; border-radius: 36px; overflow: hidden; position: relative; }
-        .app-frame { width: 100%; height: 100%; border: none; display: block; }
-        .home-indicator { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 130px; height: 5px; background-color: rgba(0, 0, 0, 0.6); border-radius: 3px; z-index: 100; pointer-events: none; }
+        /* 整个页面填满屏幕，禁止滚动 */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            height: 100dvh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #e0e0e0;
+            font-family: -apple-system, sans-serif;
+            overflow: hidden;
+        }
+
+        /* 
+         * 核心改动：不再写死 390x844
+         * 使用自适应缩放，保持手机比例
+         */
+        .phone-shell {
+            width: 100%;
+            height: 100%;
+            max-width: 430px; /* 最大宽度，在平板上不会太大 */
+            max-height: 932px; /* 最大高度 */
+            background-color: #000;
+            border-radius: 12vw; /* 手机圆角自适应 */
+            padding: 1.5vw; /* 黑边厚度自适应 */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            position: relative;
+            box-sizing: border-box;
+            /* 如果屏幕比例和手机不一致，自动按比例缩放 */
+            aspect-ratio: 390 / 844;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 顶部灵动岛，自适应位置 */
+        .dynamic-island {
+            position: absolute;
+            top: 2.5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 28%;
+            height: 3.5%;
+            background-color: #000;
+            border-radius: 2vw;
+            z-index: 100;
+        }
+
+        /* 屏幕区域 */
+        .screen {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            border-radius: 10vw; /* 内屏圆角 */
+            overflow: hidden;
+            position: relative;
+            flex: 1;
+        }
+
+        /* 核心：把 dawn.html 塞进屏幕里 */
+        .app-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
     </style>
 </head>
 <body>
+
+    <!-- 手机外壳开始 -->
     <div class="phone-shell">
+        <!-- 灵动岛 -->
         <div class="dynamic-island"></div>
+        
+        <!-- 屏幕区域 -->
         <div class="screen" style="position: relative;">
             <!-- 桌面层 -->
             <div id="homeScreen" style="width: 100%; height: 100%;">
@@ -26,10 +93,11 @@
                 <iframe class="app-frame" src="dawn.html"></iframe>
             </div>
         </div>
-        <div class="home-indicator"></div>
     </div>
-    
+    <!-- 手机外壳结束 -->
+
     <script src="script.js"></script>
+    
     <script>
         // 每分钟给后台微信发送一次心跳，防止被浏览器休眠
         setInterval(() => {
